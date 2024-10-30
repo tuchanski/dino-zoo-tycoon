@@ -60,7 +60,8 @@ public class UserRepository {
         return -1;
     }
 
-    public User updateUserById(int id, String newUsername, String newPassword) throws UserNotFoundException {
+    public User updateUserById(int id, String newUsername, String newPassword)
+            throws UserNotFoundException, UserAlreadyRegisteredException {
 
         User toBeUpdated = getUserById(id);
 
@@ -69,6 +70,10 @@ public class UserRepository {
         }
 
         int index = getIndex(toBeUpdated);
+
+        if (!newUsername.equals(toBeUpdated.getUsername()) && usernameIsAlreadyRegistered(newUsername)) {
+            throw new UserAlreadyRegisteredException("Username is already registered: " + newUsername);
+        }
 
         if (!newUsername.equals(toBeUpdated.getUsername())) {
             toBeUpdated.setUsername(newUsername);
@@ -81,6 +86,10 @@ public class UserRepository {
         users.set(index, toBeUpdated);
 
         return toBeUpdated;
+    }
+
+    private boolean usernameIsAlreadyRegistered(String username) {
+        return users.stream().anyMatch(user -> user.getUsername().equals(username));
     }
 
 }

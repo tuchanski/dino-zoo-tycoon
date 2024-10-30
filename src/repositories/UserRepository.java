@@ -41,13 +41,13 @@ public class UserRepository {
 
         User toBeDeleted = getUserById(id);
 
-        Boolean removed = users.removeIf(user -> user.getId() == id);
-
-        if (removed) {
-            return toBeDeleted;
+        if (toBeDeleted == null) {
+            throw new UserNotFoundException("User not found with id: " + id);
         }
 
-        return null;
+        users.removeIf(user -> user.getId() == id);
+
+        return toBeDeleted;
     }
 
     private int getIndex(User user) {

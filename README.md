@@ -1,4 +1,4 @@
-# Dino Zoo Tycoon
+# Dino Zoo Tycoon 🦖
 
 ## Description
 

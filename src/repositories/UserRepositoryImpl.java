@@ -6,15 +6,13 @@ import java.util.List;
 import exceptions.UserAlreadyRegisteredException;
 import exceptions.UserNotFoundException;
 import models.User;
+import repositories.interfaces.IUserRepository;
 
-public class UserRepository {
+public class UserRepositoryImpl implements IUserRepository {
 
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
-    public UserRepository() {
-        this.users = new ArrayList<>();
-    }
-
+    @Override
     public void createUser(String username, String password) throws UserAlreadyRegisteredException {
 
         if (getUserByUsername(username) != null) {
@@ -25,18 +23,22 @@ public class UserRepository {
         users.add(newUser);
     }
 
+    @Override
     public List<User> getUsers() {
         return users;
     }
 
+    @Override
     public User getUserById(int id) {
         return users.stream().filter(user -> user.getId() == id).findFirst().orElse(null);
     }
 
+    @Override
     public User getUserByUsername(String username) {
         return users.stream().filter(user -> user.getUsername().equals(username)).findFirst().orElse(null);
     }
 
+    @Override
     public User deleteUserById(int id) throws UserNotFoundException {
 
         User toBeDeleted = getUserById(id);
@@ -50,16 +52,7 @@ public class UserRepository {
         return toBeDeleted;
     }
 
-    private int getIndex(User user) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).equals(user)) {
-                return i;
-            }
-
-        }
-        return -1;
-    }
-
+    @Override
     public User updateUserById(int id, String newUsername, String newPassword)
             throws UserNotFoundException, UserAlreadyRegisteredException {
 
@@ -90,6 +83,16 @@ public class UserRepository {
 
     private boolean usernameIsAlreadyRegistered(String username) {
         return users.stream().anyMatch(user -> user.getUsername().equals(username));
+    }
+
+    private int getIndex(User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).equals(user)) {
+                return i;
+            }
+
+        }
+        return -1;
     }
 
 }

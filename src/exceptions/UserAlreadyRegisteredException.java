@@ -1,4 +1,4 @@
-package models.exceptions;
+package exceptions;
 
 public class UserAlreadyRegisteredException extends Exception {
 

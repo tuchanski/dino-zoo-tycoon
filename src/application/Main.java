@@ -1,7 +1,13 @@
 package application;
 
+import service.FileReader;
+
+import java.io.FileNotFoundException;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("THIS WILL BE A DINO ZOO TYCOON!");
+    public static void main(String[] args) throws FileNotFoundException {
+
+        FileReader fr = new FileReader("./database/dinosaur.csv");
+        fr.readFile();
     }
 }

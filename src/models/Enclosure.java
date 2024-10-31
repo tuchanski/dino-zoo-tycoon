@@ -1,6 +1,4 @@
-﻿// REVISAR
-
-package models;
+﻿package models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,17 +6,23 @@ import java.util.List;
 public class Enclosure {
 
     private String name;
-    private double area;  
-    private List<Dinosaur> dinosaurs; 
+    private Double area;
+    private List<Dinosaur> dinosaurs;
+    private List<Food> availableFoods;
 
     public Enclosure(String name, double area) {
         this.name = name;
         this.area = area;
         this.dinosaurs = new ArrayList<>();
+        this.availableFoods = new ArrayList<>();
     }
 
     public void addDinosaur(Dinosaur dinosaur) {
         this.dinosaurs.add(dinosaur);
+    }
+
+    public void addFood(Food food) {
+        this.availableFoods.add(food);
     }
 
     public void showEnclosureInfo() {
@@ -26,7 +30,10 @@ public class Enclosure {
         System.out.println("Area: " + area + " square meters");
 
         if (!dinosaurs.isEmpty()) {
-            dinosaurs.stream().iterator().forEachRemaining(dinosaur -> dinosaur.showInfo());
+            dinosaurs.forEach(Dinosaur::showInfo);
+        }
+        if (!availableFoods.isEmpty()) {
+            availableFoods.forEach(food -> System.out.println(food.toString()));
         }
     }
 
@@ -49,5 +56,8 @@ public class Enclosure {
     public List<Dinosaur> getDinosaurs() {
         return dinosaurs;
     }
-  
+
+    public List<Food> getAvailableFoods() {
+        return availableFoods;
+    }
 }

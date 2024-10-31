@@ -29,4 +29,25 @@ public class Enclosure {
             dinosaurs.stream().iterator().forEachRemaining(dinosaur -> dinosaur.showInfo());
         }
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    public List<Dinosaur> getDinosaurs() {
+        return dinosaurs;
+    }
+  
 }

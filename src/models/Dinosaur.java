@@ -26,6 +26,18 @@ public abstract class Dinosaur {
         return weight;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
     // Método abstrato para obter a dieta do dinossauro (a ser implementado nas subclasses)
     public abstract String getDiet();
 

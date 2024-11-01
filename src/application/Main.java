@@ -1,6 +1,6 @@
 package application;
 
-import service.FileReader;
+import services.FileReader;
 
 import java.io.FileNotFoundException;
 

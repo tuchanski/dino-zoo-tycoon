@@ -1,13 +1,15 @@
 package application;
 
-import services.FileReader;
+import java.sql.SQLException;
 
-import java.io.FileNotFoundException;
+import config.DB;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-
-        FileReader fr = new FileReader("./database/dinosaur.csv");
-        fr.readFile();
+    public static void main(String[] args) {
+        try (var connection = DB.connect()) {
+            System.out.println("Connected to the PostgreSQL database.");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

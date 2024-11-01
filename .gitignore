@@ -152,6 +152,9 @@ replay_pid*
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+# ALL
+.vscode
+
 # Local History for Visual Studio Code
 .history/
 

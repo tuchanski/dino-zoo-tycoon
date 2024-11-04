@@ -2,7 +2,7 @@ package application;
 
 import java.sql.SQLException;
 
-import config.DB;
+import models.DB;
 
 public class Main {
     public static void main(String[] args) {

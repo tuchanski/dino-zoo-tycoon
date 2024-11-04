@@ -1,8 +1,9 @@
-package config;
+package models;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import config.DatabaseConfig;
 
 public class DB {
     public static Connection connect() throws SQLException {

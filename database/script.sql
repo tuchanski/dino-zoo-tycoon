@@ -1,4 +1,5 @@
 -- May be changed in the future
+-- Please, create a database named DinoZooTycoon in Postgres before running this script
 
 CREATE TABLE SystemUser (
                             user_id BIGSERIAL PRIMARY KEY,

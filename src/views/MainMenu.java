@@ -1,6 +1,7 @@
 package views;
 
 import views.utils.ImageBackgroundPanel;
+import views.utils.TitleBarButton;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

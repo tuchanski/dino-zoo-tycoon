@@ -1,6 +1,7 @@
-package views;
+package views.utils;
 
-import views.utils.CustomButton;
+import views.AddDinoPanel;
+import views.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;

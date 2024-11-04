@@ -1,9 +1,8 @@
 package views;
 
-import views.utils.CustomButton;
+import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,10 +15,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        Color backgroundColor = new Color(94, 73, 61);
-
-        JPanel backgroundPanel = new JPanel();
-        backgroundPanel.setBackground(backgroundColor);
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/bg.png");
         backgroundPanel.setLayout(null);
 
         TitleBarButton titleBarButtons = new TitleBarButton(this);
@@ -48,6 +44,4 @@ public class MainMenu extends JFrame {
     public static void main(String[] args) {
         new MainMenu();
     }
-
-
 }

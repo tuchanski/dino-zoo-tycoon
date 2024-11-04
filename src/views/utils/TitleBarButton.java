@@ -43,7 +43,7 @@ public class TitleBarButton extends JPanel {
 
         CustomButton closeButton = new CustomButton(
                 "src/resources/buttons/closeButton.png",
-                725,
+                720,
                 14,
                 68,
                 70,
@@ -52,7 +52,7 @@ public class TitleBarButton extends JPanel {
 
         CustomButton minimizeButton = new CustomButton(
                 "src/resources/buttons/minimizeButton.png",
-                648,
+                644,
                 14,
                 68,
                 70,

@@ -23,6 +23,11 @@ public class MainMenu extends JFrame {
         titleBarButtons.setBounds(0, 0, 800, 100);
         backgroundPanel.add(titleBarButtons);
 
+        ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
+
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mouseX = e.getX();

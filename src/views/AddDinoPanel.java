@@ -24,6 +24,11 @@ public class AddDinoPanel extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-add.png");
         backgroundPanel.setLayout(null);
 
+        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
+
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mouseX = e.getX();

@@ -20,6 +20,11 @@ public class InitialPanel extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-welcome.png");
         backgroundPanel.setLayout(null);
 
+        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
+
         CustomButton closeButton = new CustomButton(
                 "src/resources/buttons/closeButtonSmall.png",
                 335,
@@ -46,7 +51,7 @@ public class InitialPanel extends JFrame {
         CustomButton loginButton = new CustomButton(
                 "src/resources/buttons/loginButton.png",
                 116,
-                190,
+                210,
                 165,
                 62,
                 e -> {
@@ -59,7 +64,7 @@ public class InitialPanel extends JFrame {
         CustomButton registerButton = new CustomButton(
                 "src/resources/buttons/registerButton.png",
                 116,
-                260,
+                280,
                 165,
                 62,
                 e -> {

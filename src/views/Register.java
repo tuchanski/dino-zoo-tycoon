@@ -22,6 +22,11 @@ public class Register extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-register.png");
         backgroundPanel.setLayout(null);
 
+        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
+
         CustomButton closeButton = new CustomButton(
                 "src/resources/buttons/closeButtonSmall.png",
                 335,

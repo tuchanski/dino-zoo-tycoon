@@ -28,6 +28,10 @@ public class UserController {
         return userRepository.deleteUserById(id);
     }
 
+    public User getUserByUsername(String username) {
+        return userRepository.getUserByUsername(username);
+    }
+
     public User updateUserById(int id, String newUsername, String newPassword) throws UserNotFoundException, UserAlreadyRegisteredException {
         return userRepository.updateUserById(id, newUsername, newPassword);
     }

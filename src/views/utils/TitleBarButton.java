@@ -33,13 +33,13 @@ public class TitleBarButton extends JPanel {
                 e -> System.exit(0),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        CustomButton deleteButton = new CustomButton(
-                "src/resources/buttons/button-add.png",
+        CustomButton sosButton = new CustomButton(
+                "src/resources/buttons/sosButton.png",
                 384,
                 16,
                 165,
                 62,
-                e -> System.exit(0),
+                e -> System.out.println("S.O.S | Emergency"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton closeButton = new CustomButton(
@@ -71,7 +71,7 @@ public class TitleBarButton extends JPanel {
 
         add(addButton);
         add(listButton);
-        add(deleteButton);
+        add(sosButton);
 
         add(closeButton);
         add(minimizeButton);

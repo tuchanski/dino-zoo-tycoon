@@ -8,18 +8,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Login extends JFrame {
+public class Register extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JTextField passwordField;
 
-    public Login(JFrame parentFrame){
+    public Register(JFrame parentFrame){
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/small-bg-login.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/small-bg-register.png");
         backgroundPanel.setLayout(null);
 
         CustomButton closeButton = new CustomButton(
@@ -103,16 +103,16 @@ public class Login extends JFrame {
         passwordField = transparentField(68, 250, 262, 47, 12);
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
 
-        CustomButton loginButton = new CustomButton(
-                "src/resources/buttons/loginButton.png",
+        CustomButton registerButton = new CustomButton(
+                "src/resources/buttons/registerButton.png",
                 116,
                 320,
                 165,
                 62,
-                e -> System.out.println("Login"),
+                e -> System.out.println("Register"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
-        layeredPane.add(loginButton, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(registerButton, JLayeredPane.PALETTE_LAYER);
 
         add(backgroundPanel);
         setVisible(true);
@@ -139,8 +139,7 @@ public class Login extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Login(null);
+        new Register(null);
     }
-
 
 }

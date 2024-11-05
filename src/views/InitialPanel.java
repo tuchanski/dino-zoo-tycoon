@@ -62,7 +62,10 @@ public class InitialPanel extends JFrame {
                 260,
                 165,
                 62,
-                e -> this.setState(JFrame.ICONIFIED),
+                e -> {
+                    new Register(this);
+                    setVisible(false);
+                },
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 

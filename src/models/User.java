@@ -5,18 +5,19 @@ import java.util.List;
 
 public class User {
 
-    private static Long idCounter = 0L;
-
     private Long id;
-
     private String username;
     private String password;
     
     private List<Zoo> zoos = new ArrayList<>();
 
     public User(String username, String password){
-        idCounter++;
-        this.id = idCounter;
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(Long id, String username, String password){
+        this.id = id;
         this.username = username;
         this.password = password;
     }

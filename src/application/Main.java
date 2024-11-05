@@ -1,13 +1,16 @@
 package application;
 
-import services.FileReader;
+import java.sql.SQLException;
 
-import java.io.FileNotFoundException;
+import controllers.UserController;
+import exceptions.UserAlreadyRegisteredException;
+import exceptions.UserNotFoundException;
+import models.DB;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws UserNotFoundException, UserAlreadyRegisteredException {
 
-        FileReader fr = new FileReader("./database/dinosaur.csv");
-        fr.readFile();
+        // System.out.println("DINO ZOO TYCOON!!!!");
+
     }
 }

@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.UserAlreadyRegisteredException;
-import exceptions.UserNotFoundException;
+import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
 import repositories.interfaces.IUserRepository;
@@ -22,12 +22,12 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-    public void createUser(String username, String password) throws UserAlreadyRegisteredException {
+    public void createUser(String username, String password) throws EntityAlreadyRegisteredException {
 
         boolean usernameIsAvailable = usernameIsAvailable(username);
 
         if (!usernameIsAvailable) {
-            throw new UserAlreadyRegisteredException("Username already registered");
+            throw new EntityAlreadyRegisteredException("Username already registered");
         }
 
         String createUserQuery = "INSERT INTO SystemUser (username, password) VALUES (?, ?)";
@@ -133,14 +133,14 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-    public User deleteUserById(int id) throws UserNotFoundException {
+    public User deleteUserById(int id) throws EntityNotFoundException {
 
         User userToBeDeleted = getUserById(id); // May be null
 
         try {
 
             if (userToBeDeleted == null) {
-                throw new UserNotFoundException("User not found with id: " + id);
+                throw new EntityNotFoundException("User not found with id: " + id);
             }
 
             String deleteQuery = "DELETE FROM SystemUser WHERE user_id = ?";
@@ -161,12 +161,12 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User updateUserById(int id, String newUsername, String newPassword)
-            throws UserNotFoundException, UserAlreadyRegisteredException {
+            throws EntityNotFoundException, EntityAlreadyRegisteredException {
 
         User toBeUpdated = getUserById(id);
 
         if (toBeUpdated == null) {
-            throw new UserNotFoundException("User not found with id: " + id);
+            throw new EntityNotFoundException("User not found with id: " + id);
         }
 
         String updateQuery = "UPDATE SystemUser SET ";
@@ -177,7 +177,7 @@ public class UserRepositoryImpl implements IUserRepository {
         boolean passwordChanged = !newPassword.equals(toBeUpdated.getPassword());
 
         if (usernameChanged && !usernameIsAvailable(newUsername)) {
-            throw new UserAlreadyRegisteredException("Username already registered");
+            throw new EntityAlreadyRegisteredException("Username already registered");
         }
 
         if (usernameChanged) {

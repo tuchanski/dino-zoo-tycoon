@@ -2,8 +2,8 @@ package controllers;
 
 import java.util.List;
 
-import exceptions.UserAlreadyRegisteredException;
-import exceptions.UserNotFoundException;
+import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.User;
 import repositories.UserRepositoryImpl;
 import repositories.interfaces.IUserRepository;
@@ -12,7 +12,7 @@ public class UserController {
     
     private IUserRepository userRepository = new UserRepositoryImpl();
 
-    public void createUser(String username, String password) throws UserAlreadyRegisteredException {
+    public void createUser(String username, String password) throws EntityAlreadyRegisteredException {
         userRepository.createUser(username, password);
     }
 
@@ -24,7 +24,7 @@ public class UserController {
         return userRepository.getUserById(id);
     }
 
-    public User deleteUserById(int id) throws UserNotFoundException {
+    public User deleteUserById(int id) throws EntityNotFoundException {
         return userRepository.deleteUserById(id);
     }
 
@@ -32,7 +32,7 @@ public class UserController {
         return userRepository.getUserByUsername(username);
     }
 
-    public User updateUserById(int id, String newUsername, String newPassword) throws UserNotFoundException, UserAlreadyRegisteredException {
+    public User updateUserById(int id, String newUsername, String newPassword) throws EntityNotFoundException, EntityAlreadyRegisteredException {
         return userRepository.updateUserById(id, newUsername, newPassword);
     }
 

@@ -1,55 +1,45 @@
 package models;
 
-import models.enums.DinosaurType;
+import models.enums.DinosaurSpecies;
 
 public class Dinosaur {
-    private static Long idCounter = 0L;
 
     private Long id;
-    private String name;
-    private DinosaurType type;
-    private Integer age;
 
-    public Dinosaur(String name, DinosaurType type, Integer age) {
-        this.id = ++idCounter;
-        this.name = name;
-        this.type = type;
-        this.age = age;
+    private DinosaurSpecies species;
+
+    public Dinosaur(Long id, DinosaurSpecies species) {
+        this.id = id;
+        this.species = species;
+    }
+
+    public Dinosaur(Long id, String species) {
+        this.id = id;
+        this.species = DinosaurSpecies.valueOf(species.toUpperCase());
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getDiet() {
+        return species.getDiet();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public DinosaurSpecies getSpecies() {
+        return species;
     }
 
-    public DinosaurType getType() {
-        return type;
+    public void setSpecies(DinosaurSpecies species) {
+        this.species = species;
     }
 
-    public void setType(DinosaurType type) {
-        this.type = type;
+    @Override
+    public String toString() {
+        return "Dinosaur{" +
+                "id=" + id +
+                ", species=" + species +
+                '}';
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void displayInfo() {
-        System.out.println("Dinosaur ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Type: " + type.getName());
-        System.out.println("Age: " + age + " years");
-    }
-    
 }

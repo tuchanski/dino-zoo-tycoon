@@ -70,7 +70,7 @@ public class AddDinoPanel extends JFrame {
         // Name
         configFieldWithLabel(layeredPane, "NAME:", 175, 110, 100, 30, 16);
 
-        ImageIcon nameFieldBg = new ImageIcon("src/resources/images/teste.png");
+        ImageIcon nameFieldBg = new ImageIcon("src/resources/images/customField.png");
         JLabel nameFieldBackground = new JLabel(nameFieldBg);
         nameFieldBackground.setBounds(65, 140, 266, 47);
         layeredPane.add(nameFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -81,7 +81,7 @@ public class AddDinoPanel extends JFrame {
         // Type
         configFieldWithLabel(layeredPane, "TYPE:", 175, 190, 100, 30, 16);
 
-        ImageIcon typeFieldBg = new ImageIcon("src/resources/images/teste.png");
+        ImageIcon typeFieldBg = new ImageIcon("src/resources/images/customField.png");
         JLabel typeFieldBackground = new JLabel(typeFieldBg);
         typeFieldBackground.setBounds(65, 220, 266, 47);
         layeredPane.add(typeFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -92,7 +92,7 @@ public class AddDinoPanel extends JFrame {
         // Age
         configFieldWithLabel(layeredPane, "AGE:", 178, 270, 100, 30, 16);
 
-        ImageIcon ageFieldBg = new ImageIcon("src/resources/images/teste.png");
+        ImageIcon ageFieldBg = new ImageIcon("src/resources/images/customField.png");
         JLabel ageFieldBackground = new JLabel(ageFieldBg);
         ageFieldBackground.setBounds(65, 300, 266, 47);
         layeredPane.add(ageFieldBackground, JLayeredPane.DEFAULT_LAYER);

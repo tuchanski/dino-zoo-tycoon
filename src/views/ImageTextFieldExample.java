@@ -13,7 +13,7 @@ public class ImageTextFieldExample extends JFrame {
 
         // Painel com a imagem de fundo
         JPanel backgroundPanel = new JPanel() {
-            private Image backgroundImage = new ImageIcon("src/resources/images/teste.png").getImage();
+            private Image backgroundImage = new ImageIcon("src/resources/images/customField.png").getImage();
 
             @Override
             protected void paintComponent(Graphics g) {

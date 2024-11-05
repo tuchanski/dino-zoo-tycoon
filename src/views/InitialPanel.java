@@ -49,7 +49,10 @@ public class InitialPanel extends JFrame {
                 190,
                 165,
                 62,
-                e -> this.setState(JFrame.ICONIFIED),
+                e -> {
+                    new Login(this);
+                    setVisible(false);
+                },
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 

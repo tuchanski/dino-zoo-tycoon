@@ -8,8 +8,6 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    
-    private List<Zoo> zoos = new ArrayList<>();
 
     public User(String username, String password){
         this.username = username;
@@ -40,10 +38,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public List<Zoo> getZoos() {
-        return zoos;
     }
 
     @Override

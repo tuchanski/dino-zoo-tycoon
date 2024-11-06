@@ -1,57 +1,55 @@
 package models;
 
-import models.enums.ParkEvent;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class Zoo {
 
-    private static Long idCounter = 0L;
+    private Long zooId;
+    private String name;
+    private String location;
 
-    private Long id;
-    private Inventory inventory;
-    private List<ParkEvent> eventHistory;
+    private Long userId;
 
-    public Zoo(Inventory inventory) {
-        this.id = ++idCounter;
-        this.inventory = inventory;
-        this.eventHistory = new ArrayList<>();
+    public Zoo(Long zooId, String name, String location, Long userId) {
+        this.zooId = zooId;
+        this.name = name;
+        this.location = location;
+        this.userId = userId;
     }
 
-    public void triggerRandomEvent() {
-        ParkEvent randomEvent = getRandomParkEvent();
-        eventHistory.add(randomEvent);
-        System.out.println("Event occurred: " + randomEvent.getDescription());
+    public Long getZooId() {
+        return zooId;
     }
 
-    private ParkEvent getRandomParkEvent() {
-        ParkEvent[] events = ParkEvent.values();
-        Random random = new Random();
-        return events[random.nextInt(events.length)];
+    public void setZooId(Long zooId) {
+        this.zooId = zooId;
     }
 
-    public void displayEventHistory() {
-        System.out.println("Event History:");
-        eventHistory.stream().forEach(event -> System.out.println(event.getDescription()));
+    public String getName() {
+        return name;
     }
 
-    public Long getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public String getLocation() {
+        return location;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override
     public String toString() {
-        return "Zoo [id=" + id + ", inventory=" + inventory + ", eventHistory=" + eventHistory + "]";
+        return "Zoo{" +
+                "zooId=" + zooId +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", userId=" + userId +
+                '}';
     }
-
 }

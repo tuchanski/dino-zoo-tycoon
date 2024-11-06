@@ -3,6 +3,7 @@ package repositories;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Dinosaur;
+import models.User;
 import models.enums.DinosaurSpecies;
 import repositories.interfaces.IDinosaurRepository;
 
@@ -78,10 +79,34 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
     }
 
-    // To implement
-
     @Override
     public Dinosaur getDinosaurById(int id) {
+
+        String getDinosaurByIdQuery = "SELECT * FROM dinosaur WHERE dinosaur_id = ?";
+
+        try {
+            PreparedStatement getDinosaurByIdPs = getConnection().prepareStatement(getDinosaurByIdQuery);
+            getDinosaurByIdPs.setInt(1, id);
+            ResultSet rs = getDinosaurByIdPs.executeQuery();
+
+            if (rs.next()) {
+
+                Long dinosaurId = rs.getLong("dinosaur_id");
+                DinosaurSpecies species = DinosaurSpecies.valueOf(rs.getString("species"));
+
+                getDinosaurByIdPs.close();
+                rs.close();
+
+                return new Dinosaur(dinosaurId, species);
+            }
+
+            getDinosaurByIdPs.close();
+            rs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
         return null;
     }
 
@@ -92,11 +117,52 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
     @Override
     public Dinosaur deleteDinosaurById(int id) throws EntityNotFoundException {
-        return null;
+
+        Dinosaur dinosaurToBeDeleted = getDinosaurById(id); // May bE null;
+
+        if (dinosaurToBeDeleted == null) {
+            throw new EntityNotFoundException("Dinosaur not found: " + id);
+        }
+
+        try {
+            String deleteQuery = "DELETE FROM dinosaur WHERE dinosaur_id = ?";
+            PreparedStatement deletePs = getConnection().prepareStatement(deleteQuery);
+
+            deletePs.setInt(1, id);
+            deletePs.execute();
+            deletePs.close();
+
+            System.out.println("Dinosaur: " + dinosaurToBeDeleted.getId() + " has been deleted");
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dinosaurToBeDeleted;
     }
 
     @Override
     public Dinosaur updateDinosaurById(int id, String newSpecies) throws EntityNotFoundException {
-        return null;
+        Dinosaur dinosaurToBeUpdated = getDinosaurById(id);
+
+        if (dinosaurToBeUpdated == null) {
+            throw new EntityNotFoundException("Dinosaur not found with id: " + id);
+        }
+
+        String updateQuery = "UPDATE dinosaur SET species = ? WHERE dinosaur_id = ?";
+
+        try (PreparedStatement updatePs = getConnection().prepareStatement(updateQuery)) {
+
+            updatePs.setString(1, newSpecies);
+            updatePs.setInt(2, id);
+            updatePs.executeUpdate();
+
+            System.out.println("Dinosaur: " + id + " has been updated to " + newSpecies);
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return new Dinosaur(Long.valueOf(id), DinosaurSpecies.valueOf(newSpecies));
     }
 }

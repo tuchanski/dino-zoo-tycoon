@@ -1,6 +1,7 @@
 package views.utils;
 
 import views.panels.AddDinoPanel;
+import views.panels.ListDinoPanel;
 import views.panels.MainMenu;
 
 import javax.swing.*;
@@ -30,7 +31,7 @@ public class TitleBarButton extends JPanel {
                 16,
                 165,
                 62,
-                e -> System.exit(0),
+                e -> openListDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton sosButton = new CustomButton(
@@ -81,5 +82,10 @@ public class TitleBarButton extends JPanel {
     private void openAddDino() {
         AddDinoPanel addDinoFrame = new AddDinoPanel(parentFrame);
         addDinoFrame.setVisible(true);
+    }
+
+    private void openListDino() {
+        ListDinoPanel listDinoPanel = new ListDinoPanel(parentFrame);
+        listDinoPanel.setVisible(true);
     }
 }

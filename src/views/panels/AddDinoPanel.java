@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.CustomButton;
 import views.utils.ImageBackgroundPanel;

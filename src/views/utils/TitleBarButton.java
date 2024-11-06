@@ -1,7 +1,7 @@
 package views.utils;
 
-import views.AddDinoPanel;
-import views.MainMenu;
+import views.panels.AddDinoPanel;
+import views.panels.MainMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +39,7 @@ public class TitleBarButton extends JPanel {
                 16,
                 165,
                 62,
-                e -> System.out.println("S.O.S | Emergency"),
+                e -> System.out.println("SOS | Emergency"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton closeButton = new CustomButton(

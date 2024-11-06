@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.ImageBackgroundPanel;
 import views.utils.TitleBarButton;

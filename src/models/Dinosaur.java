@@ -18,6 +18,10 @@ public class Dinosaur {
         this.species = DinosaurSpecies.valueOf(species.toUpperCase());
     }
 
+    public Dinosaur(DinosaurSpecies species) {
+        this.species = species;
+    }
+
     public Long getId() {
         return id;
     }

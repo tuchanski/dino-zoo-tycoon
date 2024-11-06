@@ -1,24 +1,25 @@
 package views.panels;
 
 import controllers.DinosaurController;
+import models.Dinosaur;
+import models.enums.DinosaurSpecies;
 import views.utils.CustomButton;
-import views.utils.CustomDialog;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
-import models.enums.DinosaurSpecies;
-
-public class AddDinoPanel extends JFrame {
+public class UpdateDinoPanel extends JFrame {
     private int mouseX, mouseY;
-
     private JComboBox<DinosaurSpecies> speciesComboBox;
     private DinosaurController dinosaurController;
+    private Dinosaur dinosaurToUpdate;
 
-    public AddDinoPanel(JFrame parentFrame) {
+    public UpdateDinoPanel(JFrame parentFrame, Dinosaur dinosaurToUpdate) {
+        this.dinosaurToUpdate = dinosaurToUpdate;
         dinosaurController = new DinosaurController();
         setUndecorated(true);
         setSize(400, 500);
@@ -71,33 +72,25 @@ public class AddDinoPanel extends JFrame {
         backgroundPanel.add(closeButton);
         backgroundPanel.add(minimizeButton);
 
-        // JLayeredPane - organize layers
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(0, 0, 400, 500);
         backgroundPanel.add(layeredPane);
 
-        // Combbox
-        configFieldWithLabel(layeredPane, "SPECIES:", 170, 160, 100, 30, 16);
-
-        ImageIcon speciesFieldBg = new ImageIcon("src/resources/utils/customField.png");
-        JLabel speciesFieldBackground = new JLabel(speciesFieldBg);
-        speciesFieldBackground.setBounds(74, 190, 266, 47);
-        layeredPane.add(speciesFieldBackground, JLayeredPane.DEFAULT_LAYER);
+        configFieldWithLabel(layeredPane, "NEW SPECIES:", 120, 220, 160, 30, 16);
 
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
-        speciesComboBox.setBounds(76, 190, 262, 47);
+        speciesComboBox.setBounds(76, 250, 262, 47);
         speciesComboBox.setFont(new Font("Arial", Font.BOLD, 12));
         speciesComboBox.setBackground(new Color(255, 255, 255, 100));
-
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
         CustomButton submitButton = new CustomButton(
                 "src/resources/buttons/submitButton.png",
                 120,
-                270,
+                330,
                 165,
                 62,
-                e -> addDino(),
+                e -> updateDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -116,19 +109,19 @@ public class AddDinoPanel extends JFrame {
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }
 
-    private void addDino(){
+    private void updateDino() {
         DinosaurSpecies species = (DinosaurSpecies) speciesComboBox.getSelectedItem();
 
-        if (species != null){
-            try{
-                dinosaurController.createDinosaur(species.name());
-                CustomDialog.showMessage("Dinosaur added!", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e){
-                CustomDialog.showMessage("Species not found", JOptionPane.ERROR_MESSAGE);
+        if (species != null) {
+            try {
+                dinosaurController.updateDinosaurById(dinosaurToUpdate.getId().intValue(), species.name());
+                JOptionPane.showMessageDialog(this, "Dinosaur updated!");
+                dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error updating dinosaur.");
             }
-        }
-        else {
-            CustomDialog.showMessage("Please select a species", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a species.");
         }
     }
 }

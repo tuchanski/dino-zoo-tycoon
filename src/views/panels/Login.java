@@ -1,6 +1,9 @@
 package views.panels;
 
+import controllers.UserController;
+import models.User;
 import views.utils.CustomButton;
+import views.utils.CustomDialog;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -11,9 +14,12 @@ import java.awt.event.MouseEvent;
 public class Login extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
-    private JTextField passwordField;
+    private JPasswordField passwordField;
+    private UserController userController;
 
     public Login(JFrame parentFrame){
+        userController = new UserController();
+
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -100,7 +106,7 @@ public class Login extends JFrame {
         passwordFieldBackground.setBounds(65, 250, 266, 47);
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        passwordField = transparentField(68, 250, 262, 47, 12);
+        passwordField = transparentPasswordField(68, 250, 262, 47, 12);
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
 
         CustomButton loginButton = new CustomButton(
@@ -109,7 +115,7 @@ public class Login extends JFrame {
                 320,
                 165,
                 62,
-                e -> System.out.println("Login"),
+                e -> login(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
         layeredPane.add(loginButton, JLayeredPane.PALETTE_LAYER);
@@ -129,6 +135,17 @@ public class Login extends JFrame {
         return field;
     }
 
+    private JPasswordField transparentPasswordField(int x, int y, int width, int height, int fontSize) {
+        JPasswordField field = new JPasswordField();
+        field.setOpaque(false);
+        Color fontColor = new Color(218, 195, 167);
+        field.setForeground(fontColor);
+        field.setBorder(null);
+        field.setBounds(x, y, width, height);
+        field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        return field;
+    }
+
     private void configFieldWithLabel(JLayeredPane panel, String labelText, int x, int y, int width, int height, int fontSize) {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
@@ -136,6 +153,31 @@ public class Login extends JFrame {
         label.setFont(new Font("Arial", Font.BOLD, fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
+    }
+
+    private void login(){
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            CustomDialog.showMessage("Username or password cannot be empty", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            User user = userController.getUserByUsername(username);
+
+            if (user != null && user.getPassword().equals(password)) {
+                CustomDialog.showMessage("Login successful!", JOptionPane.INFORMATION_MESSAGE);
+                new MainMenu(user);
+                dispose();
+            } else {
+                CustomDialog.showMessage("Invalid username or password", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void main(String[] args) {

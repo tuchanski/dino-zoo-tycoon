@@ -1,6 +1,9 @@
 package views.panels;
 
+import controllers.UserController;
+import exceptions.EntityAlreadyRegisteredException;
 import views.utils.CustomButton;
+import views.utils.CustomDialog;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -12,8 +15,11 @@ public class Register extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JTextField passwordField;
+    private UserController userController;
 
     public Register(JFrame parentFrame){
+        userController = new UserController();
+
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -114,7 +120,7 @@ public class Register extends JFrame {
                 320,
                 165,
                 62,
-                e -> System.out.println("Register"),
+                e -> register(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
         layeredPane.add(registerButton, JLayeredPane.PALETTE_LAYER);
@@ -141,6 +147,28 @@ public class Register extends JFrame {
         label.setFont(new Font("Arial", Font.BOLD, fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
+    }
+
+    private void register(){
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
+
+        if (username.isEmpty() || password.isEmpty()){
+            CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+
+        try{
+            userController.createUser(username, password);
+            CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (EntityAlreadyRegisteredException e) {
+            CustomDialog.showMessage("Username already registered.", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

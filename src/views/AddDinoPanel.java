@@ -19,7 +19,7 @@ public class AddDinoPanel extends JFrame {
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parentFrame);
 
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-add.png");
         backgroundPanel.setLayout(null);
@@ -50,7 +50,7 @@ public class AddDinoPanel extends JFrame {
                 14,
                 52,
                 53,
-                e -> System.exit(0),
+                e -> dispose(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -60,7 +60,7 @@ public class AddDinoPanel extends JFrame {
                 14,
                 52,
                 53,
-                e -> parentFrame.setState(JFrame.ICONIFIED),
+                e -> setState(JFrame.ICONIFIED),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -111,7 +111,7 @@ public class AddDinoPanel extends JFrame {
                 370,
                 165,
                 62,
-                e -> parentFrame.setState(JFrame.ICONIFIED),
+                e -> JOptionPane.showMessageDialog(this, "Dino Added!"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 

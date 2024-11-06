@@ -26,7 +26,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
         String dietType = DinosaurSpecies.valueOf(species).getDiet();
 
-        String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type, enclosure_id) VALUES (?, ?, ?)";
+        String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type) VALUES (?, ?)";
 
         try {
 

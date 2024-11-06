@@ -7,7 +7,9 @@ import repositories.interfaces.IZooRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ZooRepositoryImpl implements IZooRepository {
@@ -47,7 +49,32 @@ public class ZooRepositoryImpl implements IZooRepository {
 
     @Override
     public List<Zoo> getAllZoos() {
-        return List.of();
+
+        List<Zoo> zoos = new ArrayList<>();
+
+        String selectZooQuery = "SELECT * FROM zoo where user_id = ?";
+
+        try {
+            PreparedStatement selectZooPs = getConnection().prepareStatement(selectZooQuery);
+            selectZooPs.setLong(1, user.getId());
+            ResultSet rs = selectZooPs.executeQuery();
+
+            while (rs.next()) {
+                long id = rs.getLong("zoo_id");
+                String name = rs.getString("name");
+                String location = rs.getString("location");
+                zoos.add(new Zoo(id, name, location, user.getId()));
+            }
+
+            rs.close();
+            selectZooPs.close();
+
+        } catch (SQLException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return zoos;
+
     }
 
     @Override

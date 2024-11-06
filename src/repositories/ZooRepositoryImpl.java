@@ -4,6 +4,7 @@ import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
 import models.Zoo;
+import repositories.interfaces.IInventoryRepository;
 import repositories.interfaces.IZooRepository;
 
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ZooRepositoryImpl implements IZooRepository {
 
     private final User user; // Dependency Injection
+    private final IInventoryRepository inventoryRepository = new InventoryRepositoryImpl();
 
     public ZooRepositoryImpl(User user) {
         this.user = user;
@@ -25,11 +27,10 @@ public class ZooRepositoryImpl implements IZooRepository {
         return DB.connect();
     }
 
-
     @Override
     public void createZoo(String name, String location) {
 
-        String createZooQuery = "INSERT INTO zoo (name, location, user_id) VALUES (?, ?, ?)";
+        String createZooQuery = "INSERT INTO zoo (name, location, user_id) VALUES (?, ?, ?) RETURNING zoo_id";
 
         try {
             PreparedStatement createZooPs = getConnection().prepareStatement(createZooQuery);
@@ -37,7 +38,15 @@ public class ZooRepositoryImpl implements IZooRepository {
             createZooPs.setString(2, location);
             createZooPs.setLong(3, user.getId());
 
-            createZooPs.execute();
+            ResultSet rs = createZooPs.executeQuery();
+            if (rs.next()) {
+                Long zooId = rs.getLong("zoo_id");
+                System.out.println("Zoo created: " + name);
+
+                inventoryRepository.createInventory(zooId);
+            }
+
+            rs.close();
             createZooPs.close();
 
             System.out.println("Zoo created: " + name);

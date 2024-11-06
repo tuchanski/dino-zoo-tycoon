@@ -169,7 +169,7 @@ public class Login extends JFrame {
 
             if (user != null && user.getPassword().equals(password)) {
                 CustomDialog.showMessage("Login successful!", JOptionPane.INFORMATION_MESSAGE);
-                new MainMenu();
+                new MainMenu(user);
                 dispose();
             } else {
                 CustomDialog.showMessage("Invalid username or password", JOptionPane.ERROR_MESSAGE);

@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.CustomButton;
 import views.utils.ImageBackgroundPanel;
@@ -19,8 +19,13 @@ public class Register extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/small-bg-register.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-register.png");
         backgroundPanel.setLayout(null);
+
+        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
 
         CustomButton closeButton = new CustomButton(
                 "src/resources/buttons/closeButtonSmall.png",
@@ -84,7 +89,7 @@ public class Register extends JFrame {
         // Username
         configFieldWithLabel(layeredPane, "USERNAME:", 153, 140, 100, 30, 16);
 
-        ImageIcon usernameFieldBg = new ImageIcon("src/resources/images/customField.png");
+        ImageIcon usernameFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel usernameFieldBackground = new JLabel(usernameFieldBg);
         usernameFieldBackground.setBounds(65, 170, 266, 47);
         layeredPane.add(usernameFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -95,7 +100,7 @@ public class Register extends JFrame {
         // Password
         configFieldWithLabel(layeredPane, "PASSWORD:", 153, 220, 120, 30, 16);
 
-        ImageIcon passwordFieldBg = new ImageIcon("src/resources/images/customField.png");
+        ImageIcon passwordFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel passwordFieldBackground = new JLabel(passwordFieldBg);
         passwordFieldBackground.setBounds(65, 250, 266, 47);
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);

@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.CustomButton;
 import views.utils.ImageBackgroundPanel;
@@ -19,10 +19,15 @@ public class AddDinoPanel extends JFrame {
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parentFrame);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/small-bg-add.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-add.png");
         backgroundPanel.setLayout(null);
+
+        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
 
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -45,7 +50,7 @@ public class AddDinoPanel extends JFrame {
                 14,
                 52,
                 53,
-                e -> System.exit(0),
+                e -> dispose(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -55,7 +60,7 @@ public class AddDinoPanel extends JFrame {
                 14,
                 52,
                 53,
-                e -> parentFrame.setState(JFrame.ICONIFIED),
+                e -> setState(JFrame.ICONIFIED),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -70,7 +75,7 @@ public class AddDinoPanel extends JFrame {
         // Name
         configFieldWithLabel(layeredPane, "NAME:", 175, 110, 100, 30, 16);
 
-        ImageIcon nameFieldBg = new ImageIcon("src/resources/images/customField.png");
+        ImageIcon nameFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel nameFieldBackground = new JLabel(nameFieldBg);
         nameFieldBackground.setBounds(65, 140, 266, 47);
         layeredPane.add(nameFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -81,7 +86,7 @@ public class AddDinoPanel extends JFrame {
         // Type
         configFieldWithLabel(layeredPane, "TYPE:", 175, 190, 100, 30, 16);
 
-        ImageIcon typeFieldBg = new ImageIcon("src/resources/images/customField.png");
+        ImageIcon typeFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel typeFieldBackground = new JLabel(typeFieldBg);
         typeFieldBackground.setBounds(65, 220, 266, 47);
         layeredPane.add(typeFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -92,7 +97,7 @@ public class AddDinoPanel extends JFrame {
         // Age
         configFieldWithLabel(layeredPane, "AGE:", 178, 270, 100, 30, 16);
 
-        ImageIcon ageFieldBg = new ImageIcon("src/resources/images/customField.png");
+        ImageIcon ageFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel ageFieldBackground = new JLabel(ageFieldBg);
         ageFieldBackground.setBounds(65, 300, 266, 47);
         layeredPane.add(ageFieldBackground, JLayeredPane.DEFAULT_LAYER);
@@ -106,7 +111,7 @@ public class AddDinoPanel extends JFrame {
                 370,
                 165,
                 62,
-                e -> parentFrame.setState(JFrame.ICONIFIED),
+                e -> JOptionPane.showMessageDialog(this, "Dino Added!"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 

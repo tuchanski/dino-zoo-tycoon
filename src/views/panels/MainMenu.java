@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.ImageBackgroundPanel;
 import views.utils.TitleBarButton;
@@ -16,12 +16,17 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/bg.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
         TitleBarButton titleBarButtons = new TitleBarButton(this);
         titleBarButtons.setBounds(0, 0, 800, 100);
         backgroundPanel.add(titleBarButtons);
+
+        ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(imageLabel);
 
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {

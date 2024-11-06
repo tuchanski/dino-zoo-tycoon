@@ -1,4 +1,4 @@
-package views;
+package views.panels;
 
 import views.utils.CustomButton;
 import views.utils.ImageBackgroundPanel;
@@ -17,7 +17,7 @@ public class InitialPanel extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/images/small-bg-welcome.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-welcome.png");
         backgroundPanel.setLayout(null);
 
         CustomButton closeButton = new CustomButton(
@@ -46,7 +46,7 @@ public class InitialPanel extends JFrame {
         CustomButton loginButton = new CustomButton(
                 "src/resources/buttons/loginButton.png",
                 116,
-                190,
+                210,
                 165,
                 62,
                 e -> {
@@ -59,7 +59,7 @@ public class InitialPanel extends JFrame {
         CustomButton registerButton = new CustomButton(
                 "src/resources/buttons/registerButton.png",
                 116,
-                260,
+                280,
                 165,
                 62,
                 e -> {

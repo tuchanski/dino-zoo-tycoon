@@ -30,7 +30,7 @@ public class Enclosure {
         System.out.println("Area: " + area + " square meters");
 
         if (!dinosaurs.isEmpty()) {
-            dinosaurs.forEach(dinosaur -> dinosaur.displayInfo());
+            dinosaurs.forEach(dinosaur -> dinosaur.toString());
         }
         if (!availableFoods.isEmpty()) {
             availableFoods.forEach(food -> System.out.println(food.toString()));

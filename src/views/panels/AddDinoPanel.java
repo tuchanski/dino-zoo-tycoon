@@ -8,12 +8,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import models.enums.DinosaurSpecies;
+
 public class AddDinoPanel extends JFrame {
     private int mouseX, mouseY;
 
-    private JTextField nameField;
-    private JTextField typeField;
-    private JTextField ageField;
+    private JComboBox<DinosaurSpecies> speciesComboBox;
 
     public AddDinoPanel(JFrame parentFrame) {
         setUndecorated(true);
@@ -72,38 +72,20 @@ public class AddDinoPanel extends JFrame {
         layeredPane.setBounds(0, 0, 400, 500);
         backgroundPanel.add(layeredPane);
 
-        // Name
-        configFieldWithLabel(layeredPane, "NAME:", 175, 110, 100, 30, 16);
+        // Combbox
+        configFieldWithLabel(layeredPane, "SPECIES:", 175, 110, 100, 30, 16);
 
-        ImageIcon nameFieldBg = new ImageIcon("src/resources/utils/customField.png");
-        JLabel nameFieldBackground = new JLabel(nameFieldBg);
-        nameFieldBackground.setBounds(65, 140, 266, 47);
-        layeredPane.add(nameFieldBackground, JLayeredPane.DEFAULT_LAYER);
+        ImageIcon speciesFieldBg = new ImageIcon("src/resources/utils/customField.png");
+        JLabel speciesFieldBackground = new JLabel(speciesFieldBg);
+        speciesFieldBackground.setBounds(74, 140, 266, 47);
+        layeredPane.add(speciesFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        nameField = transparentField(68, 140, 262, 47, 12);
-        layeredPane.add(nameField, JLayeredPane.PALETTE_LAYER);
+        speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
+        speciesComboBox.setBounds(76, 140, 262, 47);
+        speciesComboBox.setFont(new Font("Arial", Font.BOLD, 12));
+        speciesComboBox.setBackground(new Color(255, 255, 255, 100));
 
-        // Type
-        configFieldWithLabel(layeredPane, "TYPE:", 175, 190, 100, 30, 16);
-
-        ImageIcon typeFieldBg = new ImageIcon("src/resources/utils/customField.png");
-        JLabel typeFieldBackground = new JLabel(typeFieldBg);
-        typeFieldBackground.setBounds(65, 220, 266, 47);
-        layeredPane.add(typeFieldBackground, JLayeredPane.DEFAULT_LAYER);
-
-        typeField = transparentField(68, 220, 262, 47, 12);
-        layeredPane.add(typeField, JLayeredPane.PALETTE_LAYER);
-
-        // Age
-        configFieldWithLabel(layeredPane, "AGE:", 178, 270, 100, 30, 16);
-
-        ImageIcon ageFieldBg = new ImageIcon("src/resources/utils/customField.png");
-        JLabel ageFieldBackground = new JLabel(ageFieldBg);
-        ageFieldBackground.setBounds(65, 300, 266, 47);
-        layeredPane.add(ageFieldBackground, JLayeredPane.DEFAULT_LAYER);
-
-        ageField = transparentField(68, 300, 262, 47, 12);
-        layeredPane.add(ageField, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
         CustomButton submitButton = new CustomButton(
                 "src/resources/buttons/submitButton.png",
@@ -120,18 +102,7 @@ public class AddDinoPanel extends JFrame {
         add(backgroundPanel);
         setVisible(true);
     }
-
-    private JTextField transparentField(int x, int y, int width, int height, int fontSize) {
-        JTextField field = new JTextField();
-        field.setOpaque(false);
-        Color fontColor = new Color(218, 195, 167);
-        field.setForeground(fontColor);
-        field.setBorder(null);
-        field.setBounds(x, y, width, height);
-        field.setFont(new Font("Arial", Font.BOLD, fontSize));
-        return field;
-    }
-
+    
     private void configFieldWithLabel(JLayeredPane panel, String labelText, int x, int y, int width, int height, int fontSize) {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);

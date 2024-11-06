@@ -79,6 +79,22 @@ public class ZooRepositoryImpl implements IZooRepository {
 
     @Override
     public Zoo getZooById(Long id) {
+
+        String getZooQuery = "SELECT * FROM zoo WHERE zoo_id = ? AND user_id = ?";
+
+        try {
+            PreparedStatement getZooPs = getConnection().prepareStatement(getZooQuery);
+            getZooPs.setLong(1, id);
+            getZooPs.setLong(2, user.getId());
+            ResultSet rs = getZooPs.executeQuery();
+            if (rs.next()) {
+                return new Zoo(id, rs.getString("name"), rs.getString("location"), user.getId());
+            }
+
+        } catch (SQLException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+
         return null;
     }
 

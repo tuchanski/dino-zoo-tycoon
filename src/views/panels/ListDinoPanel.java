@@ -47,7 +47,6 @@ public class ListDinoPanel extends JFrame {
             }
         });
 
-        // Close and minimize buttons
         CustomButton closeButton = new CustomButton(
                 "src/resources/buttons/closeButtonSmall.png",
                 735,
@@ -133,42 +132,56 @@ public class ListDinoPanel extends JFrame {
 
             // Species
             JLabel speciesLabel = new JLabel(dinosaur.getSpecies().name());
-            speciesLabel.setFont(new Font("Arial", Font.BOLD, 16));
-            Color fontColorSpecies = new Color(228, 201, 171);
-            speciesLabel.setForeground(fontColorSpecies);
+            speciesLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            speciesLabel.setForeground(new Color(228, 201, 171));
             speciesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(speciesLabel);
 
             // Diet
             JLabel dietLabel = new JLabel(dinosaur.getSpecies().getDiet().toUpperCase());
-            dietLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-            Color fontColorDiet = new Color(228, 201, 171);
-            dietLabel.setForeground(fontColorDiet);
+            dietLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+            dietLabel.setForeground(new Color(228, 201, 171));
             dietLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(dietLabel);
 
+            // Botões
+            CustomButton deleteButton = new CustomButton(
+                    "src/resources/buttons/deleteButtonSmall.png",
+                    0,
+                    0,
+                    52,
+                    53,
+                    e -> {
+                        try {
+                            dinosaurController.deleteDinosaurById(dinosaur.getId().intValue());
+                            refreshDinosaurCards(dinosaursPanel);
+                        } catch (EntityNotFoundException ex) {
+                            JOptionPane.showMessageDialog(null, "Dinosaur not found.");
+                        }
+                    },
+                    Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+            );
 
+            CustomButton updateButton = new CustomButton(
+                    "src/resources/buttons/updateButtonSmall.png",
+                    0,
+                    0,
+                    52,
+                    53,
+                    e -> {
+                        new UpdateDinoPanel(this, dinosaur);
+                    },
+                    Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+            );
 
-            JButton deleteButton = new JButton("Delete");
-            deleteButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            deleteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            deleteButton.addActionListener(e -> {
-                try {
-                    dinosaurController.deleteDinosaurById(dinosaur.getId().intValue());
-                    refreshDinosaurCards(dinosaursPanel);
-                } catch (EntityNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, "Dinosaur not foudn.");
-                }
-            });
-            cardPanel.add(deleteButton);
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            buttonPanel.setOpaque(false);
 
-            JButton updateButton = new JButton("Update");
-            updateButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            updateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            updateButton.addActionListener(e -> {
-                new UpdateDinoPanel(this, dinosaur);
-            });
-            cardPanel.add(updateButton);
+            buttonPanel.add(deleteButton);
+            buttonPanel.add(updateButton);
+
+            cardPanel.add(buttonPanel);
 
             dinosaursPanel.add(cardPanel);
         }
@@ -176,6 +189,7 @@ public class ListDinoPanel extends JFrame {
         dinosaursPanel.revalidate();
         dinosaursPanel.repaint();
     }
+
 
     private void refreshDinosaurCards(JPanel dinosaursPanel) {
         addDinosaurCards(dinosaursPanel);

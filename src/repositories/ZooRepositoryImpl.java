@@ -1,5 +1,6 @@
 package repositories;
 
+import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
 import models.Zoo;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class ZooRepositoryImpl implements IZooRepository {
 
-    private User user; // Dependency Injection
+    private final User user; // Dependency Injection
 
     public ZooRepositoryImpl(User user) {
         this.user = user;
@@ -41,7 +42,7 @@ public class ZooRepositoryImpl implements IZooRepository {
 
             System.out.println("Zoo created: " + name);
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -69,7 +70,7 @@ public class ZooRepositoryImpl implements IZooRepository {
             rs.close();
             selectZooPs.close();
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -91,7 +92,7 @@ public class ZooRepositoryImpl implements IZooRepository {
                 return new Zoo(id, rs.getString("name"), rs.getString("location"), user.getId());
             }
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -99,12 +100,83 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
-    public Zoo updateZooById(Long id, String newName, String newLocation) {
-        return null;
+    public Zoo updateZooById(Long id, String newName, String newLocation)
+            throws EntityNotFoundException {
+
+        Zoo toBeUpdated = getZooById(id);
+
+        if (toBeUpdated == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
+        String updateQuery = "UPDATE Zoo SET ";
+        boolean updateNeeded = false;
+        int paramIndex = 1;
+
+        boolean nameChanged = !newName.equals(toBeUpdated.getName());
+        boolean locationChanged = !newLocation.equals(toBeUpdated.getLocation());
+
+        if (nameChanged) {
+            updateQuery += "name = ?";
+            updateNeeded = true;
+        }
+
+        if (locationChanged) {
+            updateQuery += updateNeeded ? ", location = ?" : "location = ?";
+            updateNeeded = true;
+        }
+
+        if (!updateNeeded) {
+            return toBeUpdated;
+        }
+
+        updateQuery += " WHERE zoo_id = ?";
+
+        try (PreparedStatement updatePs = getConnection().prepareStatement(updateQuery)) {
+
+            if (nameChanged) {
+                updatePs.setString(paramIndex++, newName);
+            }
+
+            if (locationChanged) {
+                updatePs.setString(paramIndex++, newLocation);
+            }
+
+            updatePs.setLong(paramIndex, id);
+            updatePs.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return toBeUpdated;
     }
 
+
     @Override
-    public Zoo deleteZooById(Long id) {
-        return null;
+    public Zoo deleteZooById(Long id) throws EntityNotFoundException {
+
+        Zoo toBeDeleted = getZooById(id);
+
+        if (toBeDeleted == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
+        String deleteZooQuery = "DELETE FROM zoo WHERE zoo_id = ? AND user_id = ?";
+
+        try {
+
+            PreparedStatement deleteZooPs = getConnection().prepareStatement(deleteZooQuery);
+            deleteZooPs.setLong(1, id);
+            deleteZooPs.setLong(2, user.getId());
+            deleteZooPs.execute();
+            deleteZooPs.close();
+            System.out.println("Zoo deleted: " + id);
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return toBeDeleted;
     }
 }

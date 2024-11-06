@@ -1,11 +1,12 @@
 package application;
 
 import controllers.UserController;
+import exceptions.EntityNotFoundException;
 import models.User;
 import repositories.ZooRepositoryImpl;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
 
         UserController userController = new UserController();
 
@@ -15,6 +16,13 @@ public class Main {
 
         System.out.println(zooRepository.getAllZoos());
 
+        zooRepository.createZoo("Fornite da Ilha", "Guarabira");
+        
+        System.out.println(zooRepository.getAllZoos());
+
+        zooRepository.updateZooById(2L, "Ilha do Fornite", "Guarabira");
+
+        System.out.println(zooRepository.getAllZoos());
 
     }
 }

@@ -161,31 +161,57 @@ public class ZooRepositoryImpl implements IZooRepository {
         return toBeUpdated;
     }
 
-
     @Override
     public Zoo deleteZooById(Long id) throws EntityNotFoundException {
-
         Zoo toBeDeleted = getZooById(id);
 
         if (toBeDeleted == null) {
             throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
         }
 
+        deleteAssociatedInventory(id);
+        deleteZoo(id);
+
+        return toBeDeleted;
+    }
+
+    private void deleteZoo(Long id) {
         String deleteZooQuery = "DELETE FROM zoo WHERE zoo_id = ? AND user_id = ?";
 
         try {
-
             PreparedStatement deleteZooPs = getConnection().prepareStatement(deleteZooQuery);
+
             deleteZooPs.setLong(1, id);
             deleteZooPs.setLong(2, user.getId());
             deleteZooPs.execute();
             deleteZooPs.close();
+
             System.out.println("Zoo deleted: " + id);
+        } catch (SQLException e) {
+            System.out.println("Error while deleting zoo: " + e.getMessage());
+        }
+    }
+
+    private void deleteAssociatedInventory(Long zooId) {
+        String inventoryIdQuery = "SELECT * FROM Inventory WHERE zoo_id = ?";
+
+        try {
+            PreparedStatement inventoryIdPs = getConnection().prepareStatement(inventoryIdQuery);
+
+            inventoryIdPs.setLong(1, zooId);
+
+            ResultSet rs = inventoryIdPs.executeQuery();
+            if (rs.next()) {
+                Long inventoryId = rs.getLong("inventory_id");
+                inventoryRepository.deleteInventoryById(inventoryId);
+            }
+
+            inventoryIdPs.close();
+            rs.close();
 
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error while deleting inventory: " + e.getMessage());
         }
-
-        return toBeDeleted;
     }
+
 }

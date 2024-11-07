@@ -4,7 +4,6 @@ import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
 import models.Zoo;
-import repositories.interfaces.IInventoryRepository;
 import repositories.interfaces.IZooRepository;
 
 import java.sql.Connection;
@@ -17,7 +16,6 @@ import java.util.List;
 public class ZooRepositoryImpl implements IZooRepository {
 
     private final User user; // Dependency Injection
-    private final IInventoryRepository inventoryRepository = new InventoryRepositoryImpl();
 
     public ZooRepositoryImpl(User user) {
         this.user = user;
@@ -38,15 +36,7 @@ public class ZooRepositoryImpl implements IZooRepository {
             createZooPs.setString(2, location);
             createZooPs.setLong(3, user.getId());
 
-            ResultSet rs = createZooPs.executeQuery();
-            if (rs.next()) {
-                Long zooId = rs.getLong("zoo_id");
-                System.out.println("Zoo created: " + name);
-
-                inventoryRepository.createInventory(zooId);
-            }
-
-            rs.close();
+            createZooPs.execute();
             createZooPs.close();
 
             System.out.println("Zoo created: " + name);
@@ -169,7 +159,6 @@ public class ZooRepositoryImpl implements IZooRepository {
             throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
         }
 
-        deleteAssociatedInventory(id);
         deleteZoo(id);
 
         return toBeDeleted;
@@ -192,26 +181,5 @@ public class ZooRepositoryImpl implements IZooRepository {
         }
     }
 
-    private void deleteAssociatedInventory(Long zooId) {
-        String inventoryIdQuery = "SELECT * FROM Inventory WHERE zoo_id = ?";
-
-        try {
-            PreparedStatement inventoryIdPs = getConnection().prepareStatement(inventoryIdQuery);
-
-            inventoryIdPs.setLong(1, zooId);
-
-            ResultSet rs = inventoryIdPs.executeQuery();
-            if (rs.next()) {
-                Long inventoryId = rs.getLong("inventory_id");
-                inventoryRepository.deleteInventoryById(inventoryId);
-            }
-
-            inventoryIdPs.close();
-            rs.close();
-
-        } catch (SQLException e) {
-            System.out.println("Error while deleting inventory: " + e.getMessage());
-        }
-    }
 
 }

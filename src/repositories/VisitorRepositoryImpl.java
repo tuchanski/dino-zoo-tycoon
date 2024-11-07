@@ -71,6 +71,9 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
                 String name = rs.getString("name");
                 visitors.add(new Visitor(visitorId, name, zoo.getZooId()));
             }
+            
+            getVisitorPs.close();
+            rs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

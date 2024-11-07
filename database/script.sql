@@ -1,6 +1,8 @@
 -- May be changed in the future
 -- Please, create a database named DinoZooTycoon in Postgres before running this script
 
+CREATE TYPE FoodType AS ENUM ('Meat', 'Egg', 'Plant');
+
 CREATE TABLE SystemUser (
                             user_id BIGSERIAL PRIMARY KEY,
                             username VARCHAR(50) NOT NULL,
@@ -22,25 +24,14 @@ CREATE TABLE ParkEvent (
 CREATE TABLE Food (
                       food_id BIGSERIAL PRIMARY KEY,
                       name VARCHAR(50) NOT NULL,
-                      type VARCHAR(20) NOT NULL
+                      type FoodType NOT NULL
 );
 
-CREATE TABLE MeatStock (
-                           stock_id BIGSERIAL PRIMARY KEY,
-                           quantity INT NOT NULL,
-                           zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
-);
-
-CREATE TABLE EggStock (
-                          stock_id BIGSERIAL PRIMARY KEY,
-                          quantity INT NOT NULL,
-                          zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
-);
-
-CREATE TABLE PlantStock (
-                            stock_id BIGSERIAL PRIMARY KEY,
-                            quantity INT NOT NULL,
-                            zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
+CREATE TABLE FoodStock (
+                    zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL,
+                    food_type FoodType NOT NULL,
+                    quantity INTEGER DEFAULT 0,
+                    PRIMARY KEY (zoo_id, food_type)
 );
 
 CREATE TABLE Dinosaur (

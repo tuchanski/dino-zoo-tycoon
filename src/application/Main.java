@@ -10,15 +10,5 @@ public class Main {
 
         // zoo
 
-        UserController userController = new UserController();
-        userController.createUser("Fifo", "Lino");
-
-        User u = userController.getUserByUsername("Fifo");
-
-        ZooController zooController = new ZooController(u);
-
-        zooController.createZoo("Paraíso das Palmeiras");
-        
-
     }
 }

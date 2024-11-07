@@ -1,28 +1,36 @@
 package application;
 
+import controllers.InventoryController;
 import controllers.UserController;
+import controllers.ZooController;
+import exceptions.EntityAlreadyRegisteredException;
 import exceptions.EntityNotFoundException;
 import models.User;
+import repositories.InventoryRepositoryImpl;
 import repositories.ZooRepositoryImpl;
+import repositories.interfaces.IInventoryRepository;
+import repositories.interfaces.IZooRepository;
 
 public class Main {
-    public static void main(String[] args) throws EntityNotFoundException {
+    public static void main(String[] args) throws EntityAlreadyRegisteredException, EntityNotFoundException {
 
         UserController userController = new UserController();
 
-        User u = userController.getUserByUsername("fortnite_da_silva");
+        //userController.createUser("Teste", "1234");
 
-        ZooRepositoryImpl zooRepository = new ZooRepositoryImpl(u);
+        User u = userController.getUserByUsername("Teste");
+        ZooController zooController = new ZooController(u);
+        InventoryController inventoryController = new InventoryController();
 
-        System.out.println(zooRepository.getAllZoos());
+        //zooController.createZoo("Sitio do Tio Ari", "Lapa - PR");
 
-        zooRepository.createZoo("Fornite da Ilha", "Guarabira");
+        //System.out.println(inventoryController.getAllInventories());
 
-        System.out.println(zooRepository.getAllZoos());
+        zooController.deleteZooById(3);
 
-        zooRepository.updateZooById(2L, "Ilha do Fornite", "Guarabira");
 
-        System.out.println(zooRepository.getAllZoos());
+
+
 
     }
 }

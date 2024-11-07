@@ -36,4 +36,12 @@ public class ZooController {
         return zooRepository.deleteZooById((long) id);
     }
 
+    public void addCash(int id, int amount) throws EntityNotFoundException {
+        zooRepository.addCash((long) id, amount);
+    }
+
+    public void removeCash(int id, int amount) throws EntityNotFoundException {
+        zooRepository.removeCash((long) id, amount);
+    }
+
 }

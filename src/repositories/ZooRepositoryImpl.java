@@ -171,5 +171,91 @@ public class ZooRepositoryImpl implements IZooRepository {
         }
     }
 
+    @Override
+    public void addCash(Long id, int amount) throws EntityNotFoundException {
+
+        Zoo toAddCash = getZooById(id);
+
+        if (toAddCash == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
+        if (amount < 0) {
+            amount = 0;
+        }
+
+        int currentCash = getCurrentCash(id);
+        int finalAmount = currentCash + amount;
+
+        String addCashQuery = "UPDATE zoo SET cash = ? WHERE zoo_id = ?";
+
+        try {
+
+            PreparedStatement addCashPs = getConnection().prepareStatement(addCashQuery);
+            addCashPs.setLong(1, finalAmount);
+            addCashPs.setLong(2, id);
+            addCashPs.executeUpdate();
+            addCashPs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void removeCash(Long id, int amount) throws EntityNotFoundException {
+
+        Zoo toRemoveCash = getZooById(id);
+
+        if (toRemoveCash == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
+        if (amount < 0) {
+            amount = 0;
+        }
+
+        int currentCash = getCurrentCash(id);
+        int finalAmount = currentCash - amount;
+
+        String removeCashQuery = "UPDATE zoo SET cash = ? WHERE zoo_id = ?";
+
+        try {
+
+            PreparedStatement removeCashPs = getConnection().prepareStatement(removeCashQuery);
+            removeCashPs.setLong(1, finalAmount);
+            removeCashPs.setLong(2, id);
+            removeCashPs.executeUpdate();
+            removeCashPs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+    }
+
+    private int getCurrentCash(Long id) {
+
+        int currentCash = 0;
+        String getCurrentCashQuery = "SELECT * FROM zoo WHERE zoo_id = ? AND user_id = ?";
+
+        try {
+            PreparedStatement getCurrentCashPs = getConnection().prepareStatement(getCurrentCashQuery);
+            getCurrentCashPs.setLong(1, id);
+            getCurrentCashPs.setLong(2, user.getId());
+            ResultSet rs = getCurrentCashPs.executeQuery();
+            if (rs.next()) {
+                currentCash = rs.getInt("cash");
+            }
+            rs.close();
+            getCurrentCashPs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return currentCash;
+    }
 
 }

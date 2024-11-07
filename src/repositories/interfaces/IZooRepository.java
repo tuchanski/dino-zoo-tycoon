@@ -11,4 +11,6 @@ public interface IZooRepository {
     Zoo getZooById(Long id);
     Zoo updateZooById(Long id, String newName) throws EntityNotFoundException;
     Zoo deleteZooById(Long id) throws EntityNotFoundException;
+    void addCash(Long id, int amount) throws EntityNotFoundException;
+    void removeCash(Long id, int amount) throws EntityNotFoundException;
 }

@@ -16,8 +16,8 @@ public class ZooController {
         this.zooRepository = new ZooRepositoryImpl(user);
     }
 
-    public void createZoo(String name, String location){
-        zooRepository.createZoo(name, location);
+    public void createZoo(String name){
+        zooRepository.createZoo(name);
     }
 
     public List<Zoo> getAllZoos(){
@@ -28,8 +28,8 @@ public class ZooController {
         return zooRepository.getZooById((long) id);
     }
 
-    public Zoo updateZooById(int id, String newName, String newLocation) throws EntityNotFoundException {
-        return zooRepository.updateZooById((long) id, newName, newLocation);
+    public Zoo updateZooById(int id, String newName) throws EntityNotFoundException {
+        return zooRepository.updateZooById((long) id, newName);
     }
 
     public Zoo deleteZooById(int id) throws EntityNotFoundException {

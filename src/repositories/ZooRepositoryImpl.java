@@ -26,14 +26,14 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
-    public void createZoo(String name, String location) {
+    public void createZoo(String name) {
 
-        String createZooQuery = "INSERT INTO zoo (name, location, user_id) VALUES (?, ?, ?) RETURNING zoo_id";
+        String createZooQuery = "INSERT INTO zoo (name, cash, user_id) VALUES (?, ?, ?)";
 
         try {
             PreparedStatement createZooPs = getConnection().prepareStatement(createZooQuery);
             createZooPs.setString(1, name);
-            createZooPs.setString(2, location);
+            createZooPs.setInt(2, 0); // Default
             createZooPs.setLong(3, user.getId());
 
             createZooPs.execute();
@@ -62,7 +62,8 @@ public class ZooRepositoryImpl implements IZooRepository {
             while (rs.next()) {
                 long id = rs.getLong("zoo_id");
                 String name = rs.getString("name");
-                zoos.add(new Zoo(id, name, user.getId()));
+                int cash = rs.getInt("cash");
+                zoos.add(new Zoo(id, name, cash, user.getId()));
             }
 
             rs.close();
@@ -87,7 +88,7 @@ public class ZooRepositoryImpl implements IZooRepository {
             getZooPs.setLong(2, user.getId());
             ResultSet rs = getZooPs.executeQuery();
             if (rs.next()) {
-                return new Zoo(id, rs.getString("name"), user.getId());
+                return new Zoo(id, rs.getString("name"), rs.getInt("cash"), user.getId());
             }
 
         } catch (SQLException e) {
@@ -98,7 +99,7 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
-    public Zoo updateZooById(Long id, String newName, String newLocation)
+    public Zoo updateZooById(Long id, String newName)
             throws EntityNotFoundException {
 
         Zoo toBeUpdated = getZooById(id);

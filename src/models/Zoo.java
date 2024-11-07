@@ -15,6 +15,13 @@ public class Zoo {
         this.cash = 0;
     }
 
+    public Zoo(Long zooId, String name, int cash, Long userId) {
+        this.zooId = zooId;
+        this.name = name;
+        this.userId = userId;
+        this.cash = cash;
+    }
+
     public Long getZooId() {
         return zooId;
     }

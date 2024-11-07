@@ -6,9 +6,9 @@ import models.Zoo;
 import java.util.List;
 
 public interface IZooRepository {
-    void createZoo(String name, String location);
+    void createZoo(String name);
     List<Zoo> getAllZoos();
     Zoo getZooById(Long id);
-    Zoo updateZooById(Long id, String newName, String newLocation) throws EntityNotFoundException;
+    Zoo updateZooById(Long id, String newName) throws EntityNotFoundException;
     Zoo deleteZooById(Long id) throws EntityNotFoundException;
 }

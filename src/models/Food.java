@@ -8,6 +8,11 @@ public class Food {
     private String name;
     private FoodType type;
 
+    public Food(String name, FoodType type) {
+        this.name = name;
+        this.type = type;
+    }
+
     public Food(String name, String type) {
         this.name = name;
         this.type = FoodType.valueOf(type.toUpperCase());

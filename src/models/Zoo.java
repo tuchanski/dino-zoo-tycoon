@@ -4,14 +4,12 @@ public class Zoo {
 
     private Long zooId;
     private String name;
-    private String location;
 
     private Long userId;
 
-    public Zoo(Long zooId, String name, String location, Long userId) {
+    public Zoo(Long zooId, String name, Long userId) {
         this.zooId = zooId;
         this.name = name;
-        this.location = location;
         this.userId = userId;
     }
 
@@ -31,14 +29,6 @@ public class Zoo {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -48,7 +38,6 @@ public class Zoo {
         return "Zoo{" +
                 "zooId=" + zooId +
                 ", name='" + name + '\'' +
-                ", location='" + location + '\'' +
                 ", userId=" + userId +
                 '}';
     }

@@ -62,8 +62,7 @@ public class ZooRepositoryImpl implements IZooRepository {
             while (rs.next()) {
                 long id = rs.getLong("zoo_id");
                 String name = rs.getString("name");
-                String location = rs.getString("location");
-                zoos.add(new Zoo(id, name, location, user.getId()));
+                zoos.add(new Zoo(id, name, user.getId()));
             }
 
             rs.close();
@@ -88,7 +87,7 @@ public class ZooRepositoryImpl implements IZooRepository {
             getZooPs.setLong(2, user.getId());
             ResultSet rs = getZooPs.executeQuery();
             if (rs.next()) {
-                return new Zoo(id, rs.getString("name"), rs.getString("location"), user.getId());
+                return new Zoo(id, rs.getString("name"), user.getId());
             }
 
         } catch (SQLException e) {
@@ -113,15 +112,9 @@ public class ZooRepositoryImpl implements IZooRepository {
         int paramIndex = 1;
 
         boolean nameChanged = !newName.equals(toBeUpdated.getName());
-        boolean locationChanged = !newLocation.equals(toBeUpdated.getLocation());
 
         if (nameChanged) {
             updateQuery += "name = ?";
-            updateNeeded = true;
-        }
-
-        if (locationChanged) {
-            updateQuery += updateNeeded ? ", location = ?" : "location = ?";
             updateNeeded = true;
         }
 
@@ -135,10 +128,6 @@ public class ZooRepositoryImpl implements IZooRepository {
 
             if (nameChanged) {
                 updatePs.setString(paramIndex++, newName);
-            }
-
-            if (locationChanged) {
-                updatePs.setString(paramIndex++, newLocation);
             }
 
             updatePs.setLong(paramIndex, id);

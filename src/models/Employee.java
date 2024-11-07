@@ -6,8 +6,8 @@ public class Employee extends Human {
 
     // To implement the specific methods/atributes of an employee
 
-    public Employee(String name, Integer age, String gender){
-        super(name, age, gender);
+    public Employee(String name){
+        super(name);
     }
 
     @Override

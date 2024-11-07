@@ -3,16 +3,23 @@ package models;
 public class Zoo {
 
     private Long zooId;
-    private String name;
-    private String location;
-
     private Long userId;
 
-    public Zoo(Long zooId, String name, String location, Long userId) {
+    private String name;
+    private int cash;
+
+    public Zoo(Long zooId, String name, Long userId) {
         this.zooId = zooId;
         this.name = name;
-        this.location = location;
         this.userId = userId;
+        this.cash = 0;
+    }
+
+    public Zoo(Long zooId, String name, int cash, Long userId) {
+        this.zooId = zooId;
+        this.name = name;
+        this.userId = userId;
+        this.cash = cash;
     }
 
     public Long getZooId() {
@@ -31,25 +38,25 @@ public class Zoo {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Long getUserId() {
         return userId;
+    }
+
+    public int getCash() {
+        return cash;
+    }
+
+    public void setCash(int cash) {
+        this.cash = cash;
     }
 
     @Override
     public String toString() {
         return "Zoo{" +
                 "zooId=" + zooId +
-                ", name='" + name + '\'' +
-                ", location='" + location + '\'' +
                 ", userId=" + userId +
+                ", name='" + name + '\'' +
+                ", cash=" + cash +
                 '}';
     }
 }

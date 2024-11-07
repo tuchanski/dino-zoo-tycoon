@@ -1,7 +1,5 @@
 package models.abstracts;
 
-import models.enums.Gender;
-
 public abstract class Human {
 
     private static Long idCounter = 0L;
@@ -9,15 +7,11 @@ public abstract class Human {
     private Long id;
 
     private String name;
-    private Integer age;
-    private Gender gender;
 
-    public Human(String name, Integer age, String gender) {
+    public Human(String name) {
         idCounter++;
         this.id = idCounter;
         this.name = name;
-        this.age = age;
-        this.gender = Gender.valueOf(gender.toUpperCase());
     }
 
     public Long getId() {
@@ -30,22 +24,6 @@ public abstract class Human {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = Gender.valueOf(gender.toUpperCase());
     }
 
     // TO CHILD CLASSES

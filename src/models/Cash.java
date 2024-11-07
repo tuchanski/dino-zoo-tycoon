@@ -25,5 +25,5 @@ public class Cash {
     public Long getId() {
         return id;
     }
-    
+
 }

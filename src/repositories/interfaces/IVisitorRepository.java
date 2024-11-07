@@ -1,5 +1,6 @@
 package repositories.interfaces;
 
+import exceptions.EntityNotFoundException;
 import models.Visitor;
 
 import java.util.List;
@@ -8,7 +9,7 @@ public interface IVisitorRepository {
 
     void createGenericVisitor(); // Random Names
     List<Visitor> getVisitors();
-    Visitor getVisitor(Long visitorId);
-    Visitor deleteVisitor(Long visitorId);
+    Visitor getVisitorById(Long visitorId);
+    Visitor deleteVisitorById(Long visitorId) throws EntityNotFoundException;
 
 }

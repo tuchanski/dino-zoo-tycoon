@@ -1,5 +1,6 @@
 package repositories;
 
+import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Visitor;
 import models.Zoo;
@@ -56,7 +57,7 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     @Override
     public List<Visitor> getVisitors() {
 
-        List<Visitor> visitors = new ArrayList<>();
+        List<Visitor> visitors = new ArrayList<>(); // May be empty
 
         String getVisitorsQuery = "SELECT * FROM visitor WHERE zoo_id = ?";
 
@@ -71,7 +72,7 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
                 String name = rs.getString("name");
                 visitors.add(new Visitor(visitorId, name, zoo.getZooId()));
             }
-            
+
             getVisitorPs.close();
             rs.close();
 
@@ -84,13 +85,62 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     }
 
     @Override
-    public Visitor getVisitor(Long visitorId) {
-        return null;
+    public Visitor getVisitorById(Long visitorId) {
+
+        Visitor visitor = null;
+
+        String getVisitorQuery = "SELECT * FROM visitor WHERE visitor_id = ? AND zoo_id = ?";
+
+        try {
+
+            PreparedStatement getVisitorPs = getConnection().prepareStatement(getVisitorQuery);
+            getVisitorPs.setLong(1, visitorId);
+            getVisitorPs.setLong(2, zoo.getZooId());
+
+            ResultSet rs = getVisitorPs.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("name");
+                visitor = new Visitor(visitorId, name, zoo.getZooId());
+            }
+
+            rs.close();
+            getVisitorPs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return visitor;
+
     }
 
     @Override
-    public Visitor deleteVisitor(Long visitorId) {
-        return null;
+    public Visitor deleteVisitorById(Long visitorId) throws EntityNotFoundException {
+
+        Visitor visitor = getVisitorById(visitorId);
+
+        if (visitor == null) {
+            throw new EntityNotFoundException("Visitor not found with ID: " + visitorId);
+        }
+
+        String deleteVisitorQuery = "DELETE FROM visitor WHERE visitor_id = ? AND zoo_id = ?";
+
+        try {
+
+            PreparedStatement deleteVisitorPs = getConnection().prepareStatement(deleteVisitorQuery);
+            deleteVisitorPs.setLong(1, visitorId);
+            deleteVisitorPs.setLong(2, zoo.getZooId());
+            deleteVisitorPs.execute();
+            deleteVisitorPs.close();
+
+            System.out.println("Visitor with ID" + visitor.getId() + " has been deleted successfully to zoo: " + zoo.getName());
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return visitor;
     }
 
     private String getRandomName() {

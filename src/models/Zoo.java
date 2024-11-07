@@ -3,14 +3,16 @@ package models;
 public class Zoo {
 
     private Long zooId;
-    private String name;
-
     private Long userId;
+
+    private String name;
+    private int cash;
 
     public Zoo(Long zooId, String name, Long userId) {
         this.zooId = zooId;
         this.name = name;
         this.userId = userId;
+        this.cash = 0;
     }
 
     public Long getZooId() {
@@ -33,12 +35,21 @@ public class Zoo {
         return userId;
     }
 
+    public int getCash() {
+        return cash;
+    }
+
+    public void setCash(int cash) {
+        this.cash = cash;
+    }
+
     @Override
     public String toString() {
         return "Zoo{" +
                 "zooId=" + zooId +
-                ", name='" + name + '\'' +
                 ", userId=" + userId +
+                ", name='" + name + '\'' +
+                ", cash=" + cash +
                 '}';
     }
 }

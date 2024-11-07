@@ -4,7 +4,8 @@
 CREATE TABLE SystemUser (
                             user_id BIGSERIAL PRIMARY KEY,
                             username VARCHAR(50) NOT NULL,
-                            password VARCHAR(50) NOT NULL
+                            password VARCHAR(50) NOT NULL,
+                            cash INTEGER DEFAULT 0
 );
 
 CREATE TABLE Zoo (

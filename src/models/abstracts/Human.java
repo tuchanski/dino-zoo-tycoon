@@ -2,15 +2,17 @@ package models.abstracts;
 
 public abstract class Human {
 
-    private static Long idCounter = 0L;
-
     private Long id;
-
     private String name;
+    private Long zooId;
+
+    public Human(Long id, String name, Long zooId) {
+        this.id = id;
+        this.name = name;
+        this.zooId = zooId;
+    }
 
     public Human(String name) {
-        idCounter++;
-        this.id = idCounter;
         this.name = name;
     }
 
@@ -29,4 +31,12 @@ public abstract class Human {
     // TO CHILD CLASSES
     protected abstract void stareAtDino(); // We should have some better ideas
 
+    @Override
+    public String toString() {
+        return "Human{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", zooId=" + zooId +
+                '}';
+    }
 }

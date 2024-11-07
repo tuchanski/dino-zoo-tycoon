@@ -7,7 +7,9 @@ import repositories.interfaces.IVisitorRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +17,10 @@ import java.util.Random;
 public class VisitorRepositoryImpl implements IVisitorRepository {
 
     private final Zoo zoo;
+
+    private List<String> names = Arrays.asList("Afonso", "Guilherme", "Luiz", "Fernanda",
+            "Gabriela", "Marina", "Rafael", "Felipe", "Bruno", "Alice", "Ana", "Carla",
+                    "Arion", "Gabriel", "Joaquim", "Raquel", "Jurema", "Sofia");
 
     public VisitorRepositoryImpl(Zoo zoo) {
         this.zoo = zoo;
@@ -48,13 +54,30 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     }
 
     @Override
-    public void createVisitor(String name) {
+    public List<Visitor> getVisitors() {
 
-    }
+        List<Visitor> visitors = new ArrayList<>();
 
-    @Override
-    public List<Visitor> getVisitors(Long zooId) {
-        return List.of();
+        String getVisitorsQuery = "SELECT * FROM visitor WHERE zoo_id = ?";
+
+        try {
+
+            PreparedStatement getVisitorPs = getConnection().prepareStatement(getVisitorsQuery);
+            getVisitorPs.setLong(1, zoo.getZooId());
+            ResultSet rs = getVisitorPs.executeQuery();
+
+            while (rs.next()) {
+                Long visitorId = rs.getLong("visitor_id");
+                String name = rs.getString("name");
+                visitors.add(new Visitor(visitorId, name, zoo.getZooId()));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return visitors;
+
     }
 
     @Override
@@ -68,7 +91,6 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     }
 
     private String getRandomName() {
-        List<String> names = Arrays.asList("Afonso", "Guilherme", "Luiz", "Fernanda", "Gabriela", "Marina", "Rafael", "Felipe", "Bruno", "Alice", "Ana", "Carla");
         Random random = new Random();
         return names.get(random.nextInt(names.size()));
     }

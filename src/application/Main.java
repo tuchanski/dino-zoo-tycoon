@@ -14,21 +14,19 @@ public class Main {
 
         UserController userController = new UserController();
 
-        userController.createUser("tuchanski", "pass123");
+        //userController.createUser("tuchanski", "pass123");
 
         User u = userController.getUserByUsername("tuchanski");
 
         ZooController zooController = new ZooController(u);
 
-        zooController.createZoo("Canoeiro");
+        //zooController.createZoo("Canoeiro");
 
         Zoo zoo = zooController.getZooById(1);
 
         VisitorRepositoryImpl visitorRepository = new VisitorRepositoryImpl(zoo);
 
-        for (int i = 0; i < 10; i++) {
-            visitorRepository.createGenericVisitor();
-        }
+        System.out.println(visitorRepository.getVisitors());
 
     }
 }

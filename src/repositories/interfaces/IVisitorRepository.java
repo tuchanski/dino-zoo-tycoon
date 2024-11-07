@@ -7,8 +7,7 @@ import java.util.List;
 public interface IVisitorRepository {
 
     void createGenericVisitor(); // Random Names
-    void createVisitor(String name);
-    List<Visitor> getVisitors(Long zooId);
+    List<Visitor> getVisitors();
     Visitor getVisitor(Long visitorId);
     Visitor deleteVisitor(Long visitorId);
 

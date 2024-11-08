@@ -5,7 +5,9 @@ import controllers.ZooController;
 import exceptions.EntityAlreadyRegisteredException;
 import models.User;
 import models.Zoo;
+import models.enums.DinosaurSpecies;
 import models.enums.FoodType;
+import repositories.DinosaurRepositoryImpl;
 import repositories.FoodStockRepositoryImpl;
 import repositories.VisitorRepositoryImpl;
 
@@ -16,21 +18,25 @@ public class Main {
 
         UserController userController = new UserController();
 
-        userController.createUser("tuchanski", "pass123");
+        //userController.createUser("tuchanski", "pass123");
 
         User u = userController.getUserByUsername("tuchanski");
 
         ZooController zooController = new ZooController(u);
 
-        zooController.createZoo("Canoeiro");
+        //zooController.createZoo("Canoeiro");
 
         Zoo zoo = zooController.getZooById(1);
 
-        VisitorRepositoryImpl visitorRepository = new VisitorRepositoryImpl(zoo);
+        //DinosaurRepositoryImpl dinosaurRepository = new DinosaurRepositoryImpl(zoo);
+
+        //dinosaurRepository.createDinosaur(DinosaurSpecies.ACROCANTHOSAURUS.toString());
 
         FoodStockRepositoryImpl foodStockRepository = new FoodStockRepositoryImpl(zoo);
 
-        foodStockRepository.addFood(FoodType.MEAT, 20);
+        System.out.println(foodStockRepository.getFoodStock());
+
+
 
     }
 }

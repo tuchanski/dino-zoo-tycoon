@@ -4,6 +4,7 @@ import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Dinosaur;
 import models.User;
+import models.Zoo;
 import models.enums.DinosaurSpecies;
 import repositories.interfaces.IDinosaurRepository;
 
@@ -16,6 +17,12 @@ import java.util.List;
 
 public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
+    private final Zoo zoo;
+
+    public DinosaurRepositoryImpl(Zoo zoo) {
+        this.zoo = zoo;
+    }
+
     private Connection getConnection() throws SQLException {
         return DB.connect();
     }
@@ -27,7 +34,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
         String dietType = DinosaurSpecies.valueOf(species).getDiet();
 
-        String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type) VALUES (?, ?)";
+        String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type, zoo_id) VALUES (?, ?, ?)";
 
         try {
 
@@ -35,6 +42,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
             createDinosaurPs.setString(1, species);
             createDinosaurPs.setString(2, dietType);
+            createDinosaurPs.setLong(3, zoo.getZooId());
             //createDinosaurPs.setLong(3, enclosureId);
 
             createDinosaurPs.execute();
@@ -65,7 +73,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
                 Long id = getDinosaursRs.getLong("dinosaur_id");
                 DinosaurSpecies species = DinosaurSpecies.valueOf(getDinosaursRs.getString("species"));
 
-                dinosaurs.add(new Dinosaur(id, species));
+                dinosaurs.add(new Dinosaur(id, zoo.getZooId(), species));
             }
 
             getDinosaursRs.close();
@@ -97,7 +105,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
                 getDinosaurByIdPs.close();
                 rs.close();
 
-                return new Dinosaur(dinosaurId, species);
+                return new Dinosaur(dinosaurId, zoo.getZooId(),species);
             }
 
             getDinosaurByIdPs.close();
@@ -163,6 +171,6 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             System.out.println("Error: " + e.getMessage());
         }
 
-        return new Dinosaur(Long.valueOf(id), DinosaurSpecies.valueOf(newSpecies));
+        return new Dinosaur(Long.valueOf(id), zoo.getZooId(), DinosaurSpecies.valueOf(newSpecies));
     }
 }

@@ -13,7 +13,8 @@ public class Food {
         this.type = type;
     }
 
-    public Food(String name, String type) {
+    public Food(Long id, String name, String type) {
+        this.id = id;
         this.name = name;
         this.type = FoodType.valueOf(type.toUpperCase());
     }

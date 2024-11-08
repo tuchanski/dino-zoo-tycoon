@@ -5,30 +5,12 @@ import models.enums.FoodType;
 public class FoodStock {
 
     private Long zooId;
-    private FoodType foodType;
+    private Long foodId;
     private int quantity;
 
-    public FoodStock(Long zooId, FoodType foodType) {
+    public FoodStock(Long zooId, Long foodId, int quantity) {
         this.zooId = zooId;
-        this.foodType = foodType;
-        this.quantity = 0;
-    }
-
-    public FoodStock(Long zooId, String foodType) {
-        this.zooId = zooId;
-        this.foodType = FoodType.valueOf(foodType.toUpperCase()); // MEAT, EGG, PLANT
-        this.quantity = 0;
-    }
-
-    public FoodStock(Long zooId, FoodType foodType, int quantity) {
-        this.zooId = zooId;
-        this.foodType = foodType;
-        this.quantity = quantity;
-    }
-
-    public FoodStock(Long zooId, String foodType, int quantity) {
-        this.zooId = zooId;
-        this.foodType = FoodType.valueOf(foodType.toUpperCase()); // MEAT, EGG, PLANT
+        this.foodId = foodId;
         this.quantity = quantity;
     }
 
@@ -40,14 +22,6 @@ public class FoodStock {
         this.zooId = zooId;
     }
 
-    public FoodType getFoodType() {
-        return foodType;
-    }
-
-    public void setFoodType(FoodType foodType) {
-        this.foodType = foodType;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -56,11 +30,15 @@ public class FoodStock {
         this.quantity = quantity;
     }
 
+    public Long getFoodId() {
+        return foodId;
+    }
+
     @Override
     public String toString() {
         return "FoodStock{" +
                 "zooId=" + zooId +
-                ", foodType=" + foodType +
+                ", foodId=" + foodId +
                 ", quantity=" + quantity +
                 '}';
     }

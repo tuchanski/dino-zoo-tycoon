@@ -1,5 +1,4 @@
--- May be changed in the future
--- Please, create a database named DinoZooTycoon in Postgres before running this script
+-- Ensure a database named DinoZooTycoon is created in Postgres before running this script.
 
 CREATE TABLE SystemUser (
                             user_id BIGSERIAL PRIMARY KEY,
@@ -22,20 +21,20 @@ CREATE TABLE ParkEvent (
 CREATE TABLE Food (
                       food_id BIGSERIAL PRIMARY KEY,
                       name VARCHAR(50) NOT NULL,
-                      type VARCHAR(10) NOT NULL
+                      type VARCHAR(10) NOT NULL CHECK (type IN ('MEAT', 'PLANT', 'EGG'))
 );
 
 CREATE TABLE FoodStock (
                            zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL,
-                           food_type VARCHAR(10) NOT NULL,
+                           food_id BIGINT REFERENCES Food(food_id) NOT NULL,
                            quantity INTEGER DEFAULT 0,
-                           PRIMARY KEY (zoo_id, food_type)
+                           PRIMARY KEY (zoo_id, food_id)
 );
 
 CREATE TABLE Dinosaur (
                           dinosaur_id BIGSERIAL PRIMARY KEY,
                           species VARCHAR(50) NOT NULL,
-                          diet_type VARCHAR(50) NOT NULL,
+                          diet_type VARCHAR(10) NOT NULL CHECK (diet_type IN ('Carnivore', 'Herbivore', 'Omnivore')),
                           zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
 );
 
@@ -50,3 +49,8 @@ CREATE TABLE Employee (
                           name VARCHAR(100) NOT NULL,
                           zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
 );
+
+-- Populating Food
+INSERT INTO Food (name, type) VALUES ('Steak', 'MEAT');
+INSERT INTO Food (name, type) VALUES ('Broccoli', 'PLANT');
+INSERT INTO Food (name, type) VALUES ('Omelet', 'EGG');

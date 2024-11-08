@@ -18,7 +18,7 @@ public class ListDinoPanel extends JFrame {
     private DinosaurController dinosaurController;
 
     public ListDinoPanel(JFrame parentFrame) {
-        dinosaurController = new DinosaurController();
+        //dinosaurController = new DinosaurController();
         setUndecorated(true);
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

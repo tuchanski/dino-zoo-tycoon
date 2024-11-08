@@ -3,6 +3,7 @@ package controllers;
 import exceptions.EntityNotFoundException;
 import exceptions.EntitySpeciesNotFound;
 import models.Dinosaur;
+import models.Zoo;
 import repositories.DinosaurRepositoryImpl;
 import repositories.interfaces.IDinosaurRepository;
 
@@ -10,7 +11,11 @@ import java.util.List;
 
 public class DinosaurController {
 
-    private IDinosaurRepository dinosaurRepository = new DinosaurRepositoryImpl();
+    private IDinosaurRepository dinosaurRepository;
+
+    public DinosaurController (Zoo zoo) {
+        dinosaurRepository = new DinosaurRepositoryImpl(zoo);
+    }
 
     public void createDinosaur(String species) throws EntitySpeciesNotFound {
         dinosaurRepository.createDinosaur(species);

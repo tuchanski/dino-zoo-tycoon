@@ -3,12 +3,17 @@ package application;
 import controllers.UserController;
 import controllers.ZooController;
 import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.User;
 import models.Zoo;
+import models.enums.DinosaurSpecies;
+import models.enums.FoodType;
+import repositories.DinosaurRepositoryImpl;
+import repositories.FoodStockRepositoryImpl;
 import repositories.VisitorRepositoryImpl;
 
 public class Main {
-    public static void main(String[] args) throws EntityAlreadyRegisteredException {
+    public static void main(String[] args) throws EntityAlreadyRegisteredException, EntityNotFoundException {
 
         // zoo
 
@@ -24,9 +29,15 @@ public class Main {
 
         Zoo zoo = zooController.getZooById(1);
 
-        VisitorRepositoryImpl visitorRepository = new VisitorRepositoryImpl(zoo);
+        //DinosaurRepositoryImpl dinosaurRepository = new DinosaurRepositoryImpl(zoo);
 
-        System.out.println(visitorRepository.getVisitors());
+        //dinosaurRepository.createDinosaur(DinosaurSpecies.ACROCANTHOSAURUS.toString());
+
+        FoodStockRepositoryImpl foodStockRepository = new FoodStockRepositoryImpl(zoo);
+
+        foodStockRepository.addFood((long)2, 5);
+
+
 
     }
 }

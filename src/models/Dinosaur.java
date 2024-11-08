@@ -5,10 +5,11 @@ import models.enums.DinosaurSpecies;
 public class Dinosaur {
 
     private Long id;
-
+    private Long zooId;
     private DinosaurSpecies species;
 
-    public Dinosaur(Long id, DinosaurSpecies species) {
+    public Dinosaur(Long id, Long zooId, DinosaurSpecies species) {
+        this.zooId = zooId;
         this.id = id;
         this.species = species;
     }

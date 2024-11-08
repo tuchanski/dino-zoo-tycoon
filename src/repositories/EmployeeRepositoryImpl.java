@@ -43,6 +43,7 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
             createGenericEmployeePs.setString(1, name);
             createGenericEmployeePs.setLong(2, zoo.getZooId());
             createGenericEmployeePs.execute();
+            createGenericEmployeePs.close();
 
             System.out.println("Employee " + name + " has been created successfully to zoo: " + zoo.getName());
 

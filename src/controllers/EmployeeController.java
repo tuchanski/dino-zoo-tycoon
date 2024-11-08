@@ -32,5 +32,5 @@ public class EmployeeController {
     public Employee deleteEmployeeById(int id) throws EntityNotFoundException {
         return employeeRepository.deleteEmployeeById((long) id);
     }
-    
+
 }

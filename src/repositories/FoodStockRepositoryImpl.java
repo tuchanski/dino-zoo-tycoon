@@ -1,5 +1,6 @@
 package repositories;
 
+import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Food;
 import models.FoodStock;
@@ -29,7 +30,11 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
     }
 
     @Override
-    public void addFood(Long foodId, int amount) {
+    public void addFood(Long foodId, int amount) throws EntityNotFoundException {
+
+        if (!checkFoodId(foodId)){
+            throw new EntityNotFoundException("Food not found with ID " + foodId);
+        }
 
         if (amount < 0) {
             amount = 0;
@@ -57,7 +62,11 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
     }
 
     @Override
-    public void removeFood(Long foodId, int amount) {
+    public void removeFood(Long foodId, int amount) throws EntityNotFoundException {
+
+        if (!checkFoodId(foodId)){
+            throw new EntityNotFoundException("Food not found with ID " + foodId);
+        }
 
         if (amount < 0) {
             amount = 0;
@@ -212,6 +221,16 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
 
         return foods;
+    }
+
+    private Boolean checkFoodId(Long foodId) {
+        List<Food> foodsInSystem = getFoodsInSystem();
+        for (Food food : foodsInSystem) {
+            if (food.getId().equals(foodId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

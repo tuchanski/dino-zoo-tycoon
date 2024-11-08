@@ -1,7 +1,19 @@
 package models.enums;
 
 public enum FoodType {
-    MEAT,
-    EGG,
-    PLANT
+
+    MEAT("Meat"),
+    EGG("Egg"),
+    PLANT("Plant");
+
+    private final String name;
+
+    FoodType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

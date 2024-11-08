@@ -6,6 +6,10 @@ public class Employee extends Human {
 
     // To implement the specific methods/atributes of an employee
 
+    public Employee(Long id, String name, Long zooId) {
+        super(id, name, zooId);
+    }
+
     public Employee(String name){
         super(name);
     }

@@ -1,8 +1,10 @@
 package views.utils;
 
+import models.Zoo;
 import views.panels.AddDinoPanel;
 import views.panels.ListDinoPanel;
 import views.panels.MainMenu;
+import views.panels.UserSettings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,7 +69,7 @@ public class TitleBarButton extends JPanel {
                 14,
                 68,
                 70,
-                e -> System.exit(0),
+                e -> openUserSettings(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         add(addButton);
@@ -80,12 +82,18 @@ public class TitleBarButton extends JPanel {
     }
 
     private void openAddDino() {
-        AddDinoPanel addDinoFrame = new AddDinoPanel(parentFrame);
+        Zoo zoo = new Zoo(1L, "Teste Zoo", 100L);
+        AddDinoPanel addDinoFrame = new AddDinoPanel(parentFrame, zoo);
         addDinoFrame.setVisible(true);
     }
 
     private void openListDino() {
         ListDinoPanel listDinoPanel = new ListDinoPanel(parentFrame);
         listDinoPanel.setVisible(true);
+    }
+
+    private void openUserSettings(){
+        UserSettings userSettings = new UserSettings(parentFrame);
+        userSettings.setVisible(true);
     }
 }

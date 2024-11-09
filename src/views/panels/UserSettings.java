@@ -1,33 +1,27 @@
 package views.panels;
-
-import controllers.UserController;
-import exceptions.EntityAlreadyRegisteredException;
+import models.User;
 import views.utils.CustomButton;
-import views.utils.CustomDialog;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
+import views.utils.TitleBarButton;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Register extends JFrame {
+public class UserSettings extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JTextField passwordField;
-    private JTextField zooNameField;
-    private UserController userController;
 
-    public Register(JFrame parentFrame){
-        userController = new UserController();
-
+    public UserSettings(JFrame parentFrame){
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parentFrame);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-register.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-settings.png");
         backgroundPanel.setLayout(null);
 
         ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
@@ -41,7 +35,7 @@ public class Register extends JFrame {
                 14,
                 52,
                 53,
-                e -> System.exit(0),
+                e -> dispose(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -51,28 +45,12 @@ public class Register extends JFrame {
                 14,
                 52,
                 53,
-                e -> this.setState(JFrame.ICONIFIED),
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-
-        CustomButton backButton = new CustomButton(
-                "src/resources/buttons/backButtonSmall.png",
-                20,
-                14,
-                52,
-                53,
-                e -> {
-                    if (parentFrame != null) {
-                        parentFrame.setVisible(true);
-                    }
-                    dispose();
-                },
+                e -> setState(JFrame.ICONIFIED),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
         backgroundPanel.add(closeButton);
         backgroundPanel.add(minimizeButton);
-        backgroundPanel.add(backButton);
 
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -89,53 +67,55 @@ public class Register extends JFrame {
             }
         });
 
-        // JLayeredPane - organize layers
+        CustomButton userPhoto = new CustomButton(
+                "src/resources/buttons/fakeUser.png",
+                158,
+                125,
+                85,
+                86,
+                e -> this.setState(JFrame.ICONIFIED),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
+        backgroundPanel.add(userPhoto);
+
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setBounds(0, 0, 400, 500);
         backgroundPanel.add(layeredPane);
 
         // Username
-        configFieldWithLabel(layeredPane, "USERNAME:", 153, 135, 100, 30, 14);
+        configFieldWithLabel(layeredPane, "USERNAME:", 153, 210, 100, 30, 14);
 
         ImageIcon usernameFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel usernameFieldBackground = new JLabel(usernameFieldBg);
-        usernameFieldBackground.setBounds(65, 165, 266, 47);
+        usernameFieldBackground.setBounds(65, 240, 266, 47);
         layeredPane.add(usernameFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        usernameField = transparentField(68, 165, 262, 47, 12);
+        usernameField = transparentField(68, 240, 262, 47, 12);
         layeredPane.add(usernameField, JLayeredPane.PALETTE_LAYER);
 
         // Password
-        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 215, 120, 30, 14);
+        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 290, 120, 30, 14);
 
         ImageIcon passwordFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel passwordFieldBackground = new JLabel(passwordFieldBg);
-        passwordFieldBackground.setBounds(65, 245, 266, 47);
+        passwordFieldBackground.setBounds(65, 320, 266, 47);
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        passwordField = transparentField(68, 245, 262, 47, 12);
+        passwordField = transparentField(68, 320, 262, 47, 12);
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
 
-        configFieldWithLabel(layeredPane, "ZOO NAME:", 153, 290, 120, 30, 14);
-
-        ImageIcon zooNameFieldBg = new ImageIcon("src/resources/utils/customField.png");
-        JLabel zooNameFieldBackground = new JLabel(zooNameFieldBg);
-        zooNameFieldBackground.setBounds(65, 320, 266, 47);
-        layeredPane.add(zooNameFieldBackground, JLayeredPane.DEFAULT_LAYER);
-
-        zooNameField = transparentField(68, 320, 262, 47, 12);
-        layeredPane.add(zooNameField, JLayeredPane.PALETTE_LAYER);
-
-        CustomButton registerButton = new CustomButton(
-                "src/resources/buttons/registerButton.png",
-                116,
-                380,
+        CustomButton updateButton = new CustomButton(
+                "src/resources/buttons/updateButton.png",
+                120,
+                385,
                 165,
                 62,
-                e -> register(),
+                e -> System.out.println("a"),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
-        layeredPane.add(registerButton, JLayeredPane.PALETTE_LAYER);
+
+        layeredPane.add(updateButton, JLayeredPane.PALETTE_LAYER);
 
         add(backgroundPanel);
         setVisible(true);
@@ -161,34 +141,4 @@ public class Register extends JFrame {
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }
-
-    private void register(){
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText().trim();
-
-        if (username.isEmpty() || password.isEmpty()){
-            CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
-            return;
-        } else if (username.length() > 10) {
-            CustomDialog.showMessage("Maximum 10 characters", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-
-        try{
-            userController.createUser(username, password);
-            CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
-        }
-        catch (EntityAlreadyRegisteredException e) {
-            CustomDialog.showMessage("Username already registered.", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        new Register(null);
-    }
-
 }

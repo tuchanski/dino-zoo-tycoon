@@ -1,6 +1,7 @@
 package views.panels;
 
 import controllers.DinosaurController;
+import models.Zoo;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
 import views.utils.CustomFont;
@@ -19,8 +20,8 @@ public class AddDinoPanel extends JFrame {
     private JComboBox<DinosaurSpecies> speciesComboBox;
     private DinosaurController dinosaurController;
 
-    public AddDinoPanel(JFrame parentFrame) {
-        //dinosaurController = new DinosaurController();
+    public AddDinoPanel(JFrame parentFrame, Zoo zoo) {
+        dinosaurController = new DinosaurController(zoo);
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

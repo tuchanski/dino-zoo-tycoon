@@ -30,8 +30,6 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public void createDinosaur(String species) {
 
-        //int enclosureId = 1; // CHANGE AFTER CREATING ENCLOSURE'S LOGIC
-
         String dietType = DinosaurSpecies.valueOf(species).getDiet();
 
         String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type, zoo_id) VALUES (?, ?, ?)";
@@ -43,7 +41,6 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             createDinosaurPs.setString(1, species);
             createDinosaurPs.setString(2, dietType);
             createDinosaurPs.setLong(3, zoo.getZooId());
-            //createDinosaurPs.setLong(3, enclosureId);
 
             createDinosaurPs.execute();
             createDinosaurPs.close();
@@ -59,7 +56,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public List<Dinosaur> getDinosaurs() {
 
-        List<Dinosaur> dinosaurs = new ArrayList<>(); // May be empty
+        List<Dinosaur> dinosaurs = new ArrayList<>();
 
         String getDinosaursQuery = "SELECT * FROM dinosaur WHERE zoo_id = ?";
 
@@ -80,7 +77,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             getDinosaursRs.close();
             getDinosaursPs.close();
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -91,6 +88,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public Dinosaur getDinosaurById(int id) {
 
+        Dinosaur dinosaur = null;
         String getDinosaurByIdQuery = "SELECT * FROM dinosaur WHERE dinosaur_id = ?";
 
         try {
@@ -106,7 +104,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
                 getDinosaurByIdPs.close();
                 rs.close();
 
-                return new Dinosaur(dinosaurId, zoo.getZooId(),species);
+                dinosaur = new Dinosaur(dinosaurId, zoo.getZooId(),species);
             }
 
             getDinosaurByIdPs.close();
@@ -116,18 +114,13 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             System.out.println("Error: " + e.getMessage());
         }
 
-        return null;
-    }
-
-    @Override
-    public List<Dinosaur> getDinosaursBySpecies(String species) {
-        return List.of();
+        return dinosaur;
     }
 
     @Override
     public Dinosaur deleteDinosaurById(int id) throws EntityNotFoundException {
 
-        Dinosaur dinosaurToBeDeleted = getDinosaurById(id); // May bE null;
+        Dinosaur dinosaurToBeDeleted = getDinosaurById(id);
 
         if (dinosaurToBeDeleted == null) {
             throw new EntityNotFoundException("Dinosaur not found: " + id);

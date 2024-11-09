@@ -29,8 +29,17 @@ public class EmployeeController {
         return employeeRepository.getEmployeeById((long) id);
     }
 
-    public Employee deleteEmployeeById(int id) throws EntityNotFoundException {
-        return employeeRepository.deleteEmployeeById((long) id);
+    public Employee deleteEmployeeById(int id) {
+
+        Employee employee = null;
+
+        try {
+            employee = employeeRepository.deleteEmployeeById((long) id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return employee;
     }
 
 }

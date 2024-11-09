@@ -1,9 +1,13 @@
 package views.panels;
+
+import controllers.UserController;
+import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.User;
 import views.utils.CustomButton;
+import views.utils.CustomDialog;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
-import views.utils.TitleBarButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +18,13 @@ public class UserSettings extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JTextField passwordField;
+    private User currentUser;
+    private UserController userController;
 
-    public UserSettings(JFrame parentFrame){
+    public UserSettings(JFrame parentFrame, User currentUser) {
+        this.userController = new UserController();
+        this.currentUser = currentUser;
+
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -24,30 +33,9 @@ public class UserSettings extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-settings.png");
         backgroundPanel.setLayout(null);
 
-        ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setBounds(306, 450, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        backgroundPanel.add(imageLabel);
-
-        CustomButton closeButton = new CustomButton(
-                "src/resources/buttons/closeButtonSmall.png",
-                335,
-                14,
-                52,
-                53,
-                e -> dispose(),
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-
-        CustomButton minimizeButton = new CustomButton(
-                "src/resources/buttons/minimizeButtonSmall.png",
-                280,
-                14,
-                52,
-                53,
-                e -> setState(JFrame.ICONIFIED),
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
+        // Layout da janela
+        CustomButton closeButton = new CustomButton("src/resources/buttons/closeButtonSmall.png", 335, 14, 52, 53, e -> dispose(), Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        CustomButton minimizeButton = new CustomButton("src/resources/buttons/minimizeButtonSmall.png", 280, 14, 52, 53, e -> setState(JFrame.ICONIFIED), Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         backgroundPanel.add(closeButton);
         backgroundPanel.add(minimizeButton);
@@ -67,16 +55,7 @@ public class UserSettings extends JFrame {
             }
         });
 
-        CustomButton userPhoto = new CustomButton(
-                "src/resources/buttons/fakeUser.png",
-                158,
-                125,
-                85,
-                86,
-                e -> this.setState(JFrame.ICONIFIED),
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-
+        CustomButton userPhoto = new CustomButton("src/resources/buttons/fakeUser.png", 158, 125, 85, 86, e -> this.setState(JFrame.ICONIFIED), Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backgroundPanel.add(userPhoto);
 
         JLayeredPane layeredPane = new JLayeredPane();
@@ -92,6 +71,7 @@ public class UserSettings extends JFrame {
         layeredPane.add(usernameFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
         usernameField = transparentField(68, 240, 262, 47, 12);
+        usernameField.setText(currentUser.getUsername());
         layeredPane.add(usernameField, JLayeredPane.PALETTE_LAYER);
 
         // Password
@@ -103,18 +83,10 @@ public class UserSettings extends JFrame {
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
         passwordField = transparentField(68, 320, 262, 47, 12);
+        passwordField.setText(currentUser.getPassword());
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
 
-        CustomButton updateButton = new CustomButton(
-                "src/resources/buttons/updateButton.png",
-                120,
-                385,
-                165,
-                62,
-                e -> System.out.println("a"),
-                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        );
-
+        CustomButton updateButton = new CustomButton("src/resources/buttons/updateButton.png", 120, 385, 165, 62, e -> updateUser(), Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         layeredPane.add(updateButton, JLayeredPane.PALETTE_LAYER);
 
         add(backgroundPanel);
@@ -140,5 +112,25 @@ public class UserSettings extends JFrame {
         label.setFont(CustomFont.useCustomFont(fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
+    }
+
+    private void updateUser() {
+        String newUsername = usernameField.getText();
+        String newPassword = passwordField.getText();
+
+        if (newUsername.isEmpty() || newPassword.isEmpty()) {
+            CustomDialog.showMessage("Username or password cannot be empty", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            userController.updateUserById(currentUser.getId().intValue(), newUsername, newPassword);
+
+            CustomDialog.showMessage("Update successfully!", JOptionPane.INFORMATION_MESSAGE);
+
+
+        } catch (EntityNotFoundException | EntityAlreadyRegisteredException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

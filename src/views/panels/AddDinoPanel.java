@@ -1,10 +1,8 @@
 package views.panels;
 
 import controllers.DinosaurController;
-import models.Zoo;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
-import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -20,8 +18,8 @@ public class AddDinoPanel extends JFrame {
     private JComboBox<DinosaurSpecies> speciesComboBox;
     private DinosaurController dinosaurController;
 
-    public AddDinoPanel(JFrame parentFrame, Zoo zoo) {
-        dinosaurController = new DinosaurController(zoo);
+    public AddDinoPanel(JFrame parentFrame) {
+        //dinosaurController = new DinosaurController();
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -88,7 +86,7 @@ public class AddDinoPanel extends JFrame {
 
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
         speciesComboBox.setBounds(76, 190, 262, 47);
-        speciesComboBox.setFont(CustomFont.useCustomFont(12f));
+        speciesComboBox.setFont(new Font("Arial", Font.BOLD, 12));
         speciesComboBox.setBackground(new Color(255, 255, 255, 100));
 
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
@@ -113,7 +111,7 @@ public class AddDinoPanel extends JFrame {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
         label.setForeground(fontColor);
-        label.setFont(CustomFont.useCustomFont(fontSize));
+        label.setFont(new Font("Arial", Font.BOLD, fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }

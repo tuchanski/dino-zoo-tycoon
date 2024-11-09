@@ -1,5 +1,7 @@
 package views.panels;
 
+import com.sun.source.tree.ReturnTree;
+import models.Zoo;
 import views.utils.CustomButton;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
@@ -16,8 +18,12 @@ import java.awt.event.MouseEvent;
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
     private UserController userController;
+    private User currentUser;
 
-    public MainMenu(User user) {
+
+    public MainMenu(User currentUser) {
+        this.currentUser = currentUser;
+
         setUndecorated(true);
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,7 +34,7 @@ public class MainMenu extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
-        TitleBarButton titleBarButtons = new TitleBarButton(this);
+        TitleBarButton titleBarButtons = new TitleBarButton(this, currentUser);
         titleBarButtons.setBounds(0, 0, 800, 100);
         backgroundPanel.add(titleBarButtons);
 
@@ -37,7 +43,7 @@ public class MainMenu extends JFrame {
         imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
         backgroundPanel.add(imageLabel);
 
-        String username = user.getUsername().toUpperCase();
+        String username = currentUser.getUsername().toUpperCase();
         Font usernameFont = CustomFont.useCustomFont(18f);
         JLabel usernameLabel = new JLabel(username);
         usernameLabel.setFont(usernameFont);
@@ -47,9 +53,11 @@ public class MainMenu extends JFrame {
 
         FontMetrics metrics = usernameLabel.getFontMetrics(usernameFont);
         int textWidth = metrics.stringWidth(username);
+
         // logout info x,y
         int logoutButtonX = 650;
         int logoutButtonWidth = 103;
+
         // Center usernameLabel
         int labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
         usernameLabel.setBounds(labelX, 126, textWidth, 30);
@@ -105,6 +113,7 @@ public class MainMenu extends JFrame {
         InitialPanel initialPanel = new InitialPanel();
         initialPanel.setVisible(true);
     }
+
 
     public static void main(String[] args) {
         User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");

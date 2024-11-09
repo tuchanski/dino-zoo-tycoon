@@ -32,10 +32,10 @@ public class UserController {
 
     public User deleteUserById(int id) {
 
-        User user = userRepository.getUserById(id);
+        User user = null;
 
         try {
-            userRepository.deleteUserById(id);
+            user = userRepository.deleteUserById(id);
         } catch (EntityNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -53,14 +53,13 @@ public class UserController {
         User user = null;
 
         try {
-            userRepository.updateUserById(id, newUsername, newPassword);
-            user = userRepository.getUserById(id);
+            user = userRepository.updateUserById(id, newUsername, newPassword);
 
         } catch (EntityNotFoundException | EntityAlreadyRegisteredException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return user;
-        
+
     }
 }

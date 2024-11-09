@@ -3,6 +3,8 @@ package views.panels;
 import controllers.UserController;
 import controllers.ZooController;
 import exceptions.EntityAlreadyRegisteredException;
+import models.Zoo;
+import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
 import views.utils.CustomFont;
@@ -18,10 +20,12 @@ public class Register extends JFrame {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField zooNameField;
+
     private UserController userController;
     private ZooController zooController;
 
     public Register(JFrame parentFrame){
+
         userController = new UserController();
 
         setUndecorated(true);
@@ -180,15 +184,12 @@ public class Register extends JFrame {
 
         try{
             userController.createUser(username, password);
-            zooController = new ZooController(userController.getUserByUsername(username));
+            ZooSystem.setCurrentUser(userController.getUserByUsername(username));
+            zooController = new ZooController(ZooSystem.getCurrentUser());
             zooController.createZoo(zooName);
-
+            ZooSystem.setCurrentUser(null);
             CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
-        }
-        catch (EntityAlreadyRegisteredException e) {
-            CustomDialog.showMessage("Username already registered.", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

@@ -1,7 +1,9 @@
 package views.panels;
 
 import controllers.UserController;
+import controllers.ZooController;
 import models.User;
+import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
 import views.utils.CustomFont;
@@ -16,7 +18,9 @@ public class Login extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JPasswordField passwordField;
+
     private UserController userController;
+    private ZooController zooController;
 
     public Login(JFrame parentFrame){
         userController = new UserController();
@@ -171,6 +175,9 @@ public class Login extends JFrame {
             User user = userController.getUserByUsername(username);
 
             if (user != null && user.getPassword().equals(password)) {
+                ZooSystem.setCurrentUser(user);
+                zooController = new ZooController(user);
+                ZooSystem.setCurrentZoo(zooController.getZooByUser());
                 CustomDialog.showMessage("Login successful!", JOptionPane.INFORMATION_MESSAGE);
 
                 MainMenu mainMenu = new MainMenu(user);

@@ -99,6 +99,31 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
+    public Zoo getZooByUser() {
+
+        String getZooByUserQuery = "SELECT * FROM zoo WHERE user_id = ?";
+
+        try {
+
+            PreparedStatement getZooByUserPs = getConnection().prepareStatement(getZooByUserQuery);
+            getZooByUserPs.setLong(1, user.getId());
+            ResultSet rs = getZooByUserPs.executeQuery();
+
+            if (rs.next()) {
+                Long id = rs.getLong("zoo_id");
+                String name = rs.getString("name");
+                int cash = rs.getInt("cash");
+                return new Zoo(id, name, cash, user.getId());
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    @Override
     public Zoo updateZooById(Long id, String newName)
             throws EntityNotFoundException {
 

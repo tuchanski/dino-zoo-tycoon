@@ -16,28 +16,6 @@ import repositories.VisitorRepositoryImpl;
 public class Main {
     public static void main(String[] args) throws EntityAlreadyRegisteredException, EntityNotFoundException {
 
-        // zoo
-
-        //UserController userController = new UserController();
-
-        //userController.createUser("tuchanski", "pass123");
-
-        //User u = userController.getUserByUsername("tuchanski");
-
-        //ZooController zooController = new ZooController(u);
-
-        //zooController.createZoo("Canoeiro");
-
-        //Zoo zoo = zooController.getZooById(1);
-
-        //DinosaurRepositoryImpl dinosaurRepository = new DinosaurRepositoryImpl(zoo);
-
-        //dinosaurRepository.createDinosaur(DinosaurSpecies.ACROCANTHOSAURUS.toString());
-
-        FoodRepository foodRepository = new FoodRepository();
-
-        foodRepository.updateFoodById(1L, "Big Steak", FoodType.MEAT, 15);
-
 
 
     }

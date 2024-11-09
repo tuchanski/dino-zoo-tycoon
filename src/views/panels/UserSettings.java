@@ -123,14 +123,10 @@ public class UserSettings extends JFrame {
             return;
         }
 
-        try {
-            userController.updateUserById(currentUser.getId().intValue(), newUsername, newPassword);
+        userController.updateUserById(currentUser.getId().intValue(), newUsername, newPassword);
 
-            CustomDialog.showMessage("Update successfully!", JOptionPane.INFORMATION_MESSAGE);
+        CustomDialog.showMessage("Update successfully!", JOptionPane.INFORMATION_MESSAGE);
 
 
-        } catch (EntityNotFoundException | EntityAlreadyRegisteredException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Update Error", JOptionPane.ERROR_MESSAGE);
-        }
     }
 }

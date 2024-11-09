@@ -2,6 +2,7 @@ package views.panels;
 
 import com.sun.source.tree.ReturnTree;
 import models.Zoo;
+import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
@@ -108,6 +109,8 @@ public class MainMenu extends JFrame {
     }
 
     private void logoutAction(){
+        ZooSystem.setCurrentZoo(null);
+        ZooSystem.setCurrentUser(null);
         this.dispose();
 
         InitialPanel initialPanel = new InitialPanel();

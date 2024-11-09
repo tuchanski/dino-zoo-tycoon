@@ -135,12 +135,12 @@ public class FoodRepository implements IFoodRepository {
     }
 
     @Override
-    public Food updateFood(Long id, String newName, FoodType newType, int newPrice) {
+    public Food updateFoodById(Long id, String newName, FoodType newType, int newPrice) {
         return null;
     }
 
     @Override
-    public Food deleteFood(Long id) throws EntityNotFoundException {
+    public Food deleteFoodById(Long id) throws EntityNotFoundException {
 
         Food toBeDeleted = getFoodById(id);
 

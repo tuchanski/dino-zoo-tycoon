@@ -34,8 +34,8 @@ public class Main {
         //dinosaurRepository.createDinosaur(DinosaurSpecies.ACROCANTHOSAURUS.toString());
 
         FoodStockRepositoryImpl foodStockRepository = new FoodStockRepositoryImpl(zoo);
-
-        foodStockRepository.addFood((long)2, 5);
+        
+        foodStockRepository.removeFood((long)2, 1000);
 
 
 

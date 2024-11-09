@@ -73,6 +73,11 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
 
         int currentStock = getCurrentStockByFoodId(foodId);
+
+        if (currentStock < amount) {
+            amount = currentStock;
+        }
+
         int finalStock = currentStock - amount;
 
         String removeFoodQuery = "UPDATE FoodStock SET quantity = ? WHERE zoo_id = ? AND food_id = ?";

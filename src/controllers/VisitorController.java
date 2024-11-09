@@ -28,8 +28,17 @@ public class VisitorController {
         return visitorRepository.getVisitorById((long) id);
     }
 
-    public Visitor deleteVisitorById(int id) throws EntityNotFoundException {
-        return visitorRepository.deleteVisitorById((long) id);
+    public Visitor deleteVisitorById(int id) {
+
+        Visitor visitor = null;
+
+        try {
+            visitor = visitorRepository.deleteVisitorById((long) id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return visitor;
     }
     
 

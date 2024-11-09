@@ -28,20 +28,50 @@ public class ZooController {
         return zooRepository.getZooById((long) id);
     }
 
-    public Zoo updateZooById(int id, String newName) throws EntityNotFoundException {
-        return zooRepository.updateZooById((long) id, newName);
+    public Zoo updateZooById(int id, String newName) {
+
+        Zoo zoo = null;
+
+        try {
+            zoo = zooRepository.updateZooById((long) id, newName);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return zoo;
+
     }
 
-    public Zoo deleteZooById(int id) throws EntityNotFoundException {
-        return zooRepository.deleteZooById((long) id);
+    public Zoo deleteZooById(int id) {
+        Zoo zoo = null;
+
+        try {
+            zoo = zooRepository.deleteZooById((long) id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return zoo;
     }
 
-    public void addCash(int id, int amount) throws EntityNotFoundException {
-        zooRepository.addCash((long) id, amount);
+    public void addCash(int id, int amount) {
+
+        try {
+            zooRepository.addCash((long) id, amount);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
-    public void removeCash(int id, int amount) throws EntityNotFoundException {
-        zooRepository.removeCash((long) id, amount);
+    public void removeCash(int id, int amount) {
+
+        try {
+            zooRepository.removeCash((long) id, amount);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
 }

@@ -22,6 +22,7 @@ public class ListDinoPanel extends JFrame {
     public ListDinoPanel(JFrame parentFrame) {
 
         dinosaurController = new DinosaurController(ZooSystem.getCurrentZoo());
+        System.out.println("Current zoo: " + ZooSystem.getCurrentZoo());
 
         setUndecorated(true);
         setSize(800, 600);

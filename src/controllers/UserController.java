@@ -12,8 +12,14 @@ public class UserController {
     
     private IUserRepository userRepository = new UserRepositoryImpl();
 
-    public void createUser(String username, String password) throws EntityAlreadyRegisteredException {
-        userRepository.createUser(username, password);
+    public void createUser(String username, String password) {
+
+        try {
+            userRepository.createUser(username, password);
+        } catch (EntityAlreadyRegisteredException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     public List<User> getUsers() {
@@ -24,16 +30,37 @@ public class UserController {
         return userRepository.getUserById(id);
     }
 
-    public User deleteUserById(int id) throws EntityNotFoundException {
-        return userRepository.deleteUserById(id);
+    public User deleteUserById(int id) {
+
+        User user = userRepository.getUserById(id);
+
+        try {
+            userRepository.deleteUserById(id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return user;
+
     }
 
     public User getUserByUsername(String username) {
         return userRepository.getUserByUsername(username);
     }
 
-    public User updateUserById(int id, String newUsername, String newPassword) throws EntityNotFoundException, EntityAlreadyRegisteredException {
-        return userRepository.updateUserById(id, newUsername, newPassword);
-    }
+    public User updateUserById(int id, String newUsername, String newPassword) {
 
+        User user = null;
+
+        try {
+            userRepository.updateUserById(id, newUsername, newPassword);
+            user = userRepository.getUserById(id);
+
+        } catch (EntityNotFoundException | EntityAlreadyRegisteredException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return user;
+        
+    }
 }

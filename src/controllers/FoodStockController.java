@@ -20,15 +20,24 @@ public class FoodStockController {
         stockRepository.createStock();
     }
 
-    public void addFood(int foodId, int amount) throws EntityNotFoundException {
-        stockRepository.addFood((long) foodId, amount);
+    public void addFood(int foodId, int amount) {
+
+        try {
+            stockRepository.addFood((long) foodId, amount);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
-    public void removeFood(int foodId, int amount) throws EntityNotFoundException {
-        stockRepository.removeFood((long) foodId, amount);
+    public void removeFood(int foodId, int amount) {
+        try {
+            stockRepository.removeFood((long) foodId, amount);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
-    public List<FoodStock> getFoodStock() throws EntityNotFoundException {
+    public List<FoodStock> getFoodStock() {
         return stockRepository.getFoodStock();
     }
 

@@ -1,9 +1,11 @@
 package views.panels;
 
 import controllers.UserController;
+import controllers.ZooController;
 import exceptions.EntityAlreadyRegisteredException;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
+import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -15,7 +17,9 @@ public class Register extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;
     private JTextField passwordField;
+    private JTextField zooNameField;
     private UserController userController;
+    private ZooController zooController;
 
     public Register(JFrame parentFrame){
         userController = new UserController();
@@ -93,31 +97,41 @@ public class Register extends JFrame {
         backgroundPanel.add(layeredPane);
 
         // Username
-        configFieldWithLabel(layeredPane, "USERNAME:", 153, 140, 100, 30, 16);
+        configFieldWithLabel(layeredPane, "USERNAME:", 153, 135, 100, 30, 14);
 
         ImageIcon usernameFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel usernameFieldBackground = new JLabel(usernameFieldBg);
-        usernameFieldBackground.setBounds(65, 170, 266, 47);
+        usernameFieldBackground.setBounds(65, 165, 266, 47);
         layeredPane.add(usernameFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        usernameField = transparentField(68, 170, 262, 47, 12);
+        usernameField = transparentField(68, 165, 262, 47, 12);
         layeredPane.add(usernameField, JLayeredPane.PALETTE_LAYER);
 
         // Password
-        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 220, 120, 30, 16);
+        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 215, 120, 30, 14);
 
         ImageIcon passwordFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel passwordFieldBackground = new JLabel(passwordFieldBg);
-        passwordFieldBackground.setBounds(65, 250, 266, 47);
+        passwordFieldBackground.setBounds(65, 245, 266, 47);
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
-        passwordField = transparentField(68, 250, 262, 47, 12);
+        passwordField = transparentField(68, 245, 262, 47, 12);
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
+
+        configFieldWithLabel(layeredPane, "ZOO NAME:", 153, 290, 120, 30, 14);
+
+        ImageIcon zooNameFieldBg = new ImageIcon("src/resources/utils/customField.png");
+        JLabel zooNameFieldBackground = new JLabel(zooNameFieldBg);
+        zooNameFieldBackground.setBounds(65, 320, 266, 47);
+        layeredPane.add(zooNameFieldBackground, JLayeredPane.DEFAULT_LAYER);
+
+        zooNameField = transparentField(68, 320, 262, 47, 12);
+        layeredPane.add(zooNameField, JLayeredPane.PALETTE_LAYER);
 
         CustomButton registerButton = new CustomButton(
                 "src/resources/buttons/registerButton.png",
                 116,
-                320,
+                380,
                 165,
                 62,
                 e -> register(),
@@ -136,7 +150,8 @@ public class Register extends JFrame {
         field.setForeground(fontColor);
         field.setBorder(null);
         field.setBounds(x, y, width, height);
-        field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        field.setFont(CustomFont.useCustomFont(fontSize));
+        field.setHorizontalAlignment(SwingConstants.CENTER);
         return field;
     }
 
@@ -144,7 +159,7 @@ public class Register extends JFrame {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
         label.setForeground(fontColor);
-        label.setFont(new Font("Arial", Font.BOLD, fontSize));
+        label.setFont(CustomFont.useCustomFont(fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }
@@ -152,15 +167,22 @@ public class Register extends JFrame {
     private void register(){
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
+        String zooName = zooNameField.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty()){
+        if (username.isEmpty() || password.isEmpty() || zooName.isEmpty()){
             CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (username.length() > 10) {
+            CustomDialog.showMessage("Maximum 10 characters", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
 
         try{
             userController.createUser(username, password);
+            zooController = new ZooController(userController.getUserByUsername(username));
+            zooController.createZoo(zooName);
+
             CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (EntityAlreadyRegisteredException e) {

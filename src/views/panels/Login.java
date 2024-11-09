@@ -4,6 +4,7 @@ import controllers.UserController;
 import models.User;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
+import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -88,7 +89,7 @@ public class Login extends JFrame {
         backgroundPanel.add(layeredPane);
 
         // Username
-        configFieldWithLabel(layeredPane, "USERNAME:", 153, 140, 100, 30, 16);
+        configFieldWithLabel(layeredPane, "USERNAME:", 153, 140, 100, 30, 14);
 
         ImageIcon usernameFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel usernameFieldBackground = new JLabel(usernameFieldBg);
@@ -99,7 +100,7 @@ public class Login extends JFrame {
         layeredPane.add(usernameField, JLayeredPane.PALETTE_LAYER);
 
         // Password
-        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 220, 120, 30, 16);
+        configFieldWithLabel(layeredPane, "PASSWORD:", 153, 220, 120, 30, 14);
 
         ImageIcon passwordFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel passwordFieldBackground = new JLabel(passwordFieldBg);
@@ -131,7 +132,8 @@ public class Login extends JFrame {
         field.setForeground(fontColor);
         field.setBorder(null);
         field.setBounds(x, y, width, height);
-        field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        field.setFont(CustomFont.useCustomFont(fontSize));
+        field.setHorizontalAlignment(SwingConstants.CENTER);
         return field;
     }
 
@@ -142,7 +144,8 @@ public class Login extends JFrame {
         field.setForeground(fontColor);
         field.setBorder(null);
         field.setBounds(x, y, width, height);
-        field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        field.setFont(CustomFont.useCustomFont(fontSize));
+        field.setHorizontalAlignment(SwingConstants.CENTER);
         return field;
     }
 
@@ -150,7 +153,7 @@ public class Login extends JFrame {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
         label.setForeground(fontColor);
-        label.setFont(new Font("Arial", Font.BOLD, fontSize));
+        label.setFont(CustomFont.useCustomFont(fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }
@@ -169,7 +172,9 @@ public class Login extends JFrame {
 
             if (user != null && user.getPassword().equals(password)) {
                 CustomDialog.showMessage("Login successful!", JOptionPane.INFORMATION_MESSAGE);
-                new MainMenu(user);
+
+                MainMenu mainMenu = new MainMenu(user);
+                mainMenu.setVisible(true);
                 dispose();
             } else {
                 CustomDialog.showMessage("Invalid username or password", JOptionPane.ERROR_MESSAGE);
@@ -177,7 +182,6 @@ public class Login extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {

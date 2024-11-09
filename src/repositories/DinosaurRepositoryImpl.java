@@ -61,11 +61,12 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
         List<Dinosaur> dinosaurs = new ArrayList<>(); // May be empty
 
-        String getDinosaursQuery = "SELECT * FROM dinosaur";
+        String getDinosaursQuery = "SELECT * FROM dinosaur WHERE zoo_id = ?";
 
         try {
 
             PreparedStatement getDinosaursPs = getConnection().prepareStatement(getDinosaursQuery);
+            getDinosaursPs.setLong(1, zoo.getZooId());
             ResultSet getDinosaursRs = getDinosaursPs.executeQuery();
 
             while (getDinosaursRs.next()) {

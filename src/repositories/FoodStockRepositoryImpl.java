@@ -215,7 +215,8 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
                 Long id = rs.getLong("food_id");
                 String name = rs.getString("name");
                 String type = rs.getString("type");
-                foods.add(new Food(id, name, type));
+                int price = rs.getInt("price");
+                foods.add(new Food(id, name, type, price));
             }
 
             getFoodsSt.close();

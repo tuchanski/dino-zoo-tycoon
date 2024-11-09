@@ -21,7 +21,8 @@ CREATE TABLE ParkEvent (
 CREATE TABLE Food (
     food_id BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    type VARCHAR(10) NOT NULL CHECK (type IN ('MEAT', 'PLANT', 'EGG'))
+    type VARCHAR(10) NOT NULL CHECK (type IN ('MEAT', 'PLANT', 'EGG')),
+    price INTEGER NOT NULL
 );
 
 CREATE TABLE FoodStock (
@@ -51,6 +52,6 @@ CREATE TABLE Employee (
 );
 
 -- Populating Food
-INSERT INTO Food (name, type) VALUES ('Steak', 'MEAT');
-INSERT INTO Food (name, type) VALUES ('Broccoli', 'PLANT');
-INSERT INTO Food (name, type) VALUES ('Omelet', 'EGG');
+INSERT INTO Food (name, type, price) VALUES ('Steak', 'MEAT', 5);
+INSERT INTO Food (name, type, price) VALUES ('Broccoli', 'PLANT', 5);
+INSERT INTO Food (name, type, price) VALUES ('Omelet', 'EGG', 5);

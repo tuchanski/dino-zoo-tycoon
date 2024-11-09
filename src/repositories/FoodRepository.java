@@ -52,7 +52,7 @@ public class FoodRepository implements IFoodRepository {
         String getFoodsQuery = "SELECT * FROM Food";
 
         try {
-            
+
             PreparedStatement getFoodsPs = getConnection().prepareStatement(getFoodsQuery);
             ResultSet rs = getFoodsPs.executeQuery();
 
@@ -77,12 +77,60 @@ public class FoodRepository implements IFoodRepository {
 
     @Override
     public Food getFoodById(Long id) {
-        return null;
+
+        Food food = null;
+        String getFoodByIdQuery = "SELECT * FROM Food WHERE id = ?";
+
+        try {
+
+            PreparedStatement getFoodByIdPs = getConnection().prepareStatement(getFoodByIdQuery);
+            getFoodByIdPs.setLong(1, id);
+
+            ResultSet rs = getFoodByIdPs.executeQuery();
+            if (rs.next()) {
+                String name = rs.getString("name");
+                String type = rs.getString("type");
+                int price = rs.getInt("price");
+                food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+            }
+
+            rs.close();
+            getFoodByIdPs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return food;
     }
 
     @Override
     public Food getFoodByName(String name) {
-        return null;
+
+        Food food = null;
+
+        String getFoodByNameQuery = "SELECT * FROM Food WHERE name = ?";
+
+        try {
+
+            PreparedStatement getFoodByNamePs = getConnection().prepareStatement(getFoodByNameQuery);
+            getFoodByNamePs.setString(1, name);
+
+            ResultSet rs = getFoodByNamePs.executeQuery();
+            if (rs.next()) {
+                long id = rs.getLong("food_id");
+                String type = rs.getString("type");
+                int price = rs.getInt("price");
+                food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return food;
+
     }
 
     @Override

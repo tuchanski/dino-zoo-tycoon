@@ -36,7 +36,7 @@ public class Main {
 
         FoodRepository foodRepository = new FoodRepository();
 
-        foodRepository.createFood("Cooked Egg", FoodType.EGG, 3);
+        System.out.println(foodRepository.getFoodByName("Cooked Egg"));
 
 
 

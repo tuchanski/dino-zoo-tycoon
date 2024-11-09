@@ -1,7 +1,7 @@
 package controllers;
 
 import exceptions.EntityNotFoundException;
-import exceptions.EntitySpeciesNotFound;
+import exceptions.EntitySpeciesNotFoundException;
 import models.Dinosaur;
 import models.Zoo;
 import repositories.DinosaurRepositoryImpl;
@@ -21,7 +21,7 @@ public class DinosaurController {
     public void createDinosaur(String species) {
         try {
             dinosaurRepository.createDinosaur(species);
-        } catch (EntitySpeciesNotFound e) {
+        } catch (EntitySpeciesNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -40,7 +40,7 @@ public class DinosaurController {
 
         try {
             dinosaurs = dinosaurRepository.getDinosaursBySpecies(species);
-        } catch (EntitySpeciesNotFound e) {
+        } catch (EntitySpeciesNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
         }
 

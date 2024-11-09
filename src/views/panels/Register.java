@@ -158,6 +158,9 @@ public class Register extends JFrame {
         if (username.isEmpty() || password.isEmpty()){
             CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
             return;
+        } else if (username.length() > 10) {
+            CustomDialog.showMessage("Maximum 10 characters", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
 

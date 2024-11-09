@@ -112,7 +112,7 @@ public class AddDinoPanel extends JFrame {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
         label.setForeground(fontColor);
-        label.setFont(new Font("Arial", Font.BOLD, fontSize));
+        label.setFont(CustomFont.useCustomFont(fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }

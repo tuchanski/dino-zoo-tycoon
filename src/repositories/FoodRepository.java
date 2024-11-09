@@ -214,7 +214,7 @@ public class FoodRepository implements IFoodRepository {
             throw new EntityNotFoundException("Food not found");
         }
 
-        String deleteFoodQuery = "DELETE FROM Food WHERE id = ?";
+        String deleteFoodQuery = "DELETE FROM Food WHERE food_id = ?";
 
         try {
 

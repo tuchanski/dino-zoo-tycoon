@@ -132,6 +132,7 @@ public class Login extends JFrame {
         field.setBorder(null);
         field.setBounds(x, y, width, height);
         field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        field.setHorizontalAlignment(SwingConstants.CENTER);
         return field;
     }
 
@@ -143,6 +144,7 @@ public class Login extends JFrame {
         field.setBorder(null);
         field.setBounds(x, y, width, height);
         field.setFont(new Font("Arial", Font.BOLD, fontSize));
+        field.setHorizontalAlignment(SwingConstants.CENTER);
         return field;
     }
 

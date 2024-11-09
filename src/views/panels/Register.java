@@ -1,6 +1,7 @@
 package views.panels;
 
 import controllers.UserController;
+import controllers.ZooController;
 import exceptions.EntityAlreadyRegisteredException;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
@@ -18,6 +19,7 @@ public class Register extends JFrame {
     private JTextField passwordField;
     private JTextField zooNameField;
     private UserController userController;
+    private ZooController zooController;
 
     public Register(JFrame parentFrame){
         userController = new UserController();
@@ -165,8 +167,9 @@ public class Register extends JFrame {
     private void register(){
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
+        String zooName = zooNameField.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty()){
+        if (username.isEmpty() || password.isEmpty() || zooName.isEmpty()){
             CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
             return;
         } else if (username.length() > 10) {
@@ -177,6 +180,9 @@ public class Register extends JFrame {
 
         try{
             userController.createUser(username, password);
+            zooController = new ZooController(userController.getUserByUsername(username));
+            zooController.createZoo(zooName);
+
             CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (EntityAlreadyRegisteredException e) {

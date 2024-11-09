@@ -1,6 +1,7 @@
 package views.panels;
 
 import views.utils.CustomButton;
+import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 import views.utils.TitleBarButton;
 
@@ -37,14 +38,14 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(imageLabel);
 
         String username = user.getUsername().toUpperCase();
-        Font usernameFont = new Font("Arial", Font.BOLD, 18);
+        Font usernameFont = CustomFont.useCustomFont(18f);
         JLabel usernameLabel = new JLabel(username);
         usernameLabel.setFont(usernameFont);
 
         Color fontColor = new Color(228, 201, 173);
         usernameLabel.setForeground(fontColor);
 
-        FontMetrics metrics = getFontMetrics(usernameFont);
+        FontMetrics metrics = usernameLabel.getFontMetrics(usernameFont);
         int textWidth = metrics.stringWidth(username);
         // logout info x,y
         int logoutButtonX = 650;

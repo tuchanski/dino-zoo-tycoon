@@ -4,6 +4,7 @@ import controllers.DinosaurController;
 import exceptions.EntityNotFoundException;
 import models.Dinosaur;
 import views.utils.CustomButton;
+import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 import views.utils.RoundedBorder;
 
@@ -132,14 +133,14 @@ public class ListDinoPanel extends JFrame {
 
             // Species
             JLabel speciesLabel = new JLabel(dinosaur.getSpecies().name());
-            speciesLabel.setFont(new Font("Arial", Font.BOLD, 12));
+            speciesLabel.setFont(CustomFont.useCustomFont(10f));
             speciesLabel.setForeground(new Color(228, 201, 171));
             speciesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(speciesLabel);
 
             // Diet
             JLabel dietLabel = new JLabel(dinosaur.getSpecies().getDiet().toUpperCase());
-            dietLabel.setFont(new Font("Arial", Font.PLAIN, 10));
+            dietLabel.setFont(CustomFont.useCustomFont(10f));
             dietLabel.setForeground(new Color(228, 201, 171));
             dietLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(dietLabel);

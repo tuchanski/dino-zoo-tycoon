@@ -55,3 +55,11 @@ CREATE TABLE Employee (
 INSERT INTO Food (name, type, price) VALUES ('Steak', 'MEAT', 5);
 INSERT INTO Food (name, type, price) VALUES ('Broccoli', 'PLANT', 5);
 INSERT INTO Food (name, type, price) VALUES ('Omelet', 'EGG', 5);
+
+-- Populando ParkEvent
+INSERT INTO ParkEvent (name) VALUES ('DINO_PLAYTIME');
+INSERT INTO ParkEvent (name) VALUES ('DINO_ESCAPED');
+INSERT INTO ParkEvent (name) VALUES ('DINO_SLEEPING');
+INSERT INTO ParkEvent (name) VALUES ('WEATHER_CHANGE');
+INSERT INTO ParkEvent (name) VALUES ('DINO_SHOW');
+INSERT INTO ParkEvent (name) VALUES ('VISITOR_COMPLAINT');

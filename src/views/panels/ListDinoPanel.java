@@ -3,6 +3,7 @@ package views.panels;
 import controllers.DinosaurController;
 import exceptions.EntityNotFoundException;
 import models.Dinosaur;
+import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
@@ -19,7 +20,10 @@ public class ListDinoPanel extends JFrame {
     private DinosaurController dinosaurController;
 
     public ListDinoPanel(JFrame parentFrame) {
-        //dinosaurController = new DinosaurController();
+
+        dinosaurController = new DinosaurController(ZooSystem.getCurrentZoo());
+        System.out.println("Current zoo: " + ZooSystem.getCurrentZoo());
+
         setUndecorated(true);
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -153,12 +157,8 @@ public class ListDinoPanel extends JFrame {
                     52,
                     53,
                     e -> {
-                        try {
-                            dinosaurController.deleteDinosaurById(dinosaur.getId().intValue());
-                            refreshDinosaurCards(dinosaursPanel);
-                        } catch (EntityNotFoundException ex) {
-                            JOptionPane.showMessageDialog(null, "Dinosaur not found.");
-                        }
+                        dinosaurController.deleteDinosaurById(dinosaur.getId().intValue());
+                        refreshDinosaurCards(dinosaursPanel);
                     },
                     Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
             );

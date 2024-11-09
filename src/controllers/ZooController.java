@@ -28,6 +28,10 @@ public class ZooController {
         return zooRepository.getZooById((long) id);
     }
 
+    public Zoo getZooByUser() {
+        return zooRepository.getZooByUser();
+    }
+
     public Zoo updateZooById(int id, String newName) {
 
         Zoo zoo = null;

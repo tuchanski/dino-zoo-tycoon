@@ -36,11 +36,23 @@ public class MainMenu extends JFrame {
         imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
         backgroundPanel.add(imageLabel);
 
-        JLabel usernameLabel = new JLabel(user.getUsername().toUpperCase());
-        usernameLabel.setBounds(680, 126, 200, 30);
-        usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        String username = user.getUsername().toUpperCase();
+        Font usernameFont = new Font("Arial", Font.BOLD, 18);
+        JLabel usernameLabel = new JLabel(username);
+        usernameLabel.setFont(usernameFont);
+
         Color fontColor = new Color(228, 201, 173);
         usernameLabel.setForeground(fontColor);
+
+        FontMetrics metrics = getFontMetrics(usernameFont);
+        int textWidth = metrics.stringWidth(username);
+        // logout info x,y
+        int logoutButtonX = 650;
+        int logoutButtonWidth = 103;
+        // Center usernameLabel
+        int labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
+        usernameLabel.setBounds(labelX, 126, textWidth, 30);
+
         backgroundPanel.add(usernameLabel);
 
         CustomButton logoutButton = new CustomButton(
@@ -94,7 +106,7 @@ public class MainMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        User user = new User("aaaaaaaaa", "pasdpsaodsaodsaokkodas");
+        User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");
         new MainMenu(user);
     }
 }

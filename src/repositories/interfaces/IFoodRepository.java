@@ -1,6 +1,7 @@
 package repositories.interfaces;
 
 import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.Food;
 import models.enums.FoodType;
 
@@ -12,7 +13,7 @@ public interface IFoodRepository {
     List<Food> getFoods();
     Food getFoodById(Long id);
     Food getFoodByName(String name);
-    void updateFood(Long id, String newName, FoodType newType, int newPrice);
-    void deleteFood(Long id);
+    Food updateFood(Long id, String newName, FoodType newType, int newPrice);
+    Food deleteFood(Long id) throws EntityNotFoundException;
 
 }

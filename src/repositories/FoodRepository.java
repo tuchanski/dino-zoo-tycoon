@@ -1,6 +1,7 @@
 package repositories;
 
 import exceptions.EntityAlreadyRegisteredException;
+import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Food;
 import models.enums.FoodType;
@@ -134,12 +135,35 @@ public class FoodRepository implements IFoodRepository {
     }
 
     @Override
-    public void updateFood(Long id, String newName, FoodType newType, int newPrice) {
-
+    public Food updateFood(Long id, String newName, FoodType newType, int newPrice) {
+        return null;
     }
 
     @Override
-    public void deleteFood(Long id) {
+    public Food deleteFood(Long id) throws EntityNotFoundException {
+
+        Food toBeDeleted = getFoodById(id);
+
+        if (toBeDeleted == null) {
+            throw new EntityNotFoundException("Food not found");
+        }
+
+        String deleteFoodQuery = "DELETE FROM Food WHERE id = ?";
+
+        try {
+
+            PreparedStatement deleteFoodPs = getConnection().prepareStatement(deleteFoodQuery);
+            deleteFoodPs.setLong(1, id);
+            deleteFoodPs.execute();
+            deleteFoodPs.close();
+
+            System.out.println("Food " + id + " has been deleted successfully");
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return toBeDeleted;
 
     }
 

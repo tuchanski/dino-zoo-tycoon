@@ -30,6 +30,18 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
     }
 
     @Override
+    public void createStock() {
+        List<Food> foods = getFoodsInSystem();
+
+        for (Food food : foods) {
+
+            if (shouldCreateStock(food)) {
+                createFoodStock(food);
+            }
+        }
+    }
+
+    @Override
     public void addFood(Long foodId, int amount) throws EntityNotFoundException {
 
         if (!checkFoodId(foodId)){
@@ -190,17 +202,6 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
     }
 
-    private void createStock() {
-        List<Food> foods = getFoodsInSystem();
-
-        for (Food food : foods) {
-
-            if (shouldCreateStock(food)) {
-                createFoodStock(food);
-            }
-        }
-    }
-
     private List<Food> getFoodsInSystem() {
         List<Food> foods = new ArrayList<>();
 
@@ -238,5 +239,4 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
         return false;
     }
-
 }

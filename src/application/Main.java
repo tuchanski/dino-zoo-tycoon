@@ -9,6 +9,7 @@ import models.Zoo;
 import models.enums.DinosaurSpecies;
 import models.enums.FoodType;
 import repositories.DinosaurRepositoryImpl;
+import repositories.FoodRepository;
 import repositories.FoodStockRepositoryImpl;
 import repositories.VisitorRepositoryImpl;
 
@@ -17,25 +18,25 @@ public class Main {
 
         // zoo
 
-        UserController userController = new UserController();
+        //UserController userController = new UserController();
 
         //userController.createUser("tuchanski", "pass123");
 
-        User u = userController.getUserByUsername("tuchanski");
+        //User u = userController.getUserByUsername("tuchanski");
 
-        ZooController zooController = new ZooController(u);
+        //ZooController zooController = new ZooController(u);
 
         //zooController.createZoo("Canoeiro");
 
-        Zoo zoo = zooController.getZooById(1);
+        //Zoo zoo = zooController.getZooById(1);
 
         //DinosaurRepositoryImpl dinosaurRepository = new DinosaurRepositoryImpl(zoo);
 
         //dinosaurRepository.createDinosaur(DinosaurSpecies.ACROCANTHOSAURUS.toString());
 
-        FoodStockRepositoryImpl foodStockRepository = new FoodStockRepositoryImpl(zoo);
+        FoodRepository foodRepository = new FoodRepository();
 
-        foodStockRepository.addFood((long)2, 5);
+        foodRepository.updateFoodById(1L, "Big Steak", FoodType.MEAT, 15);
 
 
 

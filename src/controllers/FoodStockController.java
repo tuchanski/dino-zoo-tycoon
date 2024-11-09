@@ -16,6 +16,10 @@ public class FoodStockController {
        stockRepository = new FoodStockRepositoryImpl(zoo);
     }
 
+    public void createStock(){
+        stockRepository.createStock();
+    }
+
     public void addFood(int foodId, int amount) throws EntityNotFoundException {
         stockRepository.addFood((long) foodId, amount);
     }

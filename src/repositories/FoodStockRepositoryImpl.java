@@ -30,6 +30,18 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
     }
 
     @Override
+    public void createStock() {
+        List<Food> foods = getFoodsInSystem();
+
+        for (Food food : foods) {
+
+            if (shouldCreateStock(food)) {
+                createFoodStock(food);
+            }
+        }
+    }
+
+    @Override
     public void addFood(Long foodId, int amount) throws EntityNotFoundException {
 
         if (!checkFoodId(foodId)){
@@ -73,6 +85,11 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
 
         int currentStock = getCurrentStockByFoodId(foodId);
+
+        if (currentStock < amount) {
+            amount = currentStock;
+        }
+
         int finalStock = currentStock - amount;
 
         String removeFoodQuery = "UPDATE FoodStock SET quantity = ? WHERE zoo_id = ? AND food_id = ?";
@@ -185,17 +202,6 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
     }
 
-    private void createStock() {
-        List<Food> foods = getFoodsInSystem();
-
-        for (Food food : foods) {
-
-            if (shouldCreateStock(food)) {
-                createFoodStock(food);
-            }
-        }
-    }
-
     private List<Food> getFoodsInSystem() {
         List<Food> foods = new ArrayList<>();
 
@@ -210,7 +216,8 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
                 Long id = rs.getLong("food_id");
                 String name = rs.getString("name");
                 String type = rs.getString("type");
-                foods.add(new Food(id, name, type));
+                int price = rs.getInt("price");
+                foods.add(new Food(id, name, type, price));
             }
 
             getFoodsSt.close();
@@ -232,5 +239,4 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         }
         return false;
     }
-
 }

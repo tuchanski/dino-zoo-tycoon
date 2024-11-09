@@ -80,7 +80,7 @@ public class FoodRepository implements IFoodRepository {
     public Food getFoodById(Long id) {
 
         Food food = null;
-        String getFoodByIdQuery = "SELECT * FROM Food WHERE id = ?";
+        String getFoodByIdQuery = "SELECT * FROM Food WHERE food_id = ?";
 
         try {
 
@@ -88,6 +88,7 @@ public class FoodRepository implements IFoodRepository {
             getFoodByIdPs.setLong(1, id);
 
             ResultSet rs = getFoodByIdPs.executeQuery();
+
             if (rs.next()) {
                 String name = rs.getString("name");
                 String type = rs.getString("type");
@@ -135,9 +136,74 @@ public class FoodRepository implements IFoodRepository {
     }
 
     @Override
-    public Food updateFoodById(Long id, String newName, FoodType newType, int newPrice) {
-        return null;
+    public Food updateFoodById(Long id, String newName, FoodType newType, int newPrice) throws EntityAlreadyRegisteredException, EntityNotFoundException {
+        Food toBeUpdated = getFoodById(id);
+
+        if (toBeUpdated == null) {
+            throw new EntityNotFoundException("Food not found with id: " + id);
+        }
+
+        boolean nameChanged = !newName.equals(toBeUpdated.getName());
+        boolean typeChanged = !newType.equals(toBeUpdated.getType());
+        boolean priceChanged = newPrice != toBeUpdated.getPrice();
+
+        if (nameChanged && !foodNameIsAvailable(newName)) {
+            throw new EntityAlreadyRegisteredException("Food name already registered");
+        }
+
+        if (!nameChanged && !typeChanged && !priceChanged) {
+            return toBeUpdated;
+        }
+
+        String updateQuery = "UPDATE Food SET ";
+        boolean updateNeeded = false;
+        int paramIndex = 1;
+
+        if (nameChanged) {
+            updateQuery += "name = ?";
+            updateNeeded = true;
+        }
+
+        if (typeChanged) {
+            updateQuery += updateNeeded ? ", type = ?" : "type = ?";
+            updateNeeded = true;
+        }
+
+        if (priceChanged) {
+            updateQuery += updateNeeded ? ", price = ?" : "price = ?";
+        }
+
+        updateQuery += " WHERE food_id = ?";
+
+        try (PreparedStatement updatePs = getConnection().prepareStatement(updateQuery)) {
+            if (nameChanged) {
+                updatePs.setString(paramIndex++, newName);
+            }
+
+            if (typeChanged) {
+                updatePs.setString(paramIndex++, newType.toString());
+            }
+
+            if (priceChanged) {
+                updatePs.setInt(paramIndex++, newPrice);
+            }
+
+            updatePs.setLong(paramIndex, id);
+            updatePs.executeUpdate();
+
+            toBeUpdated.setName(newName);
+            toBeUpdated.setType(newType);
+            toBeUpdated.setPrice(newPrice);
+
+            System.out.println("Food " + id + " has been updated successfully");
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return toBeUpdated;
     }
+
 
     @Override
     public Food deleteFoodById(Long id) throws EntityNotFoundException {

@@ -36,7 +36,7 @@ public class Main {
 
         FoodRepository foodRepository = new FoodRepository();
 
-        System.out.println(foodRepository.getFoodByName("Cooked Egg"));
+        foodRepository.updateFoodById(1L, "Big Steak", FoodType.MEAT, 15);
 
 
 

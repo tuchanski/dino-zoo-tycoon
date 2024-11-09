@@ -13,7 +13,7 @@ public interface IFoodRepository {
     List<Food> getFoods();
     Food getFoodById(Long id);
     Food getFoodByName(String name);
-    Food updateFoodById(Long id, String newName, FoodType newType, int newPrice);
+    Food updateFoodById(Long id, String newName, FoodType newType, int newPrice) throws EntityAlreadyRegisteredException, EntityNotFoundException;
     Food deleteFoodById(Long id) throws EntityNotFoundException;
 
 }

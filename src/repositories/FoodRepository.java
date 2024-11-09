@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FoodRepository implements IFoodRepository {
@@ -46,7 +47,32 @@ public class FoodRepository implements IFoodRepository {
 
     @Override
     public List<Food> getFoods() {
-        return List.of();
+
+        List<Food> foods = new ArrayList<>();
+        String getFoodsQuery = "SELECT * FROM Food";
+
+        try {
+            
+            PreparedStatement getFoodsPs = getConnection().prepareStatement(getFoodsQuery);
+            ResultSet rs = getFoodsPs.executeQuery();
+
+            while (rs.next()) {
+                Long id = rs.getLong("food_id");
+                String name = rs.getString("name");
+                String typeToString = rs.getString("type");
+                int price = rs.getInt("price");
+                foods.add(new Food(id, name, typeToString, price));
+            }
+
+            getFoodsPs.close();
+            rs.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return foods;
+
     }
 
     @Override

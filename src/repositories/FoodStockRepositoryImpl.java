@@ -20,9 +20,7 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
 
     public FoodStockRepositoryImpl(Zoo zoo) {
         this.zoo = zoo;
-
-        // We should discuss if we are keeping this private and always being called when creating a FoodStock repo
-        createStock(); // Create stock if it doesn't exist
+        createStock();
     }
 
     private Connection getConnection() throws SQLException {
@@ -58,6 +56,7 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
         String addFoodQuery = "UPDATE FoodStock SET quantity = ? WHERE zoo_id = ? AND food_id = ?";
 
         try {
+
             PreparedStatement addFoodPs = getConnection().prepareStatement(addFoodQuery);
             addFoodPs.setInt(1, finalStock);
             addFoodPs.setLong(2, zoo.getZooId());
@@ -165,8 +164,6 @@ public class FoodStockRepositoryImpl implements IFoodStockRepository {
 
         return currentStock;
     }
-
-    // Now using try with resources
 
     private boolean shouldCreateStock(Food food) {
 

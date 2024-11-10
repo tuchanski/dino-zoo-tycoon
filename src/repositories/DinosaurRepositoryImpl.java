@@ -3,7 +3,6 @@ package repositories;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Dinosaur;
-import models.User;
 import models.Zoo;
 import models.enums.DinosaurSpecies;
 import repositories.interfaces.IDinosaurRepository;

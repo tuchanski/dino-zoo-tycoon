@@ -1,9 +1,9 @@
 package repositories;
 
 import exceptions.EntityNotFoundException;
+import exceptions.EntitySpeciesNotFoundException;
 import models.DB;
 import models.Dinosaur;
-import models.User;
 import models.Zoo;
 import models.enums.DinosaurSpecies;
 import repositories.interfaces.IDinosaurRepository;
@@ -30,8 +30,6 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public void createDinosaur(String species) {
 
-        //int enclosureId = 1; // CHANGE AFTER CREATING ENCLOSURE'S LOGIC
-
         String dietType = DinosaurSpecies.valueOf(species).getDiet();
 
         String createDinosaurQuery = "INSERT INTO dinosaur (species, diet_type, zoo_id) VALUES (?, ?, ?)";
@@ -43,7 +41,6 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             createDinosaurPs.setString(1, species);
             createDinosaurPs.setString(2, dietType);
             createDinosaurPs.setLong(3, zoo.getZooId());
-            //createDinosaurPs.setLong(3, enclosureId);
 
             createDinosaurPs.execute();
             createDinosaurPs.close();
@@ -59,7 +56,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public List<Dinosaur> getDinosaurs() {
 
-        List<Dinosaur> dinosaurs = new ArrayList<>(); // May be empty
+        List<Dinosaur> dinosaurs = new ArrayList<>();
 
         String getDinosaursQuery = "SELECT * FROM dinosaur WHERE zoo_id = ?";
 
@@ -80,7 +77,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             getDinosaursRs.close();
             getDinosaursPs.close();
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -89,8 +86,41 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     }
 
     @Override
+    public List<Dinosaur> getDinosaursBySpecies(String species) throws EntitySpeciesNotFoundException {
+
+        try {
+            DinosaurSpecies.valueOf(species.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new EntitySpeciesNotFoundException("Species not found");
+        }
+        
+        List<Dinosaur> dinosaurs = new ArrayList<>();
+
+        String getDinosaursQuery = "SELECT * FROM dinosaur WHERE species = ?";
+
+        try {
+
+            PreparedStatement getDinosaursPs = getConnection().prepareStatement(getDinosaursQuery);
+            getDinosaursPs.setString(1, species);
+
+            ResultSet getDinosaursRs = getDinosaursPs.executeQuery();
+
+            while (getDinosaursRs.next()) {
+                Long id = getDinosaursRs.getLong("dinosaur_id");
+                dinosaurs.add(new Dinosaur(id, zoo.getZooId(), DinosaurSpecies.valueOf(species.toUpperCase())));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dinosaurs;
+    }
+
+    @Override
     public Dinosaur getDinosaurById(int id) {
 
+        Dinosaur dinosaur = null;
         String getDinosaurByIdQuery = "SELECT * FROM dinosaur WHERE dinosaur_id = ?";
 
         try {
@@ -106,7 +136,7 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
                 getDinosaurByIdPs.close();
                 rs.close();
 
-                return new Dinosaur(dinosaurId, zoo.getZooId(),species);
+                dinosaur = new Dinosaur(dinosaurId, zoo.getZooId(),species);
             }
 
             getDinosaurByIdPs.close();
@@ -116,18 +146,13 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
             System.out.println("Error: " + e.getMessage());
         }
 
-        return null;
-    }
-
-    @Override
-    public List<Dinosaur> getDinosaursBySpecies(String species) {
-        return List.of();
+        return dinosaur;
     }
 
     @Override
     public Dinosaur deleteDinosaurById(int id) throws EntityNotFoundException {
 
-        Dinosaur dinosaurToBeDeleted = getDinosaurById(id); // May bE null;
+        Dinosaur dinosaurToBeDeleted = getDinosaurById(id);
 
         if (dinosaurToBeDeleted == null) {
             throw new EntityNotFoundException("Dinosaur not found: " + id);

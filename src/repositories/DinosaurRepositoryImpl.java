@@ -1,6 +1,7 @@
 package repositories;
 
 import exceptions.EntityNotFoundException;
+import exceptions.EntitySpeciesNotFoundException;
 import models.DB;
 import models.Dinosaur;
 import models.Zoo;
@@ -82,6 +83,36 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
 
         return dinosaurs;
 
+    }
+
+    @Override
+    public List<Dinosaur> getDinosaursBySpecies(String species) throws EntitySpeciesNotFoundException {
+
+        if (DinosaurSpecies.valueOf(species.toUpperCase()) == null) {
+            throw new EntitySpeciesNotFoundException("Species not found");
+        }
+
+        List<Dinosaur> dinosaurs = new ArrayList<>();
+
+        String getDinosaursQuery = "SELECT * FROM dinosaur WHERE species = ?";
+
+        try {
+
+            PreparedStatement getDinosaursPs = getConnection().prepareStatement(getDinosaursQuery);
+            getDinosaursPs.setString(1, species);
+
+            ResultSet getDinosaursRs = getDinosaursPs.executeQuery();
+
+            while (getDinosaursRs.next()) {
+                Long id = getDinosaursRs.getLong("dinosaur_id");
+                dinosaurs.add(new Dinosaur(id, zoo.getZooId(), DinosaurSpecies.valueOf(species.toUpperCase())));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dinosaurs;
     }
 
     @Override

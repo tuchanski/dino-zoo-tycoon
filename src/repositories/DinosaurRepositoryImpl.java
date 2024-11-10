@@ -88,10 +88,12 @@ public class DinosaurRepositoryImpl implements IDinosaurRepository {
     @Override
     public List<Dinosaur> getDinosaursBySpecies(String species) throws EntitySpeciesNotFoundException {
 
-        if (DinosaurSpecies.valueOf(species.toUpperCase()) == null) {
+        try {
+            DinosaurSpecies.valueOf(species.toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new EntitySpeciesNotFoundException("Species not found");
         }
-
+        
         List<Dinosaur> dinosaurs = new ArrayList<>();
 
         String getDinosaursQuery = "SELECT * FROM dinosaur WHERE species = ?";

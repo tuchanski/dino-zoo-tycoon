@@ -2,10 +2,7 @@ package views.utils;
 
 import models.User;
 import models.Zoo;
-import views.panels.AddDinoPanel;
-import views.panels.ListDinoPanel;
-import views.panels.MainMenu;
-import views.panels.UserSettings;
+import views.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +17,7 @@ public class TitleBarButton extends JPanel {
         this.parentFrame = parentFrame;
         setLayout(null);
         setOpaque(false);
+
 
         CustomButton addButton = new CustomButton(
                 "src/resources/buttons/addButton.png",
@@ -45,7 +43,7 @@ public class TitleBarButton extends JPanel {
                 16,
                 165,
                 62,
-                e -> System.out.println("SOS | Emergency"),
+                e -> openSosMessage(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton closeButton = new CustomButton(
@@ -98,5 +96,10 @@ public class TitleBarButton extends JPanel {
     private void openUserSettings() {
         UserSettings userSettings = new UserSettings(parentFrame, currentUser);
         userSettings.setVisible(true);
+    }
+
+    private void openSosMessage(){
+        SOSMessage sosMessage = new SOSMessage(parentFrame);
+        sosMessage.setVisible(true);
     }
 }

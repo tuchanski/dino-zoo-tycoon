@@ -1,7 +1,5 @@
 package views.panels;
 
-import com.sun.source.tree.ReturnTree;
-import models.Zoo;
 import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomFont;
@@ -35,14 +33,19 @@ public class MainMenu extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
-        TitleBarButton titleBarButtons = new TitleBarButton(this, currentUser);
-        titleBarButtons.setBounds(0, 0, 800, 100);
-        backgroundPanel.add(titleBarButtons);
+        ImageIcon overviewViewButton = new ImageIcon("src/resources/utils/overview.png");
+        JLabel overviewViewLabel = new JLabel(overviewViewButton);
+        overviewViewLabel.setBounds(233, 80, 114, 45);
+        backgroundPanel.add(overviewViewLabel);
 
         ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        backgroundPanel.add(imageLabel);
+        JLabel mapLabel = new JLabel(imageIcon);
+        mapLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(mapLabel);
+
+        TitleBarButton titleBarButtons = new TitleBarButton(this, currentUser, overviewViewLabel, mapLabel);
+        titleBarButtons.setBounds(0, 0, 800, 100);
+        backgroundPanel.add(titleBarButtons);
 
         String username = currentUser.getUsername().toUpperCase();
         Font usernameFont = CustomFont.useCustomFont(18f);

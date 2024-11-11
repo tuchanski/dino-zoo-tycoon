@@ -16,10 +16,17 @@ public class TitleBarButton extends JPanel {
     private UserSettings userSettings;
     private SOSMessage sosMessage;
 
+    private CustomButton endEmergencyButton;
+    private JLabel overviewViewLabel;
+    private JLabel mapLabel;
+    private boolean isEmergencyActive = false;
 
-    public TitleBarButton(MainMenu parentFrame, User currentUser){
+
+    public TitleBarButton(MainMenu parentFrame, User currentUser, JLabel overviewViewLabel, JLabel mapLabel){
         this.currentUser = currentUser;
         this.parentFrame = parentFrame;
+        this.overviewViewLabel = overviewViewLabel;
+        this.mapLabel = mapLabel;
         setLayout(null);
         setOpaque(false);
 
@@ -41,13 +48,23 @@ public class TitleBarButton extends JPanel {
                 e -> openListDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        endEmergencyButton = new CustomButton(
+                "src/resources/buttons/endEmergencyButton.png",
+                437,
+                58,
+                71,
+                30,
+                e -> endEmergency(),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        endEmergencyButton.setVisible(false);
+
         CustomButton sosButton = new CustomButton(
                 "src/resources/buttons/sosButton.png",
                 384,
                 16,
                 165,
                 62,
-                e -> openSosMessage(),
+                e -> activeEmergency(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton closeButton = new CustomButton(
@@ -77,8 +94,10 @@ public class TitleBarButton extends JPanel {
                 e -> openUserSettings(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+
         add(addButton);
         add(listButton);
+        add(endEmergencyButton);
         add(sosButton);
 
         add(closeButton);
@@ -114,12 +133,33 @@ public class TitleBarButton extends JPanel {
         }
     }
 
-    private void openSosMessage(){
+    private void activeEmergency(){
+        isEmergencyActive = true;
+
+        overviewViewLabel.setIcon(new ImageIcon("src/resources/utils/lockdown.png"));
+        mapLabel.setIcon(new ImageIcon("src/resources/images/lockdown-map.png"));
+
+        endEmergencyButton.setVisible(true);
+
         if (sosMessage == null || !sosMessage.isDisplayable()){
             sosMessage = new SOSMessage(parentFrame);
             sosMessage.setVisible(true);
         } else {
             sosMessage.toFront();
+        }
+    }
+
+    private void endEmergency() {
+        isEmergencyActive = false;
+
+        overviewViewLabel.setIcon(new ImageIcon("src/resources/utils/overview.png"));
+        mapLabel.setIcon(new ImageIcon("src/resources/images/map.png"));
+
+        endEmergencyButton.setVisible(false);
+
+        if (sosMessage != null && sosMessage.isDisplayable()) {
+            sosMessage.dispose();
+            sosMessage = null;
         }
     }
 }

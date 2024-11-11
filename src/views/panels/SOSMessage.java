@@ -3,11 +3,15 @@ package views.panels;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class SOSMessage extends JFrame {
     private int mouseX, mouseY;
+    private Timer blinking;
+    private boolean isVisible = true;
 
     public SOSMessage(JFrame parentFrame){
 
@@ -20,7 +24,7 @@ public class SOSMessage extends JFrame {
         int y = parentFrame.getY() + 50;
         setLocation(x, y);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/sos-bg.png");
         backgroundPanel.setLayout(null);
 
         backgroundPanel.addMouseListener(new MouseAdapter() {
@@ -39,7 +43,25 @@ public class SOSMessage extends JFrame {
         });
 
         add(backgroundPanel);
-        setVisible(true);
 
+        blinking = new Timer(900, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isVisible = !isVisible;
+                SOSMessage.this.setVisible(isVisible);
+            }
+        });
+
+        blinking.start();
+
+        setVisible(true);
+    }
+
+    @Override
+    public void dispose(){
+        if (blinking != null){
+            blinking.stop();
+        }
+        super.dispose();
     }
 }

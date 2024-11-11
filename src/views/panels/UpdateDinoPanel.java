@@ -83,7 +83,6 @@ public class UpdateDinoPanel extends JFrame {
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
         speciesComboBox.setBounds(76, 180, 262, 47);
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
-        speciesComboBox.setBackground(new Color(255, 255, 255, 100));
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
         CustomButton submitButton = new CustomButton(

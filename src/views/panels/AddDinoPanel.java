@@ -88,7 +88,6 @@ public class AddDinoPanel extends JFrame {
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
         speciesComboBox.setBounds(76, 190, 262, 47);
         speciesComboBox.setFont(new Font("Arial", Font.BOLD, 12));
-        speciesComboBox.setBackground(new Color(255, 255, 255, 100));
 
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 

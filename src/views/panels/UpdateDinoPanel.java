@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 public class UpdateDinoPanel extends JFrame {
     private int mouseX, mouseY;
@@ -85,17 +84,17 @@ public class UpdateDinoPanel extends JFrame {
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
-        CustomButton submitButton = new CustomButton(
-                "src/resources/buttons/submitButton.png",
+        CustomButton updateButton = new CustomButton(
+                "src/resources/buttons/updateButton.png",
                 120,
-                330,
+                240,
                 165,
                 62,
                 e -> updateDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
-        layeredPane.add(submitButton, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(updateButton, JLayeredPane.PALETTE_LAYER);
 
         add(backgroundPanel);
         setVisible(true);

@@ -11,13 +11,17 @@ public class TitleBarButton extends JPanel {
     private final MainMenu parentFrame;
     private User currentUser;
 
+    private AddDinoPanel addDinoPanel;
+    private ListDinoPanel listDinoPanel;
+    private UserSettings userSettings;
+    private SOSMessage sosMessage;
+
 
     public TitleBarButton(MainMenu parentFrame, User currentUser){
         this.currentUser = currentUser;
         this.parentFrame = parentFrame;
         setLayout(null);
         setOpaque(false);
-
 
         CustomButton addButton = new CustomButton(
                 "src/resources/buttons/addButton.png",
@@ -84,22 +88,38 @@ public class TitleBarButton extends JPanel {
 
     private void openAddDino() {
         Zoo zoo = new Zoo(1L, "Teste Zoo", 1L);
-        AddDinoPanel addDinoFrame = new AddDinoPanel(parentFrame);
-        addDinoFrame.setVisible(true);
+        if (addDinoPanel == null || !addDinoPanel.isDisplayable()){
+            addDinoPanel = new AddDinoPanel(parentFrame);
+            addDinoPanel.setVisible(true);
+        } else{
+            addDinoPanel.toFront();
+        }
     }
 
     private void openListDino() {
-        ListDinoPanel listDinoPanel = new ListDinoPanel(parentFrame);
-        listDinoPanel.setVisible(true);
+        if (listDinoPanel == null || !listDinoPanel.isDisplayable()){
+            listDinoPanel = new ListDinoPanel(parentFrame);
+            listDinoPanel.setVisible(true);
+        } else{
+            listDinoPanel.toFront();
+        }
     }
 
     private void openUserSettings() {
-        UserSettings userSettings = new UserSettings(parentFrame, currentUser);
-        userSettings.setVisible(true);
+        if (userSettings == null || !userSettings.isDisplayable()){
+            userSettings = new UserSettings(parentFrame, currentUser);
+            userSettings.setVisible(true);
+        } else{
+            userSettings.toFront();
+        }
     }
 
     private void openSosMessage(){
-        SOSMessage sosMessage = new SOSMessage(parentFrame);
-        sosMessage.setVisible(true);
+        if (sosMessage == null || !sosMessage.isDisplayable()){
+            sosMessage = new SOSMessage(parentFrame);
+            sosMessage.setVisible(true);
+        } else {
+            sosMessage.toFront();
+        }
     }
 }

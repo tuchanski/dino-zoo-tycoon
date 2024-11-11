@@ -90,6 +90,10 @@ public class AddDinoPanel extends JFrame {
         speciesComboBox.setBounds(76, 190, 262, 47);
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
 
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        speciesComboBox.setRenderer(listRenderer);
+
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
         CustomButton submitButton = new CustomButton(

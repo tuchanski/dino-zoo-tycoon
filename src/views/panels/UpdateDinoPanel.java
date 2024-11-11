@@ -84,6 +84,10 @@ public class UpdateDinoPanel extends JFrame {
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        speciesComboBox.setRenderer(listRenderer);
+
         CustomButton updateButton = new CustomButton(
                 "src/resources/buttons/updateButton.png",
                 120,

@@ -78,10 +78,10 @@ public class UpdateDinoPanel extends JFrame {
         layeredPane.setBounds(0, 0, 400, 500);
         backgroundPanel.add(layeredPane);
 
-        configFieldWithLabel(layeredPane, "NEW SPECIES:", 120, 220, 160, 30, 14);
+        configFieldWithLabel(layeredPane, "NEW SPECIES:", 155, 150, 160, 30, 14);
 
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
-        speciesComboBox.setBounds(76, 250, 262, 47);
+        speciesComboBox.setBounds(76, 180, 262, 47);
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
         speciesComboBox.setBackground(new Color(255, 255, 255, 100));
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);

@@ -5,6 +5,7 @@ import models.Dinosaur;
 import models.enums.DinosaurSpecies;
 import services.ZooSystem;
 import views.utils.CustomButton;
+import views.utils.CustomDialog;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
@@ -119,13 +120,13 @@ public class UpdateDinoPanel extends JFrame {
         if (species != null) {
             try {
                 dinosaurController.updateDinosaurById(dinosaurToUpdate.getId().intValue(), species.name());
-                JOptionPane.showMessageDialog(this, "Dinosaur updated!");
+                CustomDialog.showMessage("Dinosaur updated!", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error updating dinosaur.");
+                CustomDialog.showMessage("Error updating dinosaur.", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a species.");
+            CustomDialog.showMessage("Please select a species.", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

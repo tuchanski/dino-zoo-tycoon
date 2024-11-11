@@ -180,9 +180,14 @@ public class Login extends JFrame {
                 ZooSystem.setCurrentZoo(zooController.getZooByUser());
                 CustomDialog.showMessage("Login successful!", JOptionPane.INFORMATION_MESSAGE);
 
-                MainMenu mainMenu = new MainMenu(user);
-                mainMenu.setVisible(true);
-                dispose();
+                Timer timer = new Timer(900, evt -> {
+                    MainMenu mainMenu = new MainMenu(user);
+                    mainMenu.setVisible(true);
+                    dispose();
+                });
+                timer.setRepeats(false);
+                timer.start();
+
             } else {
                 CustomDialog.showMessage("Invalid username or password", JOptionPane.ERROR_MESSAGE);
             }

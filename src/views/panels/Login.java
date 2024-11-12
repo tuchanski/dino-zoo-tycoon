@@ -174,7 +174,7 @@ public class Login extends JFrame {
         try {
             User user = userController.getUserByUsername(username);
 
-            if (user != null && user.getPassword().equals(password)) {
+            if (user != null && user.getPassword().equals(ZooSystem.hashPassword(password))) {
                 ZooSystem.setCurrentUser(user);
                 zooController = new ZooController(user);
                 ZooSystem.setCurrentZoo(zooController.getZooByUser());

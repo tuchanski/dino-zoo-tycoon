@@ -7,11 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import exceptions.EntityAlreadyRegisteredException;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
 import repositories.interfaces.IUserRepository;
+import services.ZooSystem;
 
 public class UserRepositoryImpl implements IUserRepository {
 
@@ -28,13 +33,15 @@ public class UserRepositoryImpl implements IUserRepository {
             throw new EntityAlreadyRegisteredException("Username already registered");
         }
 
+        String hashedPassword = ZooSystem.hashPassword(password);
+
         String createUserQuery = "INSERT INTO SystemUser (username, password) VALUES (?, ?)";
 
         try {
 
             PreparedStatement createUserPs = getConnection().prepareStatement(createUserQuery);
             createUserPs.setString(1, username);
-            createUserPs.setString(2, password);
+            createUserPs.setString(2, hashedPassword);
 
             createUserPs.execute();
             createUserPs.close();

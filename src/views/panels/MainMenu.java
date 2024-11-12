@@ -142,6 +142,10 @@ public class MainMenu extends JFrame {
         Timer timer = new Timer(10000, evt -> {
             if (this.isVisible()){
                 zooController.addVisitor(zooController.getZooByUser());
+
+                int newCash = zooRepository.getCurrentCash(currentUser.getId());
+                System.out.println(newCash);
+                cashLabel.setText("$ " + newCash);
             }
         });
         timer.setRepeats(true);

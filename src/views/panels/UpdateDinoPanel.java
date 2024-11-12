@@ -5,6 +5,7 @@ import models.Dinosaur;
 import models.enums.DinosaurSpecies;
 import services.ZooSystem;
 import views.utils.CustomButton;
+import views.utils.CustomDialog;
 import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
@@ -12,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 public class UpdateDinoPanel extends JFrame {
     private int mouseX, mouseY;
@@ -78,25 +78,28 @@ public class UpdateDinoPanel extends JFrame {
         layeredPane.setBounds(0, 0, 400, 500);
         backgroundPanel.add(layeredPane);
 
-        configFieldWithLabel(layeredPane, "NEW SPECIES:", 120, 220, 160, 30, 14);
+        configFieldWithLabel(layeredPane, "NEW SPECIES:", 155, 150, 160, 30, 14);
 
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
-        speciesComboBox.setBounds(76, 250, 262, 47);
+        speciesComboBox.setBounds(76, 180, 262, 47);
         speciesComboBox.setFont(CustomFont.useCustomFont(12f));
-        speciesComboBox.setBackground(new Color(255, 255, 255, 100));
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
-        CustomButton submitButton = new CustomButton(
-                "src/resources/buttons/submitButton.png",
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        speciesComboBox.setRenderer(listRenderer);
+
+        CustomButton updateButton = new CustomButton(
+                "src/resources/buttons/updateButton.png",
                 120,
-                330,
+                240,
                 165,
                 62,
                 e -> updateDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
-        layeredPane.add(submitButton, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(updateButton, JLayeredPane.PALETTE_LAYER);
 
         add(backgroundPanel);
         setVisible(true);
@@ -117,13 +120,13 @@ public class UpdateDinoPanel extends JFrame {
         if (species != null) {
             try {
                 dinosaurController.updateDinosaurById(dinosaurToUpdate.getId().intValue(), species.name());
-                JOptionPane.showMessageDialog(this, "Dinosaur updated!");
+                CustomDialog.showMessage("Dinosaur updated!", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error updating dinosaur.");
+                CustomDialog.showMessage("Error updating dinosaur.", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a species.");
+            CustomDialog.showMessage("Please select a species.", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

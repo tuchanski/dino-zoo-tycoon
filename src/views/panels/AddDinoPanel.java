@@ -4,6 +4,7 @@ import controllers.DinosaurController;
 import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
+import views.utils.CustomFont;
 import views.utils.ImageBackgroundPanel;
 
 import javax.swing.*;
@@ -87,8 +88,11 @@ public class AddDinoPanel extends JFrame {
 
         speciesComboBox = new JComboBox<>(DinosaurSpecies.values());
         speciesComboBox.setBounds(76, 190, 262, 47);
-        speciesComboBox.setFont(new Font("Arial", Font.BOLD, 12));
-        speciesComboBox.setBackground(new Color(255, 255, 255, 100));
+        speciesComboBox.setFont(CustomFont.useCustomFont(12f));
+
+        DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        speciesComboBox.setRenderer(listRenderer);
 
         layeredPane.add(speciesComboBox, JLayeredPane.PALETTE_LAYER);
 
@@ -112,7 +116,7 @@ public class AddDinoPanel extends JFrame {
         JLabel label = new JLabel(labelText);
         Color fontColor = new Color(218, 195, 167);
         label.setForeground(fontColor);
-        label.setFont(new Font("Arial", Font.BOLD, fontSize));
+        label.setFont(CustomFont.useCustomFont(fontSize));
         label.setBounds(x, y, width, height);
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }

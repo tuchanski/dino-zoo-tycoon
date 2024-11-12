@@ -260,7 +260,7 @@ public class ZooRepositoryImpl implements IZooRepository {
 
     }
 
-    private int getCurrentCash(Long id) {
+    public int getCurrentCash(Long id) {
 
         int currentCash = 0;
         String getCurrentCashQuery = "SELECT * FROM zoo WHERE zoo_id = ? AND user_id = ?";

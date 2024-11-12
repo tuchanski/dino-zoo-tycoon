@@ -2,10 +2,7 @@ package views.utils;
 
 import models.User;
 import models.Zoo;
-import views.panels.AddDinoPanel;
-import views.panels.ListDinoPanel;
-import views.panels.MainMenu;
-import views.panels.UserSettings;
+import views.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,10 +11,22 @@ public class TitleBarButton extends JPanel {
     private final MainMenu parentFrame;
     private User currentUser;
 
+    private AddDinoPanel addDinoPanel;
+    private ListDinoPanel listDinoPanel;
+    private UserSettings userSettings;
+    private SOSMessage sosMessage;
 
-    public TitleBarButton(MainMenu parentFrame, User currentUser){
+    private CustomButton endEmergencyButton;
+    private JLabel overviewViewLabel;
+    private JLabel mapLabel;
+    private boolean isEmergencyActive = false;
+
+
+    public TitleBarButton(MainMenu parentFrame, User currentUser, JLabel overviewViewLabel, JLabel mapLabel){
         this.currentUser = currentUser;
         this.parentFrame = parentFrame;
+        this.overviewViewLabel = overviewViewLabel;
+        this.mapLabel = mapLabel;
         setLayout(null);
         setOpaque(false);
 
@@ -39,13 +48,23 @@ public class TitleBarButton extends JPanel {
                 e -> openListDino(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        endEmergencyButton = new CustomButton(
+                "src/resources/buttons/endEmergencyButton.png",
+                437,
+                58,
+                71,
+                30,
+                e -> endEmergency(),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        endEmergencyButton.setVisible(false);
+
         CustomButton sosButton = new CustomButton(
                 "src/resources/buttons/sosButton.png",
                 384,
                 16,
                 165,
                 62,
-                e -> System.out.println("SOS | Emergency"),
+                e -> activeEmergency(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         CustomButton closeButton = new CustomButton(
@@ -75,8 +94,10 @@ public class TitleBarButton extends JPanel {
                 e -> openUserSettings(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+
         add(addButton);
         add(listButton);
+        add(endEmergencyButton);
         add(sosButton);
 
         add(closeButton);
@@ -86,17 +107,59 @@ public class TitleBarButton extends JPanel {
 
     private void openAddDino() {
         Zoo zoo = new Zoo(1L, "Teste Zoo", 1L);
-        AddDinoPanel addDinoFrame = new AddDinoPanel(parentFrame);
-        addDinoFrame.setVisible(true);
+        if (addDinoPanel == null || !addDinoPanel.isDisplayable()){
+            addDinoPanel = new AddDinoPanel(parentFrame);
+            addDinoPanel.setVisible(true);
+        } else{
+            addDinoPanel.toFront();
+        }
     }
 
     private void openListDino() {
-        ListDinoPanel listDinoPanel = new ListDinoPanel(parentFrame);
-        listDinoPanel.setVisible(true);
+        if (listDinoPanel == null || !listDinoPanel.isDisplayable()){
+            listDinoPanel = new ListDinoPanel(parentFrame);
+            listDinoPanel.setVisible(true);
+        } else{
+            listDinoPanel.toFront();
+        }
     }
 
     private void openUserSettings() {
-        UserSettings userSettings = new UserSettings(parentFrame, currentUser);
-        userSettings.setVisible(true);
+        if (userSettings == null || !userSettings.isDisplayable()){
+            userSettings = new UserSettings(parentFrame, currentUser);
+            userSettings.setVisible(true);
+        } else{
+            userSettings.toFront();
+        }
+    }
+
+    private void activeEmergency(){
+        isEmergencyActive = true;
+
+        overviewViewLabel.setIcon(new ImageIcon("src/resources/utils/lockdown.png"));
+        mapLabel.setIcon(new ImageIcon("src/resources/images/lockdown-map.png"));
+
+        endEmergencyButton.setVisible(true);
+
+        if (sosMessage == null || !sosMessage.isDisplayable()){
+            sosMessage = new SOSMessage(parentFrame);
+            sosMessage.setVisible(true);
+        } else {
+            sosMessage.toFront();
+        }
+    }
+
+    private void endEmergency() {
+        isEmergencyActive = false;
+
+        overviewViewLabel.setIcon(new ImageIcon("src/resources/utils/overview.png"));
+        mapLabel.setIcon(new ImageIcon("src/resources/images/map.png"));
+
+        endEmergencyButton.setVisible(false);
+
+        if (sosMessage != null && sosMessage.isDisplayable()) {
+            sosMessage.dispose();
+            sosMessage = null;
+        }
     }
 }

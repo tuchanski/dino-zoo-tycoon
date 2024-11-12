@@ -1,7 +1,7 @@
 package views.panels;
 
-import com.sun.source.tree.ReturnTree;
-import models.Zoo;
+import controllers.ZooController;
+import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomFont;
@@ -20,10 +20,13 @@ public class MainMenu extends JFrame {
     private int mouseX, mouseY;
     private UserController userController;
     private User currentUser;
+    private ZooRepositoryImpl zooRepository;
+    private JLabel cashLabel;
 
 
     public MainMenu(User currentUser) {
         this.currentUser = currentUser;
+        this.zooRepository = new ZooRepositoryImpl(currentUser);
 
         setUndecorated(true);
         setSize(800, 600);
@@ -35,14 +38,19 @@ public class MainMenu extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
-        TitleBarButton titleBarButtons = new TitleBarButton(this, currentUser);
-        titleBarButtons.setBounds(0, 0, 800, 100);
-        backgroundPanel.add(titleBarButtons);
+        ImageIcon overviewViewButton = new ImageIcon("src/resources/utils/overview.png");
+        JLabel overviewViewLabel = new JLabel(overviewViewButton);
+        overviewViewLabel.setBounds(233, 80, 114, 45);
+        backgroundPanel.add(overviewViewLabel);
 
         ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        backgroundPanel.add(imageLabel);
+        JLabel mapLabel = new JLabel(imageIcon);
+        mapLabel.setBounds(30, 80, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+        backgroundPanel.add(mapLabel);
+
+        TitleBarButton titleBarButtons = new TitleBarButton(this, currentUser, overviewViewLabel, mapLabel);
+        titleBarButtons.setBounds(0, 0, 800, 100);
+        backgroundPanel.add(titleBarButtons);
 
         String username = currentUser.getUsername().toUpperCase();
         Font usernameFont = CustomFont.useCustomFont(18f);
@@ -61,9 +69,27 @@ public class MainMenu extends JFrame {
 
         // Center usernameLabel
         int labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
-        usernameLabel.setBounds(labelX, 126, textWidth, 30);
+        usernameLabel.setBounds(labelX, 115, textWidth, 30);
 
         backgroundPanel.add(usernameLabel);
+
+        //cash
+
+        int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+        cashLabel = new JLabel("$ " + currentCash);
+        cashLabel.setFont(CustomFont.useCustomFont(12f));
+        cashLabel.setForeground(fontColor);
+
+        metrics = cashLabel.getFontMetrics(cashLabel.getFont());
+        textWidth = metrics.stringWidth("$ " + currentCash);
+
+        logoutButtonX = 650;
+        logoutButtonWidth = 103;
+
+        labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
+
+        cashLabel.setBounds(labelX, 143, textWidth, 20);
+        backgroundPanel.add(cashLabel);
 
         CustomButton logoutButton = new CustomButton(
                 "src/resources/buttons/logoutButton.png",

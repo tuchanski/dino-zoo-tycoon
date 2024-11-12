@@ -1,5 +1,6 @@
 package repositories;
 
+import controllers.VisitorController;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.User;
@@ -282,5 +283,6 @@ public class ZooRepositoryImpl implements IZooRepository {
 
         return currentCash;
     }
+
 
 }

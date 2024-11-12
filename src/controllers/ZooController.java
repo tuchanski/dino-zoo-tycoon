@@ -2,6 +2,7 @@ package controllers;
 
 import exceptions.EntityNotFoundException;
 import models.User;
+import models.Visitor;
 import models.Zoo;
 import repositories.ZooRepositoryImpl;
 import repositories.interfaces.IZooRepository;
@@ -58,7 +59,7 @@ public class ZooController {
         return zoo;
     }
 
-    public void addCash(int id, int amount) {
+    public void addCash(long id, int amount) {
 
         try {
             zooRepository.addCash((long) id, amount);
@@ -68,7 +69,7 @@ public class ZooController {
 
     }
 
-    public void removeCash(int id, int amount) {
+    public void removeCash(long id, int amount) {
 
         try {
             zooRepository.removeCash((long) id, amount);
@@ -76,6 +77,15 @@ public class ZooController {
             System.out.println("Error: " + e.getMessage());
         }
 
+    }
+
+    public void addVisitor(Zoo zoo) {
+        VisitorController visitorController = new VisitorController(zoo);
+        visitorController.createVisitor();
+        List<Visitor> visitors = visitorController.getVisitors();
+        System.out.println("Visitor " + visitors.getLast() + " arrived.");
+        addCash(zoo.getZooId(), 5);
+        System.out.println("Cash: + 5 | Total: " + zoo.getCash());
     }
 
 }

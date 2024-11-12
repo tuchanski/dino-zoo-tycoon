@@ -19,11 +19,13 @@ public class UserSettings extends JFrame {
     private JTextField usernameField;
     private JTextField passwordField;
     private User currentUser;
+    private MainMenu mainMenu;
     private UserController userController;
 
-    public UserSettings(JFrame parentFrame, User currentUser) {
+    public UserSettings(JFrame parentFrame, User currentUser, MainMenu mainMenu) {
         this.userController = new UserController();
         this.currentUser = currentUser;
+        this.mainMenu = mainMenu;
 
         setUndecorated(true);
         setSize(400, 500);
@@ -124,6 +126,8 @@ public class UserSettings extends JFrame {
         }
 
         userController.updateUserById(currentUser.getId().intValue(), newUsername, newPassword);
+        currentUser.setUsername(newUsername);
+        mainMenu.updateUsername(newUsername);
 
         CustomDialog.showMessage("Update successfully!", JOptionPane.INFORMATION_MESSAGE);
 

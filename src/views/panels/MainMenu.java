@@ -27,17 +27,12 @@ public class MainMenu extends JFrame {
     private ZooController zooController;
     private JLabel cashLabel;
 
+
     public MainMenu(User currentUser) {
 
         this.currentUser = currentUser;
         this.zooController = new ZooController(currentUser);
         this.zooRepository = new ZooRepositoryImpl(currentUser);
-
-        Timer timer = new Timer(10000, evt -> {
-            zooController.addVisitor(zooController.getZooByUser());
-        });
-        timer.setRepeats(true);
-        timer.start();
 
         setUndecorated(true);
         setSize(800, 600);
@@ -143,6 +138,15 @@ public class MainMenu extends JFrame {
 
         add(backgroundPanel);
         setVisible(true);
+
+        Timer timer = new Timer(10000, evt -> {
+            if (this.isVisible()){
+                zooController.addVisitor(zooController.getZooByUser());
+            }
+        });
+        timer.setRepeats(true);
+        timer.start();
+
     }
 
     private void logoutAction(){

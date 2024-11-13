@@ -12,6 +12,11 @@ public class Visitor extends Human {
     }
 
     @Override
+    public String getRole() {
+        return "Visitor";
+    }
+
+    @Override
     public String getDailyTask() {
         Random random = new Random();
         List<String> tasks = List.of("Follow the dinosaur footprints trail",

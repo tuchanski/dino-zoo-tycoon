@@ -30,6 +30,10 @@ public abstract class Human {
 
     public abstract String getDailyTask();
 
+    public String getRole() {
+        return "General Human";
+    }
+
     @Override
     public String toString() {
         return "Human{" +

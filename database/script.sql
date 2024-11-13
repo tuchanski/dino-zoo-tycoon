@@ -42,6 +42,7 @@ CREATE TABLE Dinosaur (
 CREATE TABLE Visitor (
     visitor_id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    daily_task VARCHAR(100),
     zoo_id BIGINT REFERENCES Zoo(zoo_id) NOT NULL
 );
 

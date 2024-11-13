@@ -121,9 +121,41 @@ public class MainMenu extends JFrame {
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
+        ImageIcon employeesViewButton = new ImageIcon("src/resources/utils/employeeManageButton.png");
+        JLabel employeeViewLabel = new JLabel(employeesViewButton);
+        employeeViewLabel.setBounds(610, 214, 102, 41);
+        backgroundPanel.add(employeeViewLabel);
+
+        CustomButton hireEmployeeButton = new CustomButton(
+                "src/resources/buttons/hireEmployeeButton.png",
+                583,
+                237,
+                153,
+                58,
+                e -> logoutAction(),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
+        ImageIcon visitorsViewsButton = new ImageIcon("src/resources/utils/visitorsManageButton.png");
+        JLabel visitorsViewsLabel = new JLabel(visitorsViewsButton);
+        visitorsViewsLabel.setBounds(610, 300, 102, 41);
+        backgroundPanel.add(visitorsViewsLabel);
+
+        CustomButton manageVisitorsButton = new CustomButton(
+                "src/resources/buttons/manageVisitorsButton.png",
+                583,
+                323,
+                153,
+                58,
+                e -> logoutAction(),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
         backgroundPanel.add(logoutButton);
         backgroundPanel.add(userPhoto);
         backgroundPanel.add(usernameLabel);
+        backgroundPanel.add(hireEmployeeButton);
+        backgroundPanel.add(manageVisitorsButton);
 
         JPanel logPanel = new JPanel() {
             @Override

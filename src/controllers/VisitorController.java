@@ -40,6 +40,9 @@ public class VisitorController {
 
         return visitor;
     }
-    
 
+    public String getDailyTask(int id) {
+        return visitorRepository.getDailyTask((long) id);
+    }
+    
 }

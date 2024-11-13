@@ -1,13 +1,11 @@
 package views.panels;
 
+import controllers.EmployeeController;
 import controllers.VisitorController;
-import exceptions.EntityNotFoundException;
+import models.Employee;
 import models.Visitor;
 import services.ZooSystem;
-import views.utils.CustomButton;
-import views.utils.CustomFont;
-import views.utils.ImageBackgroundPanel;
-import views.utils.RoundedBorder;
+import views.utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +16,11 @@ import java.awt.event.MouseEvent;
 public class ListVisitorPanel extends JFrame {
     private int mouseX, mouseY;
     private VisitorController visitorController;
+    private EmployeeController employeeController;
 
     public ListVisitorPanel(JFrame parentFrame) {
 
+        employeeController = new EmployeeController(ZooSystem.getCurrentZoo());
         visitorController = new VisitorController(ZooSystem.getCurrentZoo());
         System.out.println("Current zoo: " + ZooSystem.getCurrentZoo());
 
@@ -175,13 +175,20 @@ public class ListVisitorPanel extends JFrame {
             cardPanel.add(nameLabel);
 
             // Buttons
-            CustomButton updateButton = new CustomButton(
+            CustomButton dailyTask = new CustomButton(
                     "src/resources/buttons/updateButtonSmall.png",
                     0,
                     0,
                     52,
                     53,
-                    e -> System.out.println(""),
+                    e -> {
+                        List<Employee> employees = employeeController.getEmployees();
+                        if (employees.isEmpty()) {
+                            CustomDialog.showMessage("No employees found.", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            new AddDailyTask(this);
+                        }
+                    },
                     Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
             );
 
@@ -202,7 +209,7 @@ public class ListVisitorPanel extends JFrame {
             buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
             buttonPanel.setOpaque(false);
 
-            buttonPanel.add(updateButton);
+            buttonPanel.add(dailyTask);
             buttonPanel.add(deleteButton);
 
             cardPanel.add(buttonPanel);

@@ -1,6 +1,7 @@
 package controllers;
 
 import exceptions.EntityNotFoundException;
+import exceptions.NotEnoughMoneyException;
 import models.User;
 import models.Visitor;
 import models.Zoo;
@@ -95,6 +96,14 @@ public class ZooController {
         String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $5)";
         logTextArea.append(visitorLog + "\n");
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+    }
+
+    public void contractEmployee(int id) {
+        try {
+            zooRepository.contractNewEmployee((long) id);
+        } catch (EntityNotFoundException | NotEnoughMoneyException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
 }

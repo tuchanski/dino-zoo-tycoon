@@ -1,7 +1,7 @@
 package repositories;
 
-import controllers.VisitorController;
 import exceptions.EntityNotFoundException;
+import exceptions.NotEnoughMoneyException;
 import models.DB;
 import models.User;
 import models.Zoo;
@@ -258,6 +258,27 @@ public class ZooRepositoryImpl implements IZooRepository {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+
+    }
+
+    @Override
+    public void contractNewEmployee(Long id) throws EntityNotFoundException, NotEnoughMoneyException {
+
+        Zoo zoo = getZooById(id);
+
+        if (zoo == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
+        int currentCash = getCurrentCash(id);
+
+        if (currentCash < 100) {
+            throw new NotEnoughMoneyException("Zoo with ID: " + id + "does not have enough money.");
+        }
+
+        EmployeeRepositoryImpl employeeRepository = new EmployeeRepositoryImpl(zoo);
+        employeeRepository.createGenericEmployee();
+        removeCash(id, 100); // 100 per Employee
 
     }
 

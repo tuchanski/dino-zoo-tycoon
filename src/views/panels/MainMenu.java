@@ -89,7 +89,7 @@ public class MainMenu extends JFrame {
         cashLabel.setForeground(fontColor);
 
         metrics = cashLabel.getFontMetrics(cashLabel.getFont());
-        textWidth = metrics.stringWidth("$ " + currentCash);
+        textWidth = metrics.stringWidth("$ " + currentCash + "   ");
 
         logoutButtonX = 650;
         logoutButtonWidth = 103;
@@ -144,7 +144,6 @@ public class MainMenu extends JFrame {
         Timer timer = new Timer(10000, evt -> {
             if (this.isVisible()){
                 zooController.addVisitor(zooController.getZooByUser());
-
                 int newCash = zooRepository.getCurrentCash(currentUser.getId());
                 System.out.println(newCash);
                 cashLabel.setText("$ " + newCash);

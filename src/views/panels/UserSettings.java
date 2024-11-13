@@ -85,7 +85,6 @@ public class UserSettings extends JFrame {
         layeredPane.add(passwordFieldBackground, JLayeredPane.DEFAULT_LAYER);
 
         passwordField = transparentField(68, 320, 262, 47, 12);
-        passwordField.setText(currentUser.getPassword());
         layeredPane.add(passwordField, JLayeredPane.PALETTE_LAYER);
 
         CustomButton updateButton = new CustomButton("src/resources/buttons/updateButton.png", 120, 385, 165, 62, e -> updateUser(), Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

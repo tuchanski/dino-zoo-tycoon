@@ -40,7 +40,6 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-
         userController = new UserController();
 
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
@@ -120,15 +119,28 @@ public class MainMenu extends JFrame {
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
+        ZooController zooController = new ZooController(currentUser);
+        String zooName = zooController.getZooName();
+
+        JLabel welcomeLabel = new JLabel("WELCOME TO " + zooName);
+
+        Color welcomeFontColor = new Color(37, 27, 20);
+        welcomeLabel.setFont(CustomFont.useCustomFont(14f));
+        welcomeLabel.setForeground(welcomeFontColor);
+        welcomeLabel.setBounds(553, 200, 250, 41);
+
+        backgroundPanel.add(welcomeLabel);
+
+
         ImageIcon employeesViewButton = new ImageIcon("src/resources/utils/employeeManageButton.png");
         JLabel employeeViewLabel = new JLabel(employeesViewButton);
-        employeeViewLabel.setBounds(610, 214, 102, 41);
+        employeeViewLabel.setBounds(610, 235, 102, 41);
         backgroundPanel.add(employeeViewLabel);
 
         CustomButton hireEmployeeButton = new CustomButton(
                 "src/resources/buttons/hireEmployeeButton.png",
                 583,
-                237,
+                259 ,
                 153,
                 58,
                 e -> {
@@ -140,7 +152,7 @@ public class MainMenu extends JFrame {
         CustomButton manageEmployeesButton = new CustomButton(
                 "src/resources/buttons/manageVisitorsButton.png",
                 583,
-                293,
+                315,
                 153,
                 58,
                 e -> openListEmployee(),
@@ -149,16 +161,31 @@ public class MainMenu extends JFrame {
 
         ImageIcon visitorsViewsButton = new ImageIcon("src/resources/utils/visitorsManageButton.png");
         JLabel visitorsViewsLabel = new JLabel(visitorsViewsButton);
-        visitorsViewsLabel.setBounds(610, 350, 102, 41);
+        visitorsViewsLabel.setBounds(610, 376, 102, 41);
         backgroundPanel.add(visitorsViewsLabel);
 
         CustomButton manageVisitorsButton = new CustomButton(
                 "src/resources/buttons/manageVisitorsButton.png",
                 583,
-                373,
+                399,
                 153,
                 58,
                 e -> openListVisitor(),
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
+        ImageIcon foodViewButton = new ImageIcon("src/resources/utils/foodButton.png");
+        JLabel foodViewLabel = new JLabel(foodViewButton);
+        foodViewLabel.setBounds(610, 462, 102, 41);
+        backgroundPanel.add(foodViewLabel);
+
+        CustomButton buyFoodButton = new CustomButton(
+                "src/resources/buttons/buyButton.png",
+                583,
+                485,
+                153,
+                58,
+                e -> openBuyFood(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -168,6 +195,7 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(hireEmployeeButton);
         backgroundPanel.add(manageVisitorsButton);
         backgroundPanel.add(manageEmployeesButton);
+        backgroundPanel.add(buyFoodButton);
 
         JPanel logPanel = new JPanel() {
             @Override
@@ -338,6 +366,11 @@ public class MainMenu extends JFrame {
     private void openListEmployee(){
         ListEmployeePanel listEmployeePanel = new ListEmployeePanel(this);
         listEmployeePanel.setVisible(true);
+        this.setState(JFrame.ICONIFIED);
+    }
+    private void openBuyFood(){
+        BuyFoodPanel buyFood = new BuyFoodPanel(this);
+        buyFood.setVisible(true);
         this.setState(JFrame.ICONIFIED);
     }
 

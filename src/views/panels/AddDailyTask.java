@@ -78,7 +78,7 @@ public class AddDailyTask extends JFrame {
         backgroundPanel.add(layeredPane);
 
         // Combbox
-        configFieldWithLabel(layeredPane, "EMPLOYEE:", 170, 160, 100, 30, 16);
+        configFieldWithLabel(layeredPane, "EMPLOYEE:", 150, 160, 100, 30, 16);
 
         ImageIcon employeeFieldBg = new ImageIcon("src/resources/utils/customField.png");
         JLabel employeeFieldBackground = new JLabel(employeeFieldBg);
@@ -127,7 +127,7 @@ public class AddDailyTask extends JFrame {
         if (employee != null){
             String dailyTask = employeeController.getDailyTask(employee.getId().intValue());
             if (dailyTask != null) {
-                CustomDialog.showMessage("Employee's daily task: " + dailyTask, JOptionPane.INFORMATION_MESSAGE);
+                CustomDialog.showMessage(dailyTask, JOptionPane.INFORMATION_MESSAGE);
             } else {
                 CustomDialog.showMessage("Daily task not found for this employee.", JOptionPane.ERROR_MESSAGE);
             }

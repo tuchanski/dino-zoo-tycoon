@@ -1,12 +1,11 @@
 package views.panels;
 
 import controllers.ZooController;
+import exceptions.EntityNotFoundException;
+import exceptions.NotEnoughMoneyException;
 import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
-import views.utils.CustomButton;
-import views.utils.CustomFont;
-import views.utils.ImageBackgroundPanel;
-import views.utils.TitleBarButton;
+import views.utils.*;
 
 import controllers.UserController;
 import models.User;
@@ -132,7 +131,9 @@ public class MainMenu extends JFrame {
                 237,
                 153,
                 58,
-                e -> logoutAction(),
+                e -> {
+                    hireEmployeeAction();
+                },
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -274,6 +275,28 @@ public class MainMenu extends JFrame {
         listVisitorPanel.setVisible(true);
         this.setState(JFrame.ICONIFIED);
     }
+
+    private void hireEmployeeAction() {
+        try {
+            int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+
+            if (currentCash < 100) {
+                throw new NotEnoughMoneyException("You don't have enough money.");
+            }
+
+            zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
+
+            int newCash = currentCash - 100;
+            cashLabel.setText("$ " + newCash);
+            zooRepository.removeCash(currentUser.getId(), 100);
+        } catch (NotEnoughMoneyException ex) {
+            CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
+        } catch (EntityNotFoundException ex) {
+            CustomDialog.showMessage("Entity not foundd.", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
 
     public static void main(String[] args) {
         User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");

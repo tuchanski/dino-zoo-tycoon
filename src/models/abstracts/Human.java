@@ -36,10 +36,6 @@ public abstract class Human {
 
     @Override
     public String toString() {
-        return "Human{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", zooId=" + zooId +
-                '}';
+        return name;
     }
 }

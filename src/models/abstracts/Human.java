@@ -28,8 +28,7 @@ public abstract class Human {
         this.name = name;
     }
 
-    // TO CHILD CLASSES
-    protected abstract void stareAtDino(); // We should have some better ideas
+    public abstract String getDailyTask();
 
     @Override
     public String toString() {

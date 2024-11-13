@@ -11,5 +11,6 @@ public interface IVisitorRepository {
     List<Visitor> getVisitors();
     Visitor getVisitorById(Long visitorId);
     Visitor deleteVisitorById(Long visitorId) throws EntityNotFoundException;
+    String getDailyTask(Long visitorId);
 
 }

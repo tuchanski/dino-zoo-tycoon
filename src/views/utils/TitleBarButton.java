@@ -126,7 +126,7 @@ public class TitleBarButton extends JPanel {
 
     private void openUserSettings() {
         if (userSettings == null || !userSettings.isDisplayable()){
-            userSettings = new UserSettings(parentFrame, currentUser);
+            userSettings = new UserSettings(parentFrame, currentUser, parentFrame);
             userSettings.setVisible(true);
         } else{
             userSettings.toFront();

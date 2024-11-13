@@ -26,6 +26,7 @@ public class MainMenu extends JFrame {
     private ZooRepositoryImpl zooRepository;
     private ZooController zooController;
     private JLabel cashLabel;
+    private JLabel usernameLabel;
 
 
     public MainMenu(User currentUser) {
@@ -60,7 +61,8 @@ public class MainMenu extends JFrame {
 
         String username = currentUser.getUsername().toUpperCase();
         Font usernameFont = CustomFont.useCustomFont(18f);
-        JLabel usernameLabel = new JLabel(username);
+        usernameLabel = new JLabel(username);
+
         usernameLabel.setFont(usernameFont);
 
         Color fontColor = new Color(228, 201, 173);
@@ -162,6 +164,21 @@ public class MainMenu extends JFrame {
         initialPanel.setVisible(true);
     }
 
+    public void updateUsername(String newUsername){
+        this.currentUser.setUsername(newUsername);
+        String upperUsername = newUsername.toUpperCase();
+
+        usernameLabel.setText(upperUsername);
+        FontMetrics metrics = usernameLabel.getFontMetrics(usernameLabel.getFont());
+        int textWidth = metrics.stringWidth(upperUsername);
+
+        int logoutButtonX = 650;
+        int logoutButtonWidth = 103;
+        int labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
+
+        usernameLabel.setBounds(labelX, 115, textWidth, 30);
+        usernameLabel.repaint();
+    }
 
     public static void main(String[] args) {
         User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");

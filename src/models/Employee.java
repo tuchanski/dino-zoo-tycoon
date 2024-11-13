@@ -16,6 +16,11 @@ public class Employee extends Human {
     }
 
     @Override
+    public String getRole() {
+        return "Employee";
+    }
+
+    @Override
     public String getDailyTask() {
         Random random = new Random();
         List<String> tasks = List.of("Clean enclosure", "Guide visitors", "Feed dinosaurs");

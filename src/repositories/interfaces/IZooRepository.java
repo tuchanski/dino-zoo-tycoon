@@ -1,6 +1,7 @@
 package repositories.interfaces;
 
 import exceptions.EntityNotFoundException;
+import exceptions.NotEnoughMoneyException;
 import models.Zoo;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface IZooRepository {
     Zoo deleteZooById(Long id) throws EntityNotFoundException;
     void addCash(Long id, int amount) throws EntityNotFoundException;
     void removeCash(Long id, int amount) throws EntityNotFoundException;
+    void contractNewEmployee(Long id) throws EntityNotFoundException, NotEnoughMoneyException;
 }

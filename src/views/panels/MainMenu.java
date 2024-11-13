@@ -147,7 +147,7 @@ public class MainMenu extends JFrame {
                 323,
                 153,
                 58,
-                e -> logoutAction(),
+                e -> openListVisitor(),
                 Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         );
 
@@ -267,6 +267,12 @@ public class MainMenu extends JFrame {
 
         usernameLabel.setBounds(labelX, 115, textWidth, 30);
         usernameLabel.repaint();
+    }
+
+    private void openListVisitor(){
+        ListVisitorPanel listVisitorPanel = new ListVisitorPanel(this);
+        listVisitorPanel.setVisible(true);
+        this.setState(JFrame.ICONIFIED);
     }
 
     public static void main(String[] args) {

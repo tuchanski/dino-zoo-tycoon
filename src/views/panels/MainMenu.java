@@ -13,11 +13,8 @@ import models.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
 
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
@@ -27,6 +24,10 @@ public class MainMenu extends JFrame {
     private ZooController zooController;
     private JLabel cashLabel;
     private JLabel usernameLabel;
+    private JTextArea logTextArea;
+    private JScrollPane logScrollPane;
+
+    private String visitorName = "";
 
 
     public MainMenu(User currentUser) {
@@ -39,6 +40,7 @@ public class MainMenu extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
 
         userController = new UserController();
 
@@ -123,6 +125,50 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(userPhoto);
         backgroundPanel.add(usernameLabel);
 
+        JPanel logPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                ImageIcon backgroundImage = new ImageIcon("src/resources/backgrounds/log-bg.png");
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        logPanel.setLayout(new BorderLayout());
+        logPanel.setBounds(47, 435, 262, 142);
+
+        logPanel.setOpaque(false);
+
+        logTextArea = new JTextArea();
+        logTextArea.setOpaque(false);
+        logTextArea.setEditable(false);
+        logTextArea.setFont(CustomFont.useCustomFont(12f));
+        Color logTextColor = new Color(216, 194, 166);
+        logTextArea.setForeground(logTextColor);
+        logTextArea.setLineWrap(true);
+        logTextArea.setWrapStyleWord(true);
+        logTextArea.setMargin(new Insets(5, 5, 5, 5));
+        logTextArea.setBorder(null);
+
+        JScrollPane scrollPane = new JScrollPane(logTextArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null);
+        scrollPane.setBounds(0, 0, logPanel.getWidth(), logPanel.getHeight());
+
+        logPanel.add(scrollPane, BorderLayout.CENTER);
+
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+
+        ImageIcon visitorsViewButton = new ImageIcon("src/resources/utils/visitorsButton.png");
+        JLabel visitorsViewLabel = new JLabel(visitorsViewButton);
+        visitorsViewLabel.setBounds(135, 565, 74, 32);
+        backgroundPanel.add(visitorsViewLabel);
+
+        backgroundPanel.add(logPanel);
+
         backgroundPanel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mouseX = e.getX();
@@ -142,11 +188,23 @@ public class MainMenu extends JFrame {
         setVisible(true);
 
         Timer timer = new Timer(10000, evt -> {
-            if (this.isVisible()){
-                zooController.addVisitor(zooController.getZooByUser());
+            if (this.isVisible()) {
+                zooController.addVisitor(zooController.getZooByUser(), logTextArea);
+
                 int newCash = zooRepository.getCurrentCash(currentUser.getId());
                 System.out.println(newCash);
-                cashLabel.setText("$ " + newCash);
+
+                String cashText = "$ " + newCash;
+                cashLabel.setText(cashText);
+
+                FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
+                int newTextWidth = newMetrics.stringWidth(cashText);
+
+                int newLogoutButtonX = 650;
+                int newLogoutButtonWidth = 103;
+                int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
+
+                cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
             }
         });
         timer.setRepeats(true);

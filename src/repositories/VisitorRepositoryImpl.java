@@ -35,13 +35,15 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     public void createGenericVisitor() {
 
         String name = getRandomName();
-        String createGenericVisitorQuery = "INSERT INTO visitor (name, zoo_id) VALUES (?, ?)";
+        String dailyTask = new Visitor(null, name, zoo.getZooId()).getDailyTask();
+        String createGenericVisitorQuery = "INSERT INTO visitor (name, zoo_id, daily_task) VALUES (?, ?, ?)";
 
         try {
 
             PreparedStatement createGenericVisitorPs = getConnection().prepareStatement(createGenericVisitorQuery);
             createGenericVisitorPs.setString(1, name);
             createGenericVisitorPs.setLong(2, zoo.getZooId());
+            createGenericVisitorPs.setString(3, dailyTask);
 
             createGenericVisitorPs.execute();
             createGenericVisitorPs.close();
@@ -55,9 +57,31 @@ public class VisitorRepositoryImpl implements IVisitorRepository {
     }
 
     @Override
+    public String getDailyTask(Long visitorId) {
+        String dailyTask = null;
+        String getDailyTaskQuery = "SELECT * FROM visitor WHERE visitor_id = ? AND zoo_id = ?";
+
+        try {
+            PreparedStatement getDailyTaskPs = getConnection().prepareStatement(getDailyTaskQuery);
+            getDailyTaskPs.setLong(1, visitorId);
+            getDailyTaskPs.setLong(2, zoo.getZooId());
+            ResultSet rs = getDailyTaskPs.executeQuery();
+
+            if (rs.next()) {
+                dailyTask = rs.getString("daily_task");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dailyTask;
+    }
+
+    @Override
     public List<Visitor> getVisitors() {
 
-        List<Visitor> visitors = new ArrayList<>(); // May be empty
+        List<Visitor> visitors = new ArrayList<>();
 
         String getVisitorsQuery = "SELECT * FROM visitor WHERE zoo_id = ?";
 

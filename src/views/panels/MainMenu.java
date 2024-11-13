@@ -91,7 +91,7 @@ public class MainMenu extends JFrame {
         cashLabel.setForeground(fontColor);
 
         metrics = cashLabel.getFontMetrics(cashLabel.getFont());
-        textWidth = metrics.stringWidth("$ " + currentCash);
+        textWidth = metrics.stringWidth("$ " + currentCash + "   ");
 
         logoutButtonX = 650;
         logoutButtonWidth = 103;

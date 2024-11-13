@@ -2,9 +2,10 @@ package models;
 
 import models.abstracts.Human;
 
-public class Employee extends Human {
+import java.util.List;
+import java.util.Random;
 
-    // To implement the specific methods/atributes of an employee
+public class Employee extends Human {
 
     public Employee(Long id, String name, Long zooId) {
         super(id, name, zooId);
@@ -15,8 +16,10 @@ public class Employee extends Human {
     }
 
     @Override
-    protected void stareAtDino() {
-        System.out.println("Employee " + this.getName() + " is gazing at the dinosaurs they glimpsed.");
+    public String getDailyTask() {
+        Random random = new Random();
+        List<String> tasks = List.of("Clean enclosure", "Guide visitors", "Feed dinosaurs");
+        return tasks.get(random.nextInt(tasks.size()));
     }
     
 }

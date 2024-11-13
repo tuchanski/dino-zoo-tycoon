@@ -3,6 +3,7 @@ package repositories;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Employee;
+import models.Visitor;
 import models.Zoo;
 import repositories.interfaces.IEmployeeRepository;
 
@@ -35,13 +36,15 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
     public void createGenericEmployee(){
 
         String name = getRandomName();
-        String createGenericEmployeeQuery = "INSERT INTO employee (name, zoo_id) VALUES (?, ?)";
+        String dailyTask = new Employee(null, name, zoo.getZooId()).getDailyTask();
+        String createGenericEmployeeQuery = "INSERT INTO employee (name, zoo_id, daily_task) VALUES (?, ?, ?)";
 
         try {
 
             PreparedStatement createGenericEmployeePs = getConnection().prepareStatement(createGenericEmployeeQuery);
             createGenericEmployeePs.setString(1, name);
             createGenericEmployeePs.setLong(2, zoo.getZooId());
+            createGenericEmployeePs.setString(3, dailyTask);
             createGenericEmployeePs.execute();
             createGenericEmployeePs.close();
 
@@ -51,6 +54,28 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
             System.out.println("Error: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public String getDailyTask(Long employeeId) {
+        String dailyTask = null;
+        String getDailyTaskQuery = "SELECT * FROM employee WHERE employee_id = ? AND zoo_id = ?";
+
+        try {
+            PreparedStatement getDailyTaskPs = getConnection().prepareStatement(getDailyTaskQuery);
+            getDailyTaskPs.setLong(1, employeeId);
+            getDailyTaskPs.setLong(2, zoo.getZooId());
+            ResultSet rs = getDailyTaskPs.executeQuery();
+
+            if (rs.next()) {
+                dailyTask = rs.getString("daily_task");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return dailyTask;
     }
 
     @Override

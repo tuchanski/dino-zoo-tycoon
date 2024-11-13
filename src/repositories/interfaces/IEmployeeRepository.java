@@ -11,4 +11,5 @@ public interface IEmployeeRepository {
     List<Employee> getEmployees();
     Employee getEmployeeById(Long employeeId);
     Employee deleteEmployeeById(Long employeeId) throws EntityNotFoundException;
+    String getDailyTask(Long employeeId);
 }

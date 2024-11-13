@@ -42,4 +42,8 @@ public class EmployeeController {
         return employee;
     }
 
+    public String getDailyTask(int id) {
+        return employeeRepository.getDailyTask((long) id);
+    }
+
 }

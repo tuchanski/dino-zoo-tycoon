@@ -44,5 +44,5 @@ public class VisitorController {
     public String getDailyTask(int id) {
         return visitorRepository.getDailyTask((long) id);
     }
-    
+
 }

@@ -379,21 +379,16 @@ public class MainMenu extends JFrame {
 
     private void hireEmployeeAction() {
         try {
-            int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+            int currentCash = zooRepository.getCurrentCash(ZooSystem.getCurrentZoo().getZooId());
 
-            if (currentCash < 100) {
-                throw new NotEnoughMoneyException("You don't have enough money.");
-            }
+            zooRepository.contractNewEmployee(ZooSystem.getCurrentZoo().getZooId());
 
-            zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
+            CustomDialog.showMessage("Employee successfully hired!", JOptionPane.INFORMATION_MESSAGE);
 
-            int newCash = currentCash - 100;
-            cashLabel.setText("$ " + newCash);
-            zooRepository.removeCash(currentUser.getId(), 100);
-        } catch (NotEnoughMoneyException ex) {
-            CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
-        } catch (EntityNotFoundException ex) {
-            CustomDialog.showMessage("Entity not foundd.", JOptionPane.ERROR_MESSAGE);
+        } catch (NotEnoughMoneyException e) {
+            CustomDialog.showMessage("Not enough balance.", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            CustomDialog.showMessage("Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
 

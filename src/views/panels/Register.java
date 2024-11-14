@@ -184,7 +184,6 @@ public class Register extends JFrame {
             return;
         }
 
-
         try{
             userController.createUser(username, password);
             ZooSystem.setCurrentUser(userController.getUserByUsername(username));

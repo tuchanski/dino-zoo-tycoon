@@ -79,7 +79,7 @@ public class ZooController {
 
     }
 
-    public void removeCash(long id, int amount) {
+    public void removeCash(int id, int amount) {
 
         try {
             zooRepository.removeCash((long) id, amount);
@@ -87,6 +87,16 @@ public class ZooController {
             System.out.println("Error: " + e.getMessage());
         }
 
+    }
+
+    public int getCurrentCash(long id) {
+        int cash = 0;
+        try {
+            cash = zooRepository.getCurrentCash(id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return cash;
     }
 
     public void addVisitor(Zoo zoo, JTextArea logTextArea) {

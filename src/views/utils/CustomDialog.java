@@ -7,7 +7,7 @@ public class CustomDialog extends JFrame {
 
     public CustomDialog(String message, int messageType) {
         setUndecorated(true);
-        setSize(300, 150);
+        setSize(320, 150);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -20,13 +20,13 @@ public class CustomDialog extends JFrame {
             Color fontColor = new Color(218, 195, 167);
             statusLabel.setForeground(fontColor);
             statusLabel.setFont(new Font("Arial", Font.BOLD, 14));
-            statusLabel.setBounds(116, 30, 100, 30);
+            statusLabel.setBounds(116, 30, 200, 30);
         } else if (messageType == JOptionPane.ERROR_MESSAGE) {
             statusLabel.setText("Error!");
             Color fontColor = new Color(218, 195, 167);
             statusLabel.setForeground(fontColor);
             statusLabel.setFont(new Font("Arial", Font.BOLD, 14));
-            statusLabel.setBounds(128, 30, 100, 30);
+            statusLabel.setBounds(128, 30, 200, 30);
         } else {
             statusLabel.setText("Info");
             Color fontColor = new Color(218, 195, 167);

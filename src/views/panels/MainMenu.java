@@ -1,11 +1,14 @@
 package views.panels;
 
+import controllers.ParkEventController;
 import controllers.ZooController;
 import exceptions.EntityNotFoundException;
 import exceptions.NotEnoughMoneyException;
+import models.enums.ParkEvent;
 import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.*;
+import java.util.List;
 
 import controllers.UserController;
 import models.User;
@@ -48,10 +51,25 @@ public class MainMenu extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
+        CustomButton parkEventButton = new CustomButton(
+                "",
+                425,
+                100 ,
+                76,
+                72,
+                e -> {
+                    showParkEventMessage();
+                },
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
+        backgroundPanel.add(parkEventButton);
+
         ImageIcon overviewViewButton = new ImageIcon("src/resources/utils/overview.png");
         JLabel overviewViewLabel = new JLabel(overviewViewButton);
         overviewViewLabel.setBounds(233, 80, 114, 45);
         backgroundPanel.add(overviewViewLabel);
+
 
         ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
         JLabel mapLabel = new JLabel(imageIcon);
@@ -333,6 +351,7 @@ public class MainMenu extends JFrame {
         generalViewLabel.setBounds(320, 435, 207, 148);
         backgroundPanel.add(generalViewLabel);
 
+
     }
 
     private void logoutAction(){
@@ -389,6 +408,20 @@ public class MainMenu extends JFrame {
             CustomDialog.showMessage("Not enough balance.", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             CustomDialog.showMessage("Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void showParkEventMessage() {
+        ParkEventController parkEventController = new ParkEventController();
+        List<ParkEvent> events = parkEventController.getAllParkEvents();
+
+        if (!events.isEmpty()) {
+            ParkEvent event = events.get(0);
+            String eventDescription = event.getDescription();
+
+            CustomDialog.showMessage(eventDescription + " started", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            CustomDialog.showMessage("No events found.", JOptionPane.ERROR_MESSAGE);
         }
     }
 

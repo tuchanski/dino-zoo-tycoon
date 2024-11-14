@@ -251,7 +251,14 @@ public class ZooRepositoryImpl implements IZooRepository {
         removeCash(id, 100);
     }
 
-    public int getCurrentCash(Long id) {
+    public int getCurrentCash(Long id) throws EntityNotFoundException {
+
+        Zoo zoo = getZooById(id);
+
+        if (zoo == null) {
+            throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
+        }
+
         int currentCash = 0;
         String getCurrentCashQuery = "SELECT * FROM zoo WHERE zoo_id = ? AND user_id = ?";
 

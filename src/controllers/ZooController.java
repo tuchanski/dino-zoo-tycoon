@@ -79,7 +79,7 @@ public class ZooController {
 
     }
 
-    public void removeCash(long id, int amount) {
+    public void removeCash(int id, int amount) {
 
         try {
             zooRepository.removeCash((long) id, amount);
@@ -89,21 +89,14 @@ public class ZooController {
 
     }
 
-    public void addVisitor(Zoo zoo, JTextArea logTextArea) {
-        VisitorController visitorController = new VisitorController(zoo);
-        visitorController.createVisitor();
-        List<Visitor> visitors = visitorController.getVisitors();
-        System.out.println("Visitor " + visitors.getLast() + " arrived.");
-
-        String visitorName = visitors.get(visitors.size() - 1).getName();
-        System.out.println("Visitor " + visitorName + " arrived.");
-
-        addCash(zoo.getZooId(), 50);
-        System.out.println("Cash: +50 | Total: " + zoo.getCash());
-
-        String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $50)";
-        logTextArea.append(visitorLog + "\n");
-        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
+    public int getCurrentCash(long id) {
+        int cash = 0;
+        try {
+            cash = zooRepository.getCurrentCash(id);
+        } catch (EntityNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return cash;
     }
 
     public void contractEmployee(int id) {
@@ -112,6 +105,23 @@ public class ZooController {
         } catch (EntityNotFoundException | NotEnoughMoneyException e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    // Swing-views utility shortcut
+    public void addVisitor(Zoo zoo, JTextArea logTextArea) {
+        VisitorController visitorController = new VisitorController(zoo);
+        visitorController.createVisitor();
+        List<Visitor> visitors = visitorController.getVisitors();
+        System.out.println("Visitor " + visitors.getLast() + " arrived.");
+
+        String visitorName = visitors.getLast().getName();
+
+        addCash(zoo.getZooId(), 50);
+        System.out.println("Cash: +50 | Total: " + (zoo.getCash() + 50));
+
+        String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $50)";
+        logTextArea.append(visitorLog + "\n");
+        logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
     }
 
 }

@@ -52,11 +52,7 @@ public class Zoo {
 
     @Override
     public String toString() {
-        return "Zoo{" +
-                "zooId=" + zooId +
-                ", userId=" + userId +
-                ", name='" + name + '\'' +
-                ", cash=" + cash +
-                '}';
+        return "Zoo [id=" + zooId + ", userId=" + userId + ", name=" + name + "]";
     }
+
 }

@@ -16,4 +16,5 @@ public interface IZooRepository {
     void addCash(Long id, int amount) throws EntityNotFoundException;
     void removeCash(Long id, int amount) throws EntityNotFoundException;
     void contractNewEmployee(Long id) throws EntityNotFoundException, NotEnoughMoneyException;
+    int getCurrentCash(Long id) throws EntityNotFoundException;
 }

@@ -6,7 +6,6 @@ import controllers.ZooController;
 import exceptions.EntityNotFoundException;
 import exceptions.NotEnoughMoneyException;
 import models.enums.ParkEvent;
-import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.*;
 import java.util.List;
@@ -27,7 +26,6 @@ public class MainMenu extends JFrame {
     private UserController userController;
     private User currentUser;
     private VisitorController visitorController;
-    private ZooRepositoryImpl zooRepository;
     private DinosaurController dinosaurController;
     private EmployeeController employeeController;
 
@@ -43,7 +41,6 @@ public class MainMenu extends JFrame {
 
         this.currentUser = currentUser;
         this.zooController = new ZooController(currentUser);
-        this.zooRepository = new ZooRepositoryImpl(currentUser);
         this.visitorController = new VisitorController(ZooSystem.getCurrentZoo());
         this.employeeController = new EmployeeController(ZooSystem.getCurrentZoo());
         this.dinosaurController = new DinosaurController(ZooSystem.getCurrentZoo());
@@ -111,7 +108,7 @@ public class MainMenu extends JFrame {
 
         //cash
 
-        int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+        int currentCash = zooController.getCurrentCash(currentUser.getId());
         cashLabel = new JLabel("$ " + currentCash + "   ");
         cashLabel.setFont(CustomFont.useCustomFont(12f));
         cashLabel.setForeground(fontColor);
@@ -291,9 +288,7 @@ public class MainMenu extends JFrame {
             synchronized (cashLock) {
                 if (this.isVisible()) {
                     zooController.addVisitor(zooController.getZooByUser(), logTextArea);
-
-                    int newCash = zooRepository.getCurrentCash(currentUser.getId());
-                    System.out.println(newCash);
+                    int newCash = zooController.getCurrentCash(currentUser.getId());
 
                     String cashText = "$ " + newCash + "   ";
                     cashLabel.setText(cashText);
@@ -431,7 +426,7 @@ public class MainMenu extends JFrame {
     private void hireEmployeeAction() {
         synchronized (cashLock) {
             try {
-                int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+                int currentCash = zooController.getCurrentCash(currentUser.getId());
 
                 if (currentCash < 100) {
                     throw new NotEnoughMoneyException("You don't have enough money.");

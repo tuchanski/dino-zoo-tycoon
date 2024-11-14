@@ -180,7 +180,7 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
-    public void addCash(Long id, int amount) throws EntityNotFoundException {
+    public synchronized void addCash(Long id, int amount) throws EntityNotFoundException {
         Zoo toAddCash = getZooById(id);
         if (toAddCash == null) {
             throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
@@ -204,7 +204,7 @@ public class ZooRepositoryImpl implements IZooRepository {
     }
 
     @Override
-    public void removeCash(Long id, int amount) throws EntityNotFoundException {
+    public synchronized void removeCash(Long id, int amount) throws EntityNotFoundException {
         Zoo toRemoveCash = getZooById(id);
         if (toRemoveCash == null) {
             throw new EntityNotFoundException("Zoo with ID: " + id + " & User ID: " + user.getId() + " not found");
@@ -212,6 +212,11 @@ public class ZooRepositoryImpl implements IZooRepository {
 
         int currentCash = getCurrentCash(id);
         int finalAmount = currentCash - Math.max(amount, 0);
+
+        if (finalAmount < 0) {
+            System.out.println("Not enough cash to perform this operation.");
+            return;
+        }
 
         String removeCashQuery = "UPDATE zoo SET cash = ? WHERE zoo_id = ?";
 
@@ -227,6 +232,7 @@ public class ZooRepositoryImpl implements IZooRepository {
         }
     }
 
+
     @Override
     public void contractNewEmployee(Long id) throws EntityNotFoundException, NotEnoughMoneyException {
         Zoo zoo = getZooById(id);
@@ -241,6 +247,7 @@ public class ZooRepositoryImpl implements IZooRepository {
 
         EmployeeRepositoryImpl employeeRepository = new EmployeeRepositoryImpl(zoo);
         employeeRepository.createGenericEmployee();
+
         removeCash(id, 100);
     }
 

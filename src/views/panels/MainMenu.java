@@ -25,6 +25,7 @@ public class MainMenu extends JFrame {
     private JLabel usernameLabel;
     private JTextArea logTextArea;
     private JScrollPane logScrollPane;
+    private final Object cashLock = new Object();
 
     private String visitorName = "";
 
@@ -259,24 +260,26 @@ public class MainMenu extends JFrame {
         add(backgroundPanel);
         setVisible(true);
 
-        Timer timer = new Timer(10000, evt -> {
-            if (this.isVisible()) {
-                zooController.addVisitor(zooController.getZooByUser(), logTextArea);
+        Timer timer = new Timer(30000, evt -> {
+            synchronized (cashLock) {
+                if (this.isVisible()) {
+                    zooController.addVisitor(zooController.getZooByUser(), logTextArea);
 
-                int newCash = zooRepository.getCurrentCash(currentUser.getId());
-                System.out.println(newCash);
+                    int newCash = zooRepository.getCurrentCash(currentUser.getId());
+                    System.out.println(newCash);
 
-                String cashText = "$ " + newCash;
-                cashLabel.setText(cashText);
+                    String cashText = "$ " + newCash + "   ";
+                    cashLabel.setText(cashText);
 
-                FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
-                int newTextWidth = newMetrics.stringWidth(cashText);
+                    FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
+                    int newTextWidth = newMetrics.stringWidth(cashText);
 
-                int newLogoutButtonX = 650;
-                int newLogoutButtonWidth = 103;
-                int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
+                    int newLogoutButtonX = 650;
+                    int newLogoutButtonWidth = 103;
+                    int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
 
-                cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
+                    cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
+                }
             }
         });
         timer.setRepeats(true);
@@ -375,24 +378,24 @@ public class MainMenu extends JFrame {
     }
 
     private void hireEmployeeAction() {
-        try {
-            int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+        synchronized (cashLock) {
+            try {
+                int currentCash = zooRepository.getCurrentCash(currentUser.getId());
 
-            if (currentCash < 100) {
-                throw new NotEnoughMoneyException("You don't have enough money.");
+                if (currentCash < 100) {
+                    throw new NotEnoughMoneyException("You don't have enough money.");
+                }
+
+                zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
+
+                int newCash = currentCash - 100;
+                cashLabel.setText("$ " + newCash + "   ");
+            } catch (NotEnoughMoneyException ex) {
+                CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
             }
-
-            zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
-
-            int newCash = currentCash - 100;
-            cashLabel.setText("$ " + newCash);
-            zooRepository.removeCash(currentUser.getId(), 100);
-        } catch (NotEnoughMoneyException ex) {
-            CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
-        } catch (EntityNotFoundException ex) {
-            CustomDialog.showMessage("Entity not foundd.", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     public static void main(String[] args) {
         User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");

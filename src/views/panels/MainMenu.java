@@ -339,7 +339,7 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(dinosaursLabel);
         backgroundPanel.add(employeesLabel);
 
-        int centerX = generalViewLblLabel.getX() + (generalViewLblLabel.getWidth() / 2);
+        int centerX = 430;
 
         Timer updateTimer = new Timer(1000, e -> {
             totalVisitors.set(visitorController.getVisitors().size());
@@ -349,23 +349,13 @@ public class MainMenu extends JFrame {
             visitorsLabel.setText("Visitors: " + totalVisitors.get());
             dinosaursLabel.setText("Dinosaurs: " + totalDinosaurs.get());
             employeesLabel.setText("Employees: " + totalEmployees.get());
+
+            updateLabelPosition(visitorsLabel, centerX, 463);
+            updateLabelPosition(dinosaursLabel, centerX, 483);
+            updateLabelPosition(employeesLabel, centerX, 503);
         });
         updateTimer.setRepeats(true);
         updateTimer.start();
-
-        int labelY = 463;
-        int spacingY = 20;
-
-        for (JLabel label : new JLabel[]{visitorsLabel, dinosaursLabel, employeesLabel}) {
-            FontMetrics metricss = label.getFontMetrics(label.getFont());
-            int labelWidth = metricss.stringWidth(label.getText());
-            int labelXx = centerX - (labelWidth / 2);
-
-            label.setBounds(labelXx, labelY, labelWidth, 30);
-            backgroundPanel.add(label);
-
-            labelY += spacingY;
-        }
 
         ImageIcon generalViewButton = new ImageIcon("src/resources/utils/generalCountingButton.png");
         JLabel generalViewLabel = new JLabel(generalViewButton);
@@ -373,6 +363,13 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(generalViewLabel);
 
 
+    }
+
+    private static void updateLabelPosition(JLabel label, int centerX, int y) {
+        FontMetrics metrics = label.getFontMetrics(label.getFont());
+        int labelWidth = metrics.stringWidth(label.getText()) + 10;
+        int labelX = centerX - (labelWidth / 2);
+        label.setBounds(labelX, y, labelWidth, 30);
     }
 
     private void showParkEventMessage() {
@@ -444,6 +441,8 @@ public class MainMenu extends JFrame {
 
                 int newCash = currentCash - 100;
                 cashLabel.setText("$ " + newCash + "   ");
+
+                CustomDialog.showMessage("Employee hired successfully.", JOptionPane.INFORMATION_MESSAGE);
             } catch (NotEnoughMoneyException ex) {
                 CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
             }

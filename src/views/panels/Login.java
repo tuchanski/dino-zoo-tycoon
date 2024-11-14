@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Authentication to the project, filled with user registered infos.
+// After correct authentication user is redirected to MainMenu (Dashboard).
+
 public class Login extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;

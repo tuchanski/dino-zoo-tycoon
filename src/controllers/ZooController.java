@@ -36,13 +36,12 @@ public class ZooController {
     }
 
     public String getZooName() {
-        Zoo zoo = getZooByUser();  // Obtém o zoo associado ao usuário atual
+        Zoo zoo = getZooByUser();
         if (zoo != null) {
-            return zoo.getName();  // Retorna o nome do zoo
+            return zoo.getName();
         }
-        return "Zoo";  // Valor padrão caso não encontre o zoo
+        return "Zoo";
     }
-
 
     public Zoo updateZooById(int id, String newName) {
 

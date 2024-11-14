@@ -21,7 +21,7 @@ public class BuyFoodPanel extends JFrame {
     private ZooController zooController;
 
     public BuyFoodPanel(JFrame parentFrame) {
-        zooController = new ZooController(ZooSystem.getCurrentUser());  // Assuming ZooSystem handles the current user
+        zooController = new ZooController(ZooSystem.getCurrentUser());
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

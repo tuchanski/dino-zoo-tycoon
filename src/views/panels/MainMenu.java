@@ -1,42 +1,44 @@
 package views.panels;
 
-import controllers.FoodStockController;
-import controllers.ZooController;
-import exceptions.EntityNotFoundException;
+import controllers.*;
 import exceptions.NotEnoughMoneyException;
-import repositories.FoodStockRepositoryImpl;
 import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.*;
 
-import controllers.UserController;
 import models.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
     private UserController userController;
     private User currentUser;
+    private VisitorController visitorController;
     private ZooRepositoryImpl zooRepository;
+    private DinosaurController dinosaurController;
+    private EmployeeController employeeController;
+
     private ZooController zooController;
     protected static JLabel cashLabel;
     private JLabel usernameLabel;
     private JTextArea logTextArea;
     private JScrollPane logScrollPane;
     protected final Object cashLock = new Object();
-
     private String visitorName = "";
-
 
     public MainMenu(User currentUser) {
 
         this.currentUser = currentUser;
         this.zooController = new ZooController(currentUser);
         this.zooRepository = new ZooRepositoryImpl(currentUser);
+        this.visitorController = new VisitorController(ZooSystem.getCurrentZoo());
+        this.employeeController = new EmployeeController(ZooSystem.getCurrentZoo());
+        this.dinosaurController = new DinosaurController(ZooSystem.getCurrentZoo());
 
         setUndecorated(true);
         setSize(800, 600);
@@ -292,15 +294,13 @@ public class MainMenu extends JFrame {
         generalViewLblLabel.setBounds(365, 424, 114, 45);
         backgroundPanel.add(generalViewLblLabel);
 
-        int totalVisitors = 100;
-        int totalDinosaurs = 100;
-        int totalEmployees = 100;
-        int totalEarnings = 100;
+        AtomicInteger totalVisitors = new AtomicInteger(visitorController.getVisitors().size());
+        AtomicInteger totalDinosaurs = new AtomicInteger(dinosaurController.getDinosaurs().size());
+        AtomicInteger totalEmployees = new AtomicInteger(employeeController.getEmployees().size());
 
-        JLabel visitorsLabel = new JLabel("Visitors: " + totalVisitors);
-        JLabel dinosaursLabel = new JLabel("Dinosaurs: " + totalDinosaurs);
-        JLabel employeesLabel = new JLabel("Employees: " + totalEmployees);
-        JLabel earningsLabel = new JLabel("Earnings: $" + totalEarnings);
+        JLabel visitorsLabel = new JLabel("Visitors: " + totalVisitors.get());
+        JLabel dinosaursLabel = new JLabel("Dinosaurs: " + totalDinosaurs.get());
+        JLabel employeesLabel = new JLabel("Employees: " + totalEmployees.get());
 
         Font infoFont = CustomFont.useCustomFont(14f);
         Color infoColor = new Color(37, 25, 20);
@@ -311,15 +311,29 @@ public class MainMenu extends JFrame {
         dinosaursLabel.setForeground(infoColor);
         employeesLabel.setFont(infoFont);
         employeesLabel.setForeground(infoColor);
-        earningsLabel.setFont(infoFont);
-        earningsLabel.setForeground(infoColor);
+
+        backgroundPanel.add(visitorsLabel);
+        backgroundPanel.add(dinosaursLabel);
+        backgroundPanel.add(employeesLabel);
 
         int centerX = generalViewLblLabel.getX() + (generalViewLblLabel.getWidth() / 2);
+
+        Timer updateTimer = new Timer(1000, e -> {
+            totalVisitors.set(visitorController.getVisitors().size());
+            totalDinosaurs.set(dinosaurController.getDinosaurs().size());
+            totalEmployees.set(employeeController.getEmployees().size());
+
+            visitorsLabel.setText("Visitors: " + totalVisitors.get());
+            dinosaursLabel.setText("Dinosaurs: " + totalDinosaurs.get());
+            employeesLabel.setText("Employees: " + totalEmployees.get());
+        });
+        updateTimer.setRepeats(true);
+        updateTimer.start();
 
         int labelY = 463;
         int spacingY = 20;
 
-        for (JLabel label : new JLabel[]{visitorsLabel, dinosaursLabel, employeesLabel, earningsLabel}) {
+        for (JLabel label : new JLabel[]{visitorsLabel, dinosaursLabel, employeesLabel}) {
             FontMetrics metricss = label.getFontMetrics(label.getFont());
             int labelWidth = metricss.stringWidth(label.getText());
             int labelXx = centerX - (labelWidth / 2);

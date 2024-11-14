@@ -3,7 +3,6 @@ package repositories;
 import exceptions.EntityNotFoundException;
 import models.DB;
 import models.Employee;
-import models.Visitor;
 import models.Zoo;
 import repositories.interfaces.IEmployeeRepository;
 
@@ -33,27 +32,24 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
     }
 
     @Override
-    public void createGenericEmployee(){
-
+    public void createGenericEmployee() {
         String name = getRandomName();
         String dailyTask = new Employee(null, name, zoo.getZooId()).getDailyTask();
         String createGenericEmployeeQuery = "INSERT INTO employee (name, zoo_id, daily_task) VALUES (?, ?, ?)";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement createGenericEmployeePs = conn.prepareStatement(createGenericEmployeeQuery)) {
 
-            PreparedStatement createGenericEmployeePs = getConnection().prepareStatement(createGenericEmployeeQuery);
             createGenericEmployeePs.setString(1, name);
             createGenericEmployeePs.setLong(2, zoo.getZooId());
             createGenericEmployeePs.setString(3, dailyTask);
             createGenericEmployeePs.execute();
-            createGenericEmployeePs.close();
 
             System.out.println("Employee " + name + " has been created successfully to zoo: " + zoo.getName());
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -61,14 +57,16 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
         String dailyTask = null;
         String getDailyTaskQuery = "SELECT * FROM employee WHERE employee_id = ? AND zoo_id = ?";
 
-        try {
-            PreparedStatement getDailyTaskPs = getConnection().prepareStatement(getDailyTaskQuery);
+        try (Connection conn = getConnection();
+             PreparedStatement getDailyTaskPs = conn.prepareStatement(getDailyTaskQuery)) {
+
             getDailyTaskPs.setLong(1, employeeId);
             getDailyTaskPs.setLong(2, zoo.getZooId());
-            ResultSet rs = getDailyTaskPs.executeQuery();
 
-            if (rs.next()) {
-                dailyTask = rs.getString("daily_task");
+            try (ResultSet rs = getDailyTaskPs.executeQuery()) {
+                if (rs.next()) {
+                    dailyTask = rs.getString("daily_task");
+                }
             }
 
         } catch (SQLException e) {
@@ -81,24 +79,21 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
     @Override
     public List<Employee> getEmployees() {
         List<Employee> employees = new ArrayList<>();
-
         String getEmployeesQuery = "SELECT * FROM employee WHERE zoo_id = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement getEmployeesPs = conn.prepareStatement(getEmployeesQuery)) {
 
-            PreparedStatement getEmployeesPs = getConnection().prepareStatement(getEmployeesQuery);
             getEmployeesPs.setLong(1, zoo.getZooId());
-            ResultSet rs = getEmployeesPs.executeQuery();
 
-            while (rs.next()) {
-                Long employeeId = rs.getLong("employee_id");
-                String name = rs.getString("name");
-                Long zooId = rs.getLong("zoo_id");
-                employees.add(new Employee(employeeId, name, zooId));
+            try (ResultSet rs = getEmployeesPs.executeQuery()) {
+                while (rs.next()) {
+                    Long employeeId = rs.getLong("employee_id");
+                    String name = rs.getString("name");
+                    Long zooId = rs.getLong("zoo_id");
+                    employees.add(new Employee(employeeId, name, zooId));
+                }
             }
-
-            getEmployeesPs.close();
-            rs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -110,23 +105,20 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
     @Override
     public Employee getEmployeeById(Long employeeId) {
         Employee employee = null;
-
         String getEmployeeQuery = "SELECT * FROM employee WHERE employee_id = ? AND zoo_id = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement getEmployeePs = conn.prepareStatement(getEmployeeQuery)) {
 
-            PreparedStatement getEmployeePs = getConnection().prepareStatement(getEmployeeQuery);
             getEmployeePs.setLong(1, employeeId);
             getEmployeePs.setLong(2, zoo.getZooId());
-            ResultSet rs = getEmployeePs.executeQuery();
 
-            if (rs.next()) {
-                String employeeName = rs.getString("name");
-                employee = new Employee(employeeId, employeeName, zoo.getZooId());
+            try (ResultSet rs = getEmployeePs.executeQuery()) {
+                if (rs.next()) {
+                    String employeeName = rs.getString("name");
+                    employee = new Employee(employeeId, employeeName, zoo.getZooId());
+                }
             }
-
-            rs.close();
-            getEmployeePs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -137,7 +129,6 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
 
     @Override
     public Employee deleteEmployeeById(Long employeeId) throws EntityNotFoundException {
-
         Employee employee = getEmployeeById(employeeId);
 
         if (employee == null) {
@@ -146,27 +137,24 @@ public class EmployeeRepositoryImpl implements IEmployeeRepository {
 
         String deleteEmployeeQuery = "DELETE FROM employee WHERE employee_id = ? AND zoo_id = ?";
 
-        try {
-            PreparedStatement deleteEmployeePs = getConnection().prepareStatement(deleteEmployeeQuery);
+        try (Connection conn = getConnection();
+             PreparedStatement deleteEmployeePs = conn.prepareStatement(deleteEmployeeQuery)) {
+
             deleteEmployeePs.setLong(1, employeeId);
             deleteEmployeePs.setLong(2, zoo.getZooId());
             deleteEmployeePs.execute();
-            deleteEmployeePs.close();
 
-            System.out.println("Employee with ID" + employee.getId() + " has been deleted successfully to zoo: " + zoo.getName());
+            System.out.println("Employee with ID " + employee.getId() + " has been deleted successfully to zoo: " + zoo.getName());
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return employee;
-
     }
 
     private String getRandomName() {
         Random random = new Random();
         return names.get(random.nextInt(names.size()));
     }
-
-
 }

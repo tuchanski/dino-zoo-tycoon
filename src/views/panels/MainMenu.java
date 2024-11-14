@@ -1,5 +1,6 @@
 package views.panels;
 
+import controllers.*;
 import controllers.ParkEventController;
 import controllers.ZooController;
 import exceptions.EntityNotFoundException;
@@ -10,13 +11,13 @@ import services.ZooSystem;
 import views.utils.*;
 import java.util.List;
 
-import controllers.UserController;
 import models.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // MainMenu (Dashboard).
 // Current user can manage all zoo from here.
@@ -25,21 +26,27 @@ public class MainMenu extends JFrame {
     private int mouseX, mouseY;
     private UserController userController;
     private User currentUser;
+    private VisitorController visitorController;
     private ZooRepositoryImpl zooRepository;
+    private DinosaurController dinosaurController;
+    private EmployeeController employeeController;
+
     private ZooController zooController;
-    private JLabel cashLabel;
+    protected static JLabel cashLabel;
     private JLabel usernameLabel;
     private JTextArea logTextArea;
     private JScrollPane logScrollPane;
-
+    protected final Object cashLock = new Object();
     private String visitorName = "";
-
 
     public MainMenu(User currentUser) {
 
         this.currentUser = currentUser;
         this.zooController = new ZooController(currentUser);
         this.zooRepository = new ZooRepositoryImpl(currentUser);
+        this.visitorController = new VisitorController(ZooSystem.getCurrentZoo());
+        this.employeeController = new EmployeeController(ZooSystem.getCurrentZoo());
+        this.dinosaurController = new DinosaurController(ZooSystem.getCurrentZoo());
 
         setUndecorated(true);
         setSize(800, 600);
@@ -105,7 +112,7 @@ public class MainMenu extends JFrame {
         //cash
 
         int currentCash = zooRepository.getCurrentCash(currentUser.getId());
-        cashLabel = new JLabel("$ " + currentCash);
+        cashLabel = new JLabel("$ " + currentCash + "   ");
         cashLabel.setFont(CustomFont.useCustomFont(12f));
         cashLabel.setForeground(fontColor);
 
@@ -280,24 +287,26 @@ public class MainMenu extends JFrame {
         add(backgroundPanel);
         setVisible(true);
 
-        Timer timer = new Timer(10000, evt -> {
-            if (this.isVisible()) {
-                zooController.addVisitor(zooController.getZooByUser(), logTextArea);
+        Timer timer = new Timer(30000, evt -> {
+            synchronized (cashLock) {
+                if (this.isVisible()) {
+                    zooController.addVisitor(zooController.getZooByUser(), logTextArea);
 
-                int newCash = zooRepository.getCurrentCash(currentUser.getId());
-                System.out.println(newCash);
+                    int newCash = zooRepository.getCurrentCash(currentUser.getId());
+                    System.out.println(newCash);
 
-                String cashText = "$ " + newCash;
-                cashLabel.setText(cashText);
+                    String cashText = "$ " + newCash + "   ";
+                    cashLabel.setText(cashText);
 
-                FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
-                int newTextWidth = newMetrics.stringWidth(cashText);
+                    FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
+                    int newTextWidth = newMetrics.stringWidth(cashText);
 
-                int newLogoutButtonX = 650;
-                int newLogoutButtonWidth = 103;
-                int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
+                    int newLogoutButtonX = 650;
+                    int newLogoutButtonWidth = 103;
+                    int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
 
-                cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
+                    cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
+                }
             }
         });
         timer.setRepeats(true);
@@ -308,15 +317,13 @@ public class MainMenu extends JFrame {
         generalViewLblLabel.setBounds(365, 424, 114, 45);
         backgroundPanel.add(generalViewLblLabel);
 
-        int totalVisitors = 100;
-        int totalDinosaurs = 100;
-        int totalEmployees = 100;
-        int totalEarnings = 100;
+        AtomicInteger totalVisitors = new AtomicInteger(visitorController.getVisitors().size());
+        AtomicInteger totalDinosaurs = new AtomicInteger(dinosaurController.getDinosaurs().size());
+        AtomicInteger totalEmployees = new AtomicInteger(employeeController.getEmployees().size());
 
-        JLabel visitorsLabel = new JLabel("Visitors: " + totalVisitors);
-        JLabel dinosaursLabel = new JLabel("Dinosaurs: " + totalDinosaurs);
-        JLabel employeesLabel = new JLabel("Employees: " + totalEmployees);
-        JLabel earningsLabel = new JLabel("Earnings: $" + totalEarnings);
+        JLabel visitorsLabel = new JLabel("Visitors: " + totalVisitors.get());
+        JLabel dinosaursLabel = new JLabel("Dinosaurs: " + totalDinosaurs.get());
+        JLabel employeesLabel = new JLabel("Employees: " + totalEmployees.get());
 
         Font infoFont = CustomFont.useCustomFont(14f);
         Color infoColor = new Color(37, 25, 20);
@@ -327,15 +334,29 @@ public class MainMenu extends JFrame {
         dinosaursLabel.setForeground(infoColor);
         employeesLabel.setFont(infoFont);
         employeesLabel.setForeground(infoColor);
-        earningsLabel.setFont(infoFont);
-        earningsLabel.setForeground(infoColor);
+
+        backgroundPanel.add(visitorsLabel);
+        backgroundPanel.add(dinosaursLabel);
+        backgroundPanel.add(employeesLabel);
 
         int centerX = generalViewLblLabel.getX() + (generalViewLblLabel.getWidth() / 2);
+
+        Timer updateTimer = new Timer(1000, e -> {
+            totalVisitors.set(visitorController.getVisitors().size());
+            totalDinosaurs.set(dinosaurController.getDinosaurs().size());
+            totalEmployees.set(employeeController.getEmployees().size());
+
+            visitorsLabel.setText("Visitors: " + totalVisitors.get());
+            dinosaursLabel.setText("Dinosaurs: " + totalDinosaurs.get());
+            employeesLabel.setText("Employees: " + totalEmployees.get());
+        });
+        updateTimer.setRepeats(true);
+        updateTimer.start();
 
         int labelY = 463;
         int spacingY = 20;
 
-        for (JLabel label : new JLabel[]{visitorsLabel, dinosaursLabel, employeesLabel, earningsLabel}) {
+        for (JLabel label : new JLabel[]{visitorsLabel, dinosaursLabel, employeesLabel}) {
             FontMetrics metricss = label.getFontMetrics(label.getFont());
             int labelWidth = metricss.stringWidth(label.getText());
             int labelXx = centerX - (labelWidth / 2);
@@ -352,6 +373,20 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(generalViewLabel);
 
 
+    }
+
+    private void showParkEventMessage() {
+        ParkEventController parkEventController = new ParkEventController();
+        List<ParkEvent> events = parkEventController.getAllParkEvents();
+
+        if (!events.isEmpty()) {
+            ParkEvent event = events.get(0);
+            String eventDescription = event.getDescription();
+
+            CustomDialog.showMessage(eventDescription + " started", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            CustomDialog.showMessage("No events found.", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void logoutAction(){
@@ -397,36 +432,21 @@ public class MainMenu extends JFrame {
     }
 
     private void hireEmployeeAction() {
-        try {
-            int currentCash = zooRepository.getCurrentCash(ZooSystem.getCurrentZoo().getZooId());
+        synchronized (cashLock) {
+            try {
+                int currentCash = zooRepository.getCurrentCash(currentUser.getId());
 
-            zooRepository.contractNewEmployee(ZooSystem.getCurrentZoo().getZooId());
+                if (currentCash < 100) {
+                    throw new NotEnoughMoneyException("You don't have enough money.");
+                }
 
-            CustomDialog.showMessage("Employee successfully hired!", JOptionPane.INFORMATION_MESSAGE);
+                zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
 
-        } catch (NotEnoughMoneyException e) {
-            CustomDialog.showMessage("Not enough balance.", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            CustomDialog.showMessage("Failed", JOptionPane.ERROR_MESSAGE);
+                int newCash = currentCash - 100;
+                cashLabel.setText("$ " + newCash + "   ");
+            } catch (NotEnoughMoneyException ex) {
+                CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
+            }
         }
-    }
-
-    private void showParkEventMessage() {
-        ParkEventController parkEventController = new ParkEventController();
-        List<ParkEvent> events = parkEventController.getAllParkEvents();
-
-        if (!events.isEmpty()) {
-            ParkEvent event = events.get(0);
-            String eventDescription = event.getDescription();
-
-            CustomDialog.showMessage(eventDescription + " started", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            CustomDialog.showMessage("No events found.", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public static void main(String[] args) {
-        User user = new User("testando10", "1grse81g8541g851g8sr1grsg8s1gs51g5s");
-        new MainMenu(user);
     }
 }

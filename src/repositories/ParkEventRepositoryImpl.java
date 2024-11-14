@@ -23,29 +23,22 @@ public class ParkEventRepositoryImpl implements IParkEventRepository {
         ParkEvent parkEvent = null;
         String getParkEventQuery = "SELECT * FROM ParkEvent WHERE event_id = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement getParkEventByIdSt = conn.prepareStatement(getParkEventQuery)) {
 
-            PreparedStatement getParkEventByIdSt = getConnection().prepareStatement(getParkEventQuery);
             getParkEventByIdSt.setInt(1, id);
-            ResultSet rs = getParkEventByIdSt.executeQuery();
-
-            if (rs.next()) {
-
-                String name = rs.getString("name");
-                parkEvent = ParkEvent.valueOf(name.toUpperCase());
-
+            try (ResultSet rs = getParkEventByIdSt.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    parkEvent = ParkEvent.valueOf(name.toUpperCase());
+                }
             }
-
-            getParkEventByIdSt.close();
-            rs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
-
         return parkEvent;
-
     }
 
     @Override
@@ -54,24 +47,19 @@ public class ParkEventRepositoryImpl implements IParkEventRepository {
         List<ParkEvent> parkEvents = new ArrayList<>();
         String getParkEventsQuery = "SELECT * FROM ParkEvent";
 
-        try {
-
-            PreparedStatement getParkEventsSt = getConnection().prepareStatement(getParkEventsQuery);
-            ResultSet rs = getParkEventsSt.executeQuery();
+        try (Connection conn = getConnection();
+             PreparedStatement getParkEventsSt = conn.prepareStatement(getParkEventsQuery);
+             ResultSet rs = getParkEventsSt.executeQuery()) {
 
             while (rs.next()) {
                 String name = rs.getString("name");
                 parkEvents.add(ParkEvent.valueOf(name.toUpperCase()));
             }
 
-            getParkEventsSt.close();
-            rs.close();
-
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return parkEvents;
-
     }
 }

@@ -1,6 +1,9 @@
 package views.panels;
 
+import controllers.FoodController;
+import controllers.FoodStockController;
 import controllers.ZooController;
+import models.Food;
 import services.ZooSystem;
 import views.utils.CustomButton;
 import views.utils.CustomDialog;
@@ -11,19 +14,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import models.enums.FoodType;
-
-// Three different options of food to buy (Meat, Egg, Plant).
 
 public class BuyFoodPanel extends JFrame {
     private int mouseX, mouseY;
 
     private JComboBox<FoodType> foodComboBox;
     private ZooController zooController;
+    private FoodController foodController;
+    private FoodStockController foodStockController;
 
     public BuyFoodPanel(JFrame parentFrame) {
+        foodController = new FoodController();
+        foodStockController = new FoodStockController(ZooSystem.getCurrentZoo());
         zooController = new ZooController(ZooSystem.getCurrentUser());
+
         setUndecorated(true);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -124,11 +132,20 @@ public class BuyFoodPanel extends JFrame {
     }
 
     private void buyFood() {
+
+        List<Food> foods = foodController.getFoods();
         FoodType foodType = (FoodType) foodComboBox.getSelectedItem();
 
         if (foodType != null){
             try {
-                CustomDialog.showMessage("Food purchased!", JOptionPane.INFORMATION_MESSAGE);
+                Food selectedFood = foods.stream().filter(food -> food.getType() == foodType)
+                        .findFirst()
+                        .orElse(null);
+                if (selectedFood != null) {
+                    long id = selectedFood.getId();
+                    foodStockController.addFood((int) id, 1);
+                    CustomDialog.showMessage("Food purchased!", JOptionPane.INFORMATION_MESSAGE);
+                }
             } catch (Exception e) {
                 CustomDialog.showMessage("Error purchasing food", JOptionPane.ERROR_MESSAGE);
             }

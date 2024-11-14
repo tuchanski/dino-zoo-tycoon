@@ -98,10 +98,10 @@ public class ZooController {
         String visitorName = visitors.get(visitors.size() - 1).getName();
         System.out.println("Visitor " + visitorName + " arrived.");
 
-        addCash(zoo.getZooId(), 5);
-        System.out.println("Cash: + 5 | Total: " + zoo.getCash());
+        addCash(zoo.getZooId(), 50);
+        System.out.println("Cash: +50 | Total: " + zoo.getCash());
 
-        String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $5)";
+        String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $50)";
         logTextArea.append(visitorLog + "\n");
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
     }

@@ -23,42 +23,34 @@ public class UserRepositoryImpl implements IUserRepository {
     @Override
     public void createUser(String username, String password) throws EntityAlreadyRegisteredException {
 
-        boolean usernameIsAvailable = usernameIsAvailable(username);
-
-        if (!usernameIsAvailable) {
+        if (!usernameIsAvailable(username)) {
             throw new EntityAlreadyRegisteredException("Username already registered");
         }
 
         String hashedPassword = ZooSystem.hashPassword(password);
-
         String createUserQuery = "INSERT INTO SystemUser (username, password) VALUES (?, ?)";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement createUserPs = conn.prepareStatement(createUserQuery)) {
 
-            PreparedStatement createUserPs = getConnection().prepareStatement(createUserQuery);
             createUserPs.setString(1, username);
             createUserPs.setString(2, hashedPassword);
-
             createUserPs.execute();
-            createUserPs.close();
-
             System.out.println("User " + username + " has been created successfully");
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
 
     @Override
     public List<User> getUsers() {
-
         List<User> registeredUsers = new ArrayList<>();
         String getUsersQuery = "SELECT * FROM SystemUser";
 
-        try {
-            PreparedStatement getUsersPs = getConnection().prepareStatement(getUsersQuery);
-            ResultSet rs = getUsersPs.executeQuery();
+        try (Connection conn = getConnection();
+             PreparedStatement getUsersPs = conn.prepareStatement(getUsersQuery);
+             ResultSet rs = getUsersPs.executeQuery()) {
 
             while (rs.next()) {
                 Long userId = rs.getLong("user_id");
@@ -66,9 +58,6 @@ public class UserRepositoryImpl implements IUserRepository {
                 String password = rs.getString("password");
                 registeredUsers.add(new User(userId, username, password));
             }
-
-            rs.close();
-            getUsersPs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -79,25 +68,21 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User getUserById(int id) {
-
         User user = null;
         String getUserByIdQuery = "SELECT * FROM SystemUser WHERE user_id = ?";
 
-        try {
-            PreparedStatement getUserByIdPs = getConnection().prepareStatement(getUserByIdQuery);
+        try (Connection conn = getConnection();
+             PreparedStatement getUserByIdPs = conn.prepareStatement(getUserByIdQuery)) {
+
             getUserByIdPs.setInt(1, id);
-            ResultSet rs = getUserByIdPs.executeQuery();
-
-            if (rs.next()) {
-                Long userId = rs.getLong("user_id");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-                user = new User(userId, username, password);
+            try (ResultSet rs = getUserByIdPs.executeQuery()) {
+                if (rs.next()) {
+                    Long userId = rs.getLong("user_id");
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    user = new User(userId, username, password);
+                }
             }
-
-            rs.close();
-            getUserByIdPs.close();
-
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -108,25 +93,22 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User getUserByUsername(String username) {
-
         User user = null;
         String getUserByUsernameQuery = "SELECT * FROM SystemUser WHERE username = ?";
 
-        try {
-            PreparedStatement getUserByUsernamePs = getConnection().prepareStatement(getUserByUsernameQuery);
-            getUserByUsernamePs.setString(1, username);
-            ResultSet rs = getUserByUsernamePs.executeQuery();
+        try (Connection conn = getConnection();
+             PreparedStatement getUserByUsernamePs = conn.prepareStatement(getUserByUsernameQuery)) {
 
-            if (rs.next()) {
-                Long userId = rs.getLong("user_id");
-                String password = rs.getString("password");
-                user = new User(userId, username, password);
+            getUserByUsernamePs.setString(1, username);
+            try (ResultSet rs = getUserByUsernamePs.executeQuery()) {
+                if (rs.next()) {
+                    Long userId = rs.getLong("user_id");
+                    String password = rs.getString("password");
+                    user = new User(userId, username, password);
+                }
             }
 
-            getUserByUsernamePs.close();
-            rs.close();
-
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
@@ -135,29 +117,24 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public User deleteUserById(int id) throws EntityNotFoundException {
-
         User userToBeDeleted = getUserById(id);
-
         if (userToBeDeleted == null) {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
 
         String deleteQuery = "DELETE FROM SystemUser WHERE user_id = ?";
 
-        try {
-
-            PreparedStatement deletePs = getConnection().prepareStatement(deleteQuery);
+        try (Connection conn = getConnection();
+             PreparedStatement deletePs = conn.prepareStatement(deleteQuery)) {
 
             deletePs.setInt(1, id);
             deletePs.execute();
-            deletePs.close();
-
             System.out.println("User: " + userToBeDeleted.getUsername() + " has been deleted");
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        
+
         return userToBeDeleted;
     }
 
@@ -166,7 +143,6 @@ public class UserRepositoryImpl implements IUserRepository {
             throws EntityNotFoundException, EntityAlreadyRegisteredException {
 
         User toBeUpdated = getUserById(id);
-
         if (toBeUpdated == null) {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
@@ -198,7 +174,8 @@ public class UserRepositoryImpl implements IUserRepository {
 
         updateQuery += " WHERE user_id = ?";
 
-        try (PreparedStatement updatePs = getConnection().prepareStatement(updateQuery)) {
+        try (Connection conn = getConnection();
+             PreparedStatement updatePs = conn.prepareStatement(updateQuery)) {
 
             if (usernameChanged) {
                 updatePs.setString(paramIndex++, newUsername);
@@ -219,29 +196,21 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     private boolean usernameIsAvailable(String username) {
-
         String checkQuery = "SELECT COUNT(*) FROM SystemUser WHERE username = ?";
 
-        try {
-            PreparedStatement checkPs = getConnection().prepareStatement(checkQuery);
-            checkPs.setString(1, username);
-            ResultSet rs = checkPs.executeQuery();
+        try (Connection conn = getConnection();
+             PreparedStatement checkPs = conn.prepareStatement(checkQuery)) {
 
-            while (rs.next()){
-                if (rs.getInt(1) > 0) {
-                    rs.close();
-                    checkPs.close();
+            checkPs.setString(1, username);
+            try (ResultSet rs = checkPs.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
                     return false;
                 }
             }
 
-            rs.close();
-            checkPs.close();
-
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return true;
     }
-
 }

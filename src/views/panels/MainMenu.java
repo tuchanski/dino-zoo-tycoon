@@ -1,11 +1,14 @@
 package views.panels;
 
+import controllers.ParkEventController;
 import controllers.ZooController;
 import exceptions.EntityNotFoundException;
 import exceptions.NotEnoughMoneyException;
+import models.enums.ParkEvent;
 import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.*;
+import java.util.List;
 
 import controllers.UserController;
 import models.User;
@@ -14,6 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+// MainMenu (Dashboard).
+// Current user can manage all zoo from here.
 
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
@@ -45,10 +51,25 @@ public class MainMenu extends JFrame {
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
 
+        CustomButton parkEventButton = new CustomButton(
+                "",
+                425,
+                100 ,
+                76,
+                72,
+                e -> {
+                    showParkEventMessage();
+                },
+                Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        );
+
+        backgroundPanel.add(parkEventButton);
+
         ImageIcon overviewViewButton = new ImageIcon("src/resources/utils/overview.png");
         JLabel overviewViewLabel = new JLabel(overviewViewButton);
         overviewViewLabel.setBounds(233, 80, 114, 45);
         backgroundPanel.add(overviewViewLabel);
+
 
         ImageIcon imageIcon = new ImageIcon("src/resources/images/map.png");
         JLabel mapLabel = new JLabel(imageIcon);
@@ -330,6 +351,7 @@ public class MainMenu extends JFrame {
         generalViewLabel.setBounds(320, 435, 207, 148);
         backgroundPanel.add(generalViewLabel);
 
+
     }
 
     private void logoutAction(){
@@ -376,21 +398,30 @@ public class MainMenu extends JFrame {
 
     private void hireEmployeeAction() {
         try {
-            int currentCash = zooRepository.getCurrentCash(currentUser.getId());
+            int currentCash = zooRepository.getCurrentCash(ZooSystem.getCurrentZoo().getZooId());
 
-            if (currentCash < 100) {
-                throw new NotEnoughMoneyException("You don't have enough money.");
-            }
+            zooRepository.contractNewEmployee(ZooSystem.getCurrentZoo().getZooId());
 
-            zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
+            CustomDialog.showMessage("Employee successfully hired!", JOptionPane.INFORMATION_MESSAGE);
 
-            int newCash = currentCash - 100;
-            cashLabel.setText("$ " + newCash);
-            zooRepository.removeCash(currentUser.getId(), 100);
-        } catch (NotEnoughMoneyException ex) {
-            CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);
-        } catch (EntityNotFoundException ex) {
-            CustomDialog.showMessage("Entity not foundd.", JOptionPane.ERROR_MESSAGE);
+        } catch (NotEnoughMoneyException e) {
+            CustomDialog.showMessage("Not enough balance.", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            CustomDialog.showMessage("Failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void showParkEventMessage() {
+        ParkEventController parkEventController = new ParkEventController();
+        List<ParkEvent> events = parkEventController.getAllParkEvents();
+
+        if (!events.isEmpty()) {
+            ParkEvent event = events.get(0);
+            String eventDescription = event.getDescription();
+
+            CustomDialog.showMessage(eventDescription + " started", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            CustomDialog.showMessage("No events found.", JOptionPane.ERROR_MESSAGE);
         }
     }
 

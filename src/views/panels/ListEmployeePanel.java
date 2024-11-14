@@ -14,6 +14,9 @@ import java.util.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// List all employees hired at MainMenu.
+// Current user can remove/unemploy any employee.
+
 public class ListEmployeePanel extends JFrame {
     private int mouseX, mouseY;
     private EmployeeController employeeController;

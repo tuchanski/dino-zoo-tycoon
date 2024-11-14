@@ -13,6 +13,8 @@ import java.util.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// List all visitors, you can delete or add a new daily task.
+
 public class ListVisitorPanel extends JFrame {
     private int mouseX, mouseY;
     private VisitorController visitorController;

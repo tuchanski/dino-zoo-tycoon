@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Update any Zoo after selecting at ListDinoPanel.
+
 public class UpdateDinoPanel extends JFrame {
     private int mouseX, mouseY;
     private JComboBox<DinosaurSpecies> speciesComboBox;

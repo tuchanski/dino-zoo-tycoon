@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Emergency mode to bring immersion to the project.
+
 public class SOSMessage extends JFrame {
     private int mouseX, mouseY;
     private Timer blinking;

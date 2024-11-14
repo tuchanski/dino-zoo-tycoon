@@ -22,7 +22,7 @@ Here are some screens of the game, where it is generally possible to perform CRU
 
 - **Manage Employees**
 
-<img src="helpers\rdmeresources\Manage Employees.png" alt="Manage Employees" width="600px">
+<img src="helpers\rdmeresources\Manage Employees 2.png" alt="Manage Employees" width="600px">
 
 - **Manage Visitors**
 

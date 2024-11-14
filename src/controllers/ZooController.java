@@ -99,6 +99,15 @@ public class ZooController {
         return cash;
     }
 
+    public void contractEmployee(int id) {
+        try {
+            zooRepository.contractNewEmployee((long) id);
+        } catch (EntityNotFoundException | NotEnoughMoneyException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    // Swing-views utility shortcut
     public void addVisitor(Zoo zoo, JTextArea logTextArea) {
         VisitorController visitorController = new VisitorController(zoo);
         visitorController.createVisitor();
@@ -114,14 +123,6 @@ public class ZooController {
         String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $50)";
         logTextArea.append(visitorLog + "\n");
         logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
-    }
-
-    public void contractEmployee(int id) {
-        try {
-            zooRepository.contractNewEmployee((long) id);
-        } catch (EntityNotFoundException | NotEnoughMoneyException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
     }
 
 }

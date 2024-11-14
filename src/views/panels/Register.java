@@ -171,12 +171,12 @@ public class Register extends JFrame {
         panel.add(label, JLayeredPane.PALETTE_LAYER);
     }
 
-    private void register(){
+    private void register() {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
         String zooName = zooNameField.getText().trim();
 
-        if (username.isEmpty() || password.isEmpty() || zooName.isEmpty()){
+        if (username.isEmpty() || password.isEmpty() || zooName.isEmpty()) {
             CustomDialog.showMessage("Fill all in fields.", JOptionPane.ERROR_MESSAGE);
             return;
         } else if (username.length() > 10) {
@@ -184,14 +184,19 @@ public class Register extends JFrame {
             return;
         }
 
-        try{
+        if (userController.getUserByUsername(username) != null) {
+            CustomDialog.showMessage("Username already taken.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
             userController.createUser(username, password);
             ZooSystem.setCurrentUser(userController.getUserByUsername(username));
             zooController = new ZooController(ZooSystem.getCurrentUser());
             zooController.createZoo(zooName);
             ZooSystem.setCurrentUser(null);
             CustomDialog.showMessage("User registered successfully!", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

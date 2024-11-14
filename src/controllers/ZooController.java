@@ -115,10 +115,9 @@ public class ZooController {
         System.out.println("Visitor " + visitors.getLast() + " arrived.");
 
         String visitorName = visitors.getLast().getName();
-        System.out.println("Visitor " + visitorName + " arrived.");
 
         addCash(zoo.getZooId(), 50);
-        System.out.println("Cash: +50 | Total: " + zoo.getCash());
+        System.out.println("Cash: +50 | Total: " + (zoo.getCash() + 50));
 
         String visitorLog = "Visitor " + visitorName + " arrived at zoo (+ $50)";
         logTextArea.append(visitorLog + "\n");

@@ -288,9 +288,7 @@ public class MainMenu extends JFrame {
             synchronized (cashLock) {
                 if (this.isVisible()) {
                     zooController.addVisitor(zooController.getZooByUser(), logTextArea);
-
                     int newCash = zooController.getCurrentCash(currentUser.getId());
-                    System.out.println(newCash);
 
                     String cashText = "$ " + newCash + "   ";
                     cashLabel.setText(cashText);

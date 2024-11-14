@@ -26,5 +26,9 @@ public class Employee extends Human {
         List<String> tasks = List.of("Clean enclosure", "Guide visitors", "Feed dinosaurs");
         return tasks.get(random.nextInt(tasks.size()));
     }
-    
+
+    @Override
+    public String toString() {
+        return "Employee: " + getRole();
+    }
 }

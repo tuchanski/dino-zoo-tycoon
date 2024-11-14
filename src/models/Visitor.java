@@ -25,4 +25,8 @@ public class Visitor extends Human {
         return tasks.get(random.nextInt(tasks.size()));
     }
 
+    @Override
+    public String toString() {
+        return "Visitor: " + getRole();
+    }
 }

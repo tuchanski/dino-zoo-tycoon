@@ -1,8 +1,10 @@
 package views.panels;
 
+import controllers.FoodStockController;
 import controllers.ZooController;
 import exceptions.EntityNotFoundException;
 import exceptions.NotEnoughMoneyException;
+import repositories.FoodStockRepositoryImpl;
 import repositories.ZooRepositoryImpl;
 import services.ZooSystem;
 import views.utils.*;
@@ -21,11 +23,11 @@ public class MainMenu extends JFrame {
     private User currentUser;
     private ZooRepositoryImpl zooRepository;
     private ZooController zooController;
-    private JLabel cashLabel;
+    protected static JLabel cashLabel;
     private JLabel usernameLabel;
     private JTextArea logTextArea;
     private JScrollPane logScrollPane;
-    private final Object cashLock = new Object();
+    protected final Object cashLock = new Object();
 
     private String visitorName = "";
 
@@ -85,7 +87,7 @@ public class MainMenu extends JFrame {
         //cash
 
         int currentCash = zooRepository.getCurrentCash(currentUser.getId());
-        cashLabel = new JLabel("$ " + currentCash);
+        cashLabel = new JLabel("$ " + currentCash + "   ");
         cashLabel.setFont(CustomFont.useCustomFont(12f));
         cashLabel.setForeground(fontColor);
 

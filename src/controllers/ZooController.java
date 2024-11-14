@@ -105,7 +105,7 @@ public class ZooController {
         List<Visitor> visitors = visitorController.getVisitors();
         System.out.println("Visitor " + visitors.getLast() + " arrived.");
 
-        String visitorName = visitors.get(visitors.size() - 1).getName();
+        String visitorName = visitors.getLast().getName();
         System.out.println("Visitor " + visitorName + " arrived.");
 
         addCash(zoo.getZooId(), 50);

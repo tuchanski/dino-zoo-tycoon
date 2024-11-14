@@ -15,6 +15,9 @@ import java.util.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// List all dinosaurs in the current Zoo.
+// Current user can update or delete the dinosaur.
+
 public class ListDinoPanel extends JFrame {
     private int mouseX, mouseY;
     private DinosaurController dinosaurController;

@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Update current user info.
+
 public class UserSettings extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;

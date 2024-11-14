@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
 
 import models.enums.FoodType;
 
+// Three different options of food to buy (Meat, Egg, Plant).
+
 public class BuyFoodPanel extends JFrame {
     private int mouseX, mouseY;
 

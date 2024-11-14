@@ -15,6 +15,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// MainMenu (Dashboard).
+// Current user can manage all zoo from here.
+
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
     private UserController userController;

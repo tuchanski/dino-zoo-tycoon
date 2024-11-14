@@ -14,6 +14,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+// Add a daily task to any visitor after choosing at ListVisitorPanel
+// Daily tasks are random.
+// After choosing the visitor, need to choose the employee.
+
 public class AddDailyTask extends JFrame {
     private int mouseX, mouseY;
 

@@ -15,6 +15,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Register your account.
+// Asking Your name, password and Zoo name.
+
 public class Register extends JFrame {
     private int mouseX, mouseY;
     private JTextField usernameField;

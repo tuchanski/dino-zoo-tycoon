@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 
 import models.enums.DinosaurSpecies;
 
+// Add a new dinosaur into current Zoo.
+// By selecting the Dinosaur specie.
+
 public class AddDinoPanel extends JFrame {
     private int mouseX, mouseY;
 

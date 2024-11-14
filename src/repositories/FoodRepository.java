@@ -30,9 +30,9 @@ public class FoodRepository implements IFoodRepository {
         String createFoodQuery = "INSERT INTO Food (name, type, price) VALUES (?, ?, ?)";
         String typeToString = type.toString();
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement createFoodPs = conn.prepareStatement(createFoodQuery)) {
 
-            PreparedStatement createFoodPs = getConnection().prepareStatement(createFoodQuery);
             createFoodPs.setString(1, name);
             createFoodPs.setString(2, typeToString);
             createFoodPs.setInt(3, price);
@@ -43,7 +43,6 @@ public class FoodRepository implements IFoodRepository {
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -52,10 +51,9 @@ public class FoodRepository implements IFoodRepository {
         List<Food> foods = new ArrayList<>();
         String getFoodsQuery = "SELECT * FROM Food";
 
-        try {
-
-            PreparedStatement getFoodsPs = getConnection().prepareStatement(getFoodsQuery);
-            ResultSet rs = getFoodsPs.executeQuery();
+        try (Connection conn = getConnection();
+             PreparedStatement getFoodsPs = conn.prepareStatement(getFoodsQuery);
+             ResultSet rs = getFoodsPs.executeQuery()) {
 
             while (rs.next()) {
                 Long id = rs.getLong("food_id");
@@ -65,15 +63,11 @@ public class FoodRepository implements IFoodRepository {
                 foods.add(new Food(id, name, typeToString, price));
             }
 
-            getFoodsPs.close();
-            rs.close();
-
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return foods;
-
     }
 
     @Override
@@ -82,22 +76,19 @@ public class FoodRepository implements IFoodRepository {
         Food food = null;
         String getFoodByIdQuery = "SELECT * FROM Food WHERE food_id = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement getFoodByIdPs = conn.prepareStatement(getFoodByIdQuery)) {
 
-            PreparedStatement getFoodByIdPs = getConnection().prepareStatement(getFoodByIdQuery);
             getFoodByIdPs.setLong(1, id);
 
-            ResultSet rs = getFoodByIdPs.executeQuery();
-
-            if (rs.next()) {
-                String name = rs.getString("name");
-                String type = rs.getString("type");
-                int price = rs.getInt("price");
-                food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+            try (ResultSet rs = getFoodByIdPs.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    String type = rs.getString("type");
+                    int price = rs.getInt("price");
+                    food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+                }
             }
-
-            rs.close();
-            getFoodByIdPs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
@@ -110,29 +101,27 @@ public class FoodRepository implements IFoodRepository {
     public Food getFoodByName(String name) {
 
         Food food = null;
-
         String getFoodByNameQuery = "SELECT * FROM Food WHERE name = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement getFoodByNamePs = conn.prepareStatement(getFoodByNameQuery)) {
 
-            PreparedStatement getFoodByNamePs = getConnection().prepareStatement(getFoodByNameQuery);
             getFoodByNamePs.setString(1, name);
 
-            ResultSet rs = getFoodByNamePs.executeQuery();
-            if (rs.next()) {
-                long id = rs.getLong("food_id");
-                String type = rs.getString("type");
-                int price = rs.getInt("price");
-                food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+            try (ResultSet rs = getFoodByNamePs.executeQuery()) {
+                if (rs.next()) {
+                    long id = rs.getLong("food_id");
+                    String type = rs.getString("type");
+                    int price = rs.getInt("price");
+                    food = new Food(id, name, FoodType.valueOf(type.toUpperCase()), price);
+                }
             }
-
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return food;
-
     }
 
     @Override
@@ -143,52 +132,19 @@ public class FoodRepository implements IFoodRepository {
             throw new EntityNotFoundException("Food not found with id: " + id);
         }
 
-        boolean nameChanged = !newName.equals(toBeUpdated.getName());
-        boolean typeChanged = !newType.equals(toBeUpdated.getType());
-        boolean priceChanged = newPrice != toBeUpdated.getPrice();
-
-        if (nameChanged && !foodNameIsAvailable(newName)) {
+        if (!newName.equals(toBeUpdated.getName()) && !foodNameIsAvailable(newName)) {
             throw new EntityAlreadyRegisteredException("Food name already registered");
         }
 
-        if (!nameChanged && !typeChanged && !priceChanged) {
-            return toBeUpdated;
-        }
+        String updateQuery = "UPDATE Food SET name = ?, type = ?, price = ? WHERE food_id = ?";
 
-        String updateQuery = "UPDATE Food SET ";
-        boolean updateNeeded = false;
-        int paramIndex = 1;
+        try (Connection conn = getConnection();
+             PreparedStatement updatePs = conn.prepareStatement(updateQuery)) {
 
-        if (nameChanged) {
-            updateQuery += "name = ?";
-            updateNeeded = true;
-        }
-
-        if (typeChanged) {
-            updateQuery += updateNeeded ? ", type = ?" : "type = ?";
-            updateNeeded = true;
-        }
-
-        if (priceChanged) {
-            updateQuery += updateNeeded ? ", price = ?" : "price = ?";
-        }
-
-        updateQuery += " WHERE food_id = ?";
-
-        try (PreparedStatement updatePs = getConnection().prepareStatement(updateQuery)) {
-            if (nameChanged) {
-                updatePs.setString(paramIndex++, newName);
-            }
-
-            if (typeChanged) {
-                updatePs.setString(paramIndex++, newType.toString());
-            }
-
-            if (priceChanged) {
-                updatePs.setInt(paramIndex++, newPrice);
-            }
-
-            updatePs.setLong(paramIndex, id);
+            updatePs.setString(1, newName);
+            updatePs.setString(2, newType.toString());
+            updatePs.setInt(3, newPrice);
+            updatePs.setLong(4, id);
             updatePs.executeUpdate();
 
             toBeUpdated.setName(newName);
@@ -204,7 +160,6 @@ public class FoodRepository implements IFoodRepository {
         return toBeUpdated;
     }
 
-
     @Override
     public Food deleteFoodById(Long id) throws EntityNotFoundException {
 
@@ -216,12 +171,11 @@ public class FoodRepository implements IFoodRepository {
 
         String deleteFoodQuery = "DELETE FROM Food WHERE food_id = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement deleteFoodPs = conn.prepareStatement(deleteFoodQuery)) {
 
-            PreparedStatement deleteFoodPs = getConnection().prepareStatement(deleteFoodQuery);
             deleteFoodPs.setLong(1, id);
             deleteFoodPs.execute();
-            deleteFoodPs.close();
 
             System.out.println("Food " + id + " has been deleted successfully");
 
@@ -230,7 +184,6 @@ public class FoodRepository implements IFoodRepository {
         }
 
         return toBeDeleted;
-
     }
 
     private Boolean foodNameIsAvailable(String name) {
@@ -238,24 +191,23 @@ public class FoodRepository implements IFoodRepository {
         boolean nameIsAvailable = true;
         String foodNameIsAvailableQuery = "SELECT * FROM Food WHERE name = ?";
 
-        try {
+        try (Connection conn = getConnection();
+             PreparedStatement foodNameIsAvailablePs = conn.prepareStatement(foodNameIsAvailableQuery)) {
 
-            PreparedStatement foodNameIsAvailablePs = getConnection().prepareStatement(foodNameIsAvailableQuery);
             foodNameIsAvailablePs.setString(1, name);
-            ResultSet rs = foodNameIsAvailablePs.executeQuery();
 
-            if (rs.next()) {
-                nameIsAvailable = false;
+            try (ResultSet rs = foodNameIsAvailablePs.executeQuery()) {
+                if (rs.next()) {
+                    nameIsAvailable = false;
+                }
             }
-
-            foodNameIsAvailablePs.close();
-            rs.close();
 
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
         return nameIsAvailable;
-
     }
+
+
 }

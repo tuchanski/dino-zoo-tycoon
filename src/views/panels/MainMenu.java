@@ -414,10 +414,10 @@ public class MainMenu extends JFrame {
         listEmployeePanel.setVisible(true);
         this.setState(JFrame.ICONIFIED);
     }
+
     private void openBuyFood(){
         BuyFoodPanel buyFood = new BuyFoodPanel(this);
         buyFood.setVisible(true);
-        this.setState(JFrame.ICONIFIED);
     }
 
     private void hireEmployeeAction() {

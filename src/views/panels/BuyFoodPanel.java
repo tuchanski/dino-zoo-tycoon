@@ -142,9 +142,12 @@ public class BuyFoodPanel extends JFrame {
                         .findFirst()
                         .orElse(null);
                 if (selectedFood != null) {
-                    long id = selectedFood.getId();
-                    foodStockController.addFood((int) id, 1);
-                    CustomDialog.showMessage("Food purchased!", JOptionPane.INFORMATION_MESSAGE);
+                    synchronized (MainMenu.cashLock) {
+                        long id = selectedFood.getId();
+                        foodStockController.addFood((int) id, 1);
+                        zooController.removeCash(ZooSystem.getCurrentZoo().getZooId().intValue(), selectedFood.getPrice() );
+                        CustomDialog.showMessage("Food purchased! - $" + selectedFood.getPrice(), JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             } catch (Exception e) {
                 CustomDialog.showMessage("Error purchasing food", JOptionPane.ERROR_MESSAGE);

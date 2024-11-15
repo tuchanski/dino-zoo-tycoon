@@ -23,19 +23,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainMenu extends JFrame {
     private int mouseX, mouseY;
-    private UserController userController;
     private User currentUser;
+
     private VisitorController visitorController;
     private DinosaurController dinosaurController;
     private EmployeeController employeeController;
-
     private ZooController zooController;
-    protected static JLabel cashLabel;
+
+    private JLabel cashLabel;
     private JLabel usernameLabel;
     private JTextArea logTextArea;
-    private JScrollPane logScrollPane;
-    protected final Object cashLock = new Object();
-    private String visitorName = "";
+
+    protected static final Object cashLock = new Object();
 
     public MainMenu(User currentUser) {
 
@@ -49,8 +48,6 @@ public class MainMenu extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        userController = new UserController();
 
         ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
         backgroundPanel.setLayout(null);
@@ -106,23 +103,38 @@ public class MainMenu extends JFrame {
 
         backgroundPanel.add(usernameLabel);
 
-        //cash
+        // Cash
 
-        int currentCash = zooController.getCurrentCash(currentUser.getId());
-        cashLabel = new JLabel("$ " + currentCash + "   ");
+        AtomicInteger currentCash = new AtomicInteger(zooController.getCurrentCash(currentUser.getId()));
+
+        cashLabel = new JLabel("$ " + currentCash.get());
         cashLabel.setFont(CustomFont.useCustomFont(12f));
         cashLabel.setForeground(fontColor);
 
-        metrics = cashLabel.getFontMetrics(cashLabel.getFont());
-        textWidth = metrics.stringWidth("$ " + currentCash + "   ");
+        FontMetrics cashMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
+        int cashTextWidth = cashMetrics.stringWidth("$ " + currentCash.get()) + 20; // Margem extra
+        int cashTextHeight = cashMetrics.getHeight();
 
-        logoutButtonX = 650;
-        logoutButtonWidth = 103;
+        int logoutX = 650;
+        int logoutWidth = 103;
+        int cashLabelX = logoutX + (logoutWidth / 2) - (cashTextWidth / 2);
 
-        labelX = logoutButtonX + (logoutButtonWidth / 2) - (textWidth / 2);
+        cashLabel.setBounds(cashLabelX, 143, cashTextWidth, cashTextHeight);
+        cashLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centralizar texto horizontalmente
+        cashLabel.setVerticalAlignment(SwingConstants.CENTER); // Centralizar texto verticalmente
 
-        cashLabel.setBounds(labelX, 143, textWidth, 20);
         backgroundPanel.add(cashLabel);
+
+        Timer updateCashTimer = new Timer(1000, e -> {
+            currentCash.set(zooController.getCurrentCash(currentUser.getId()));
+            cashLabel.setText("$ " + currentCash.get());
+
+            int updatedCashWidth = cashMetrics.stringWidth("$ " + currentCash.get()) + 20;
+            cashLabel.setBounds(cashLabelX, 143, updatedCashWidth, cashTextHeight);
+        });
+
+        updateCashTimer.setRepeats(true);
+        updateCashTimer.start();
 
         CustomButton logoutButton = new CustomButton(
                 "src/resources/buttons/logoutButton.png",
@@ -155,7 +167,6 @@ public class MainMenu extends JFrame {
         welcomeLabel.setBounds(553, 200, 250, 41);
 
         backgroundPanel.add(welcomeLabel);
-
 
         ImageIcon employeesViewButton = new ImageIcon("src/resources/utils/employeeManageButton.png");
         JLabel employeeViewLabel = new JLabel(employeesViewButton);
@@ -288,19 +299,6 @@ public class MainMenu extends JFrame {
             synchronized (cashLock) {
                 if (this.isVisible()) {
                     zooController.addVisitor(zooController.getZooByUser(), logTextArea);
-                    int newCash = zooController.getCurrentCash(currentUser.getId());
-
-                    String cashText = "$ " + newCash + "   ";
-                    cashLabel.setText(cashText);
-
-                    FontMetrics newMetrics = cashLabel.getFontMetrics(cashLabel.getFont());
-                    int newTextWidth = newMetrics.stringWidth(cashText);
-
-                    int newLogoutButtonX = 650;
-                    int newLogoutButtonWidth = 103;
-                    int newLabelX = newLogoutButtonX + (newLogoutButtonWidth / 2) - (newTextWidth / 2);
-
-                    cashLabel.setBounds(newLabelX, 143, newTextWidth, 20);
                 }
             }
         });
@@ -356,7 +354,6 @@ public class MainMenu extends JFrame {
         JLabel generalViewLabel = new JLabel(generalViewButton);
         generalViewLabel.setBounds(320, 435, 207, 148);
         backgroundPanel.add(generalViewLabel);
-
 
     }
 
@@ -433,10 +430,6 @@ public class MainMenu extends JFrame {
                 }
 
                 zooController.contractEmployee(ZooSystem.getCurrentZoo().getZooId().intValue());
-
-                int newCash = currentCash - 100;
-                cashLabel.setText("$ " + newCash + "   ");
-
                 CustomDialog.showMessage("Employee hired successfully.", JOptionPane.INFORMATION_MESSAGE);
             } catch (NotEnoughMoneyException ex) {
                 CustomDialog.showMessage("Not enough money.", JOptionPane.ERROR_MESSAGE);

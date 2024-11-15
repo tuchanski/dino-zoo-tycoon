@@ -406,18 +406,19 @@ public class MainMenu extends JFrame {
     private void openListVisitor(){
         ListVisitorPanel listVisitorPanel = new ListVisitorPanel(this);
         listVisitorPanel.setVisible(true);
-        this.setState(JFrame.ICONIFIED);
+        this.setState(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     private void openListEmployee(){
         ListEmployeePanel listEmployeePanel = new ListEmployeePanel(this);
         listEmployeePanel.setVisible(true);
-        this.setState(JFrame.ICONIFIED);
+        this.setState(JFrame.DO_NOTHING_ON_CLOSE);
     }
+
     private void openBuyFood(){
         BuyFoodPanel buyFood = new BuyFoodPanel(this);
         buyFood.setVisible(true);
-        this.setState(JFrame.ICONIFIED);
+        this.setState(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
     private void hireEmployeeAction() {

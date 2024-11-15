@@ -4,6 +4,8 @@
 
 **Dino Zoo Tycoon** is a dinosaur-themed zoo management simulator where players take on the role of a park manager in charge of a zoo filled with genetically resurrected dinosaurs. The goal is to balance the safety and well-being of the dinosaurs, the entertainment of visitors, and the overall success of the park.
 
+**Dino Zoo Tycoon** is also considered by professor [Marina de Lara | @akitodr](https://github.com/akitodr) to be the best final project presented in the subject of Object-Oriented Programming at PUCPR.
+
 ## Overall Experience 🌟
 
 Here are some screens of the game, where it is generally possible to perform CRUD operations on the system entities.
@@ -30,15 +32,25 @@ Here are some screens of the game, where it is generally possible to perform CRU
 
 ## How to Play 🕹️
 
-- Make sure Java is installed on your computer and that you have a PostgreSQL database.
+### Setup
+
+- Ensure Java & PostgreSQL are installed on your local machine.
+
+- Create a database called **DinoZooTycoon**.
 
 - Run the script.sql file in helpers/database.
 
-- To play, just start the application in the Main class.
+- Import the *postgresql-42.7.4.jar* library into your project structure.
 
-- Create your account in the registration page – don't worry, passwords are encrypted.
+### Starting the Game
 
-- Start managing your dinosaur zoo!
+- To play, just launch the application - the Main class is located in `src/application/`.
+
+- Use the registration page to sign up – don't worry, passwords are encrypted!
+
+- Start managing: Explore features like hiring employees, attracting visitors, and expanding your zoo.
+
+- P.S: We’re planning to convert this application, currently built in pure Java, to Maven for better dependency management and project organization.
 
 ## Techs ⚙️
 

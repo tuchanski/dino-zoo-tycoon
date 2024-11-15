@@ -142,6 +142,8 @@ public class UserRepositoryImpl implements IUserRepository {
     public User updateUserById(int id, String newUsername, String newPassword)
             throws EntityNotFoundException, EntityAlreadyRegisteredException {
 
+        String newPasswordHashed = ZooSystem.hashPassword(newPassword);
+
         User toBeUpdated = getUserById(id);
         if (toBeUpdated == null) {
             throw new EntityNotFoundException("User not found with id: " + id);
@@ -152,7 +154,7 @@ public class UserRepositoryImpl implements IUserRepository {
         int paramIndex = 1;
 
         boolean usernameChanged = !newUsername.equals(toBeUpdated.getUsername());
-        boolean passwordChanged = !newPassword.equals(toBeUpdated.getPassword());
+        boolean passwordChanged = !newPasswordHashed.equals(toBeUpdated.getPassword());
 
         if (usernameChanged && !usernameIsAvailable(newUsername)) {
             throw new EntityAlreadyRegisteredException("Username already registered");
@@ -182,7 +184,7 @@ public class UserRepositoryImpl implements IUserRepository {
             }
 
             if (passwordChanged) {
-                updatePs.setString(paramIndex++, newPassword);
+                updatePs.setString(paramIndex++, newPasswordHashed);
             }
 
             updatePs.setInt(paramIndex, id);

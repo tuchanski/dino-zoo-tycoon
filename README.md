@@ -40,7 +40,7 @@ Here are some screens of the game, where it is generally possible to perform CRU
 
 - Run the script.sql file in helpers/database.
 
-- Import the *postgresql-42.7.4.jar* library into your project structure.
+- Import the [*postgresql-42.7.4.jar*](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.4/postgresql-42.7.4.jar) library into your project structure.
 
 ### Starting the Game
 

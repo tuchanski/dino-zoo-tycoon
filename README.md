@@ -59,5 +59,5 @@ Here are some screens of the game, where it is generally possible to perform CRU
 
 ## Authors ✍️
 
-- **Guilherme Tuchanski**
-- **Luiz Matoso**
+- [Guilherme Tuchanski | @tuchanski](https://github.com/tuchanski)
+- [ Luiz Matoso | @luiz-matoso](https://github.com/luiz-matoso)

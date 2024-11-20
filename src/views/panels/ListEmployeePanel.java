@@ -31,7 +31,7 @@ public class ListEmployeePanel extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(parentFrame);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/bg.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/employees-manage-bg.png");
         backgroundPanel.setLayout(null);
 
         ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");
@@ -83,11 +83,18 @@ public class ListEmployeePanel extends JFrame {
 
         addEmployeeCards(employeesPanel);
 
-        JScrollPane scrollPane = new JScrollPane(employeesPanel);
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapperPanel.setOpaque(false);
+        wrapperPanel.add(employeesPanel);
+
+        JScrollPane scrollPane = new JScrollPane(wrapperPanel);
         scrollPane.setBounds(50, 100, 700, 400);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         backgroundPanel.add(scrollPane);
 
         CustomButton refreshButton = new CustomButton(

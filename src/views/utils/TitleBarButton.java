@@ -4,8 +4,11 @@ import models.User;
 import models.Zoo;
 import views.panels.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class TitleBarButton extends JPanel {
     private final MainMenu parentFrame;
@@ -20,6 +23,7 @@ public class TitleBarButton extends JPanel {
     private JLabel overviewViewLabel;
     private JLabel mapLabel;
     private boolean isEmergencyActive = false;
+    private Clip sirenAudio;
 
 
     public TitleBarButton(MainMenu parentFrame, User currentUser, JLabel overviewViewLabel, JLabel mapLabel){
@@ -141,6 +145,8 @@ public class TitleBarButton extends JPanel {
 
         endEmergencyButton.setVisible(true);
 
+        playSiren("src/resources/audio/siren.wav");
+
         if (sosMessage == null || !sosMessage.isDisplayable()){
             sosMessage = new SOSMessage(parentFrame);
             sosMessage.setVisible(true);
@@ -157,9 +163,32 @@ public class TitleBarButton extends JPanel {
 
         endEmergencyButton.setVisible(false);
 
+        stopSiren();
+
         if (sosMessage != null && sosMessage.isDisplayable()) {
             sosMessage.dispose();
             sosMessage = null;
+        }
+    }
+
+    private void playSiren(String path){
+        try{
+            File file = new File(path);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+
+            sirenAudio = AudioSystem.getClip();
+            sirenAudio.open(audioInputStream);
+
+            sirenAudio.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void stopSiren(){
+        if (sirenAudio != null && sirenAudio.isRunning()){
+            sirenAudio.stop();
+            sirenAudio.close();
         }
     }
 }

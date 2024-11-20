@@ -84,11 +84,18 @@ public class ListVisitorPanel extends JFrame {
 
         addVisitorCards(visitorsPanel);
 
-        JScrollPane scrollPane = new JScrollPane(visitorsPanel);
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapperPanel.setOpaque(false);
+        wrapperPanel.add(visitorsPanel);
+
+        JScrollPane scrollPane = new JScrollPane(wrapperPanel);
         scrollPane.setBounds(50, 100, 700, 400);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         backgroundPanel.add(scrollPane);
 
         CustomButton refreshButton = new CustomButton(
@@ -210,10 +217,15 @@ public class ListVisitorPanel extends JFrame {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
             buttonPanel.setOpaque(false);
+            buttonPanel.setMaximumSize(new Dimension(180, 60));
+
+            dailyTask.setPreferredSize(new Dimension(52, 53));
+            deleteButton.setPreferredSize(new Dimension(52, 53));
 
             buttonPanel.add(dailyTask);
             buttonPanel.add(deleteButton);
 
+            cardPanel.add(Box.createVerticalStrut(10));
             cardPanel.add(buttonPanel);
 
             visitorsPanel.add(cardPanel);

@@ -85,11 +85,18 @@ public class ListDinoPanel extends JFrame {
 
         addDinosaurCards(dinosaursPanel);
 
-        JScrollPane scrollPane = new JScrollPane(dinosaursPanel);
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        wrapperPanel.setOpaque(false);
+        wrapperPanel.add(dinosaursPanel);
+
+        JScrollPane scrollPane = new JScrollPane(wrapperPanel);
         scrollPane.setBounds(50, 100, 700, 400);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setOpaque(false);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         backgroundPanel.add(scrollPane);
 
         CustomButton refreshButton = new CustomButton(
@@ -140,14 +147,14 @@ public class ListDinoPanel extends JFrame {
 
             // Species
             JLabel speciesLabel = new JLabel(dinosaur.getSpecies().name());
-            speciesLabel.setFont(CustomFont.useCustomFont(10f));
+            speciesLabel.setFont(CustomFont.useCustomFont(8f));
             speciesLabel.setForeground(new Color(228, 201, 171));
             speciesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(speciesLabel);
 
             // Diet
             JLabel dietLabel = new JLabel(dinosaur.getSpecies().getDiet().toUpperCase());
-            dietLabel.setFont(CustomFont.useCustomFont(10f));
+            dietLabel.setFont(CustomFont.useCustomFont(8f));
             dietLabel.setForeground(new Color(228, 201, 171));
             dietLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             cardPanel.add(dietLabel);
@@ -181,10 +188,15 @@ public class ListDinoPanel extends JFrame {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
             buttonPanel.setOpaque(false);
+            buttonPanel.setMaximumSize(new Dimension(180, 60));
+
+            deleteButton.setPreferredSize(new Dimension(52, 53));
+            updateButton.setPreferredSize(new Dimension(52, 53));
 
             buttonPanel.add(deleteButton);
             buttonPanel.add(updateButton);
 
+            cardPanel.add(Box.createVerticalStrut(10));
             cardPanel.add(buttonPanel);
 
             dinosaursPanel.add(cardPanel);

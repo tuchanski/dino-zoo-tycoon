@@ -37,7 +37,7 @@ public class BuyFoodPanel extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(parentFrame);
 
-        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg.png");
+        ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel("src/resources/backgrounds/small-bg-buy-food.png");
         backgroundPanel.setLayout(null);
 
         ImageIcon imageIcon = new ImageIcon("src/resources/utils/watermark.png");

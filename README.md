@@ -1,6 +1,4 @@
-# Dino Zoo Tycoon 🦖🏞️💼
-
-## Description 📝
+#🦖 Dino Zoo Tycoon
 
 **Dino Zoo Tycoon** is a dinosaur-themed zoo management simulator where players take on the role of a park manager in charge of a zoo filled with genetically resurrected dinosaurs. The goal is to balance the safety and well-being of the dinosaurs, the entertainment of visitors, and the overall success of the park.
 

@@ -4,8 +4,6 @@
 
 **Dino Zoo Tycoon** is a dinosaur-themed zoo management simulator where players take on the role of a park manager in charge of a zoo filled with genetically resurrected dinosaurs. The goal is to balance the safety and well-being of the dinosaurs, the entertainment of visitors, and the overall success of the park.
 
-**Dino Zoo Tycoon** is also considered by professor [Marina de Lara](https://github.com/akitodr) to be the best final project presented in the subject of Object-Oriented Programming at PUCPR.
-
 ## Overall Experience 🌟
 
 Here are some screens of the game, where it is generally possible to perform CRUD operations on the system entities.
